@@ -1,0 +1,110 @@
+<info>
+    <libcount>11</libcount>
+</info>
+<lib>
+    <id>0</id>
+    <file>res/obj/Bonfire.obj</file>
+</lib>
+<lib>
+    <id>1</id>
+    <file>res/obj/Man.obj</file>
+</lib>
+<lib>
+    <id>2</id>
+    <file>res/obj/Bear.obj</file>
+</lib>
+<lib>
+    <id>3</id>
+    <file>res/obj/BuckDeer.obj</file>
+</lib>
+<lib>
+    <id>4</id>
+    <file>res/obj/Buffalo.obj</file>
+</lib>
+<lib>
+    <id>5</id>
+    <file>res/obj/DoeDeer.obj</file>
+</lib>
+<lib>
+    <id>6</id>
+    <file>res/obj/LollyTree.obj</file>
+</lib>
+<lib>
+    <id>7</id>
+    <file>res/obj/Mine.obj</file>
+</lib>
+<lib>
+    <id>8</id>
+    <file>res/obj/PineTree.obj</file>
+</lib>
+<lib>
+    <id>9</id>
+    <file>res/obj/Shovel.obj</file>
+</lib>
+<lib>
+    <id>10</id>
+    <file>res/obj/Wolf.obj</file>
+</lib>
+<clan>
+    <id>0</id>
+	<meat>0</meat>
+	<berry>0</berry>
+	<farmer>0</farmer>
+	<hunter>1</hunter>
+	<warrior>0</warrior>
+	<builder>0</builder>
+	<position>0 0 0</position>
+    <color>0 .74 1</color>
+</clan>
+<effect>
+	<position>-10 0 -9.75</position>
+	<scale>.15 .15 .15</scale>
+    <color>1 0 0</color>
+	<count>500</count>
+</effect>
+<entity>
+    <id>0</id>
+    <position>-10 0 -10</position>
+    <scale>.1</scale>
+</entity>
+<entity>
+    <id>9</id>
+    <position>-3 1.5 -10.5</position>
+    <rotation>0 45 135</rotation>
+    <scale>.1</scale>
+</entity>
+<entity>
+    <id>8</id>
+    <position>10 0 -10</position>
+    <rotation>0 0 0</rotation>
+    <scale>.1</scale>
+</entity>
+<entity>
+    <id>8</id>
+    <position>-10 0 10</position>
+    <rotation>0 180 0</rotation>
+    <scale>.1</scale>
+</entity>
+<entity>
+    <id>8</id>
+    <position>0 0 16</position>
+    <rotation>0 90 0</rotation>
+    <scale>.1</scale>
+</entity>
+<entity>
+    <id>10</id>
+    <position>4 0 4</position>
+    <rotation>0 180 0</rotation>
+    <scale>.1</scale>
+</entity>
+<entity>
+    <id>7</id>
+    <position>0 0 -15</position>
+    <rotation>0 0 0</rotation>
+    <scale>.1</scale>
+</entity>
+<map>
+	<file>res/map/map.bmp</file>
+	<scale>1</scale>
+	<colorID>1</colorID>
+</map>
