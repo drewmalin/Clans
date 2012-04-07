@@ -10,12 +10,9 @@ public class Effect {
 	private ArrayList<Particle> particles;
 	private Random randGenerator;
 	
-	//private float xPosition, yPosition, zPosition;
 	public float position[];
 	public float color[];
 	public float scale[];
-	//private float R, G, B;
-	//private float scaleX, scaleY, scaleZ;
 	private float deceleration;
 	
 	public Effect() {
@@ -83,6 +80,9 @@ public class Effect {
 	}
 	
 	public void updateParticles() {
+		float[] tempPos = new float[3];
+		float[] pos = new float[3];
+		
 		for (Particle p : particles) {
 			
 			if (Math.abs(p.position[0] - position[0]) < p.maximum[0])
@@ -97,15 +97,14 @@ public class Effect {
 			p.color[0] += 0.01;
 			p.color[1] += 0.01;
 			p.color[2] += 0.01;
-
-			float[] tempPos = new float[3];
-			float[] pos = new float[3];
+			
 			tempPos[0] = p.position[0];
 			tempPos[1] = p.position[1];
 			tempPos[2] = p.position[2];
 			pos[0] = position[0];
 			pos[1] = position[1];
 			pos[2] = position[2];
+			
 			if (tempPos[1] > p.maximum[1]) {
 				p.position[0] = position[0];
 				p.position[1] = position[1];
