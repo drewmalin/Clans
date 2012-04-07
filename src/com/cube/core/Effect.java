@@ -54,25 +54,26 @@ public class Effect {
 		for (int i = 0; i < particleCount; i++) {
 			Particle p = new Particle();
 			
-			p.xMax = randGenerator.nextFloat() * 1;
-			p.yMax = randGenerator.nextFloat() * 6;
-			p.zMax = randGenerator.nextFloat() * 1;
+			p.maximum[0] = randGenerator.nextFloat() * 1;
+			p.maximum[1] = randGenerator.nextFloat() * 6;
+			p.maximum[2] = randGenerator.nextFloat() * 1;
 			
-			p.xPos = position[0];
-			p.yPos = position[1];
-			p.zPos = position[2];
+			p.position[0] = position[0];
+			p.position[1] = position[1];
+			p.position[2] = position[2];
 			
-			p.xMov = (randGenerator.nextFloat() * max) - (max/2);
-			p.yMov = (randGenerator.nextFloat() * max);
-			p.zMov = (randGenerator.nextFloat() * max) - (max/2);
+			p.movement[0] = (randGenerator.nextFloat() * max) - (max/2);
+			p.movement[1] = (randGenerator.nextFloat() * max);
+			p.movement[2] = (randGenerator.nextFloat() * max) - (max/2);
 			
-			p.R = color[0];
-			p.G = color[1];
-			p.B = color[2];
+		
+			p.color[0] = color[0];
+			p.color[1] = color[1];
+			p.color[2] = color[2];
 			
-			p.xScale = scale[0];
-			p.yScale = scale[1];
-			p.zScale = scale[2];
+			p.scale[0] = scale[0];
+			p.scale[1] = scale[1];
+			p.scale[2] = scale[2];
 
 			
 			p.acceleration = randGenerator.nextFloat() % 10;
@@ -84,39 +85,40 @@ public class Effect {
 	public void updateParticles() {
 		for (Particle p : particles) {
 			
-			if (Math.abs(p.xPos - position[0]) < p.xMax)
-				p.xPos += p.xMov * .1;
-			p.yPos += p.yMov * .4;
-			if (Math.abs(p.zPos - position[2]) < p.zMax)
-				p.zPos += p.zMov * .1;
+			if (Math.abs(p.position[0] - position[0]) < p.maximum[0])
+				p.position[0] += p.movement[0] * .1;
+			p.position[1] += p.movement[1] * .4;
+			if (Math.abs(p.position[2] - position[2]) < p.maximum[2])
+				p.position[2] += p.movement[2] * .1;
 
 			
 			p.deceleration += deceleration;
 						
-			p.R += 0.01;
-			p.G += 0.01;
-			p.B += 0.01;
+			p.color[0] += 0.01;
+			p.color[1] += 0.01;
+			p.color[2] += 0.01;
 
 			float[] tempPos = new float[3];
 			float[] pos = new float[3];
-			tempPos[0] = p.xPos;
-			tempPos[1] = p.yPos;
-			tempPos[2] = p.zPos;
+			tempPos[0] = p.position[0];
+			tempPos[1] = p.position[1];
+			tempPos[2] = p.position[2];
 			pos[0] = position[0];
 			pos[1] = position[1];
 			pos[2] = position[2];
-			if (tempPos[1] > p.yMax) {
-				p.xPos = position[0];
-				p.yPos = position[1];
-				p.zPos = position[2];
+			if (tempPos[1] > p.maximum[1]) {
+				p.position[0] = position[0];
+				p.position[1] = position[1];
+				p.position[2] = position[2];
 				
-				p.R = color[0];
-				p.G = color[1];
-				p.B = color[2];
 				
-				p.xScale = scale[0];
-				p.yScale = scale[1];
-				p.zScale = scale[2];
+				p.color[0] = color[0];
+				p.color[1] = color[1];
+				p.color[2] = color[2];
+				
+				p.scale[0] = scale[0];
+				p.scale[1] = scale[1];
+				p.scale[2] = scale[2];
 
 				p.acceleration = randGenerator.nextFloat() % 10;
 				p.deceleration = 0.0025f;
@@ -128,9 +130,9 @@ public class Effect {
 
 		for (Particle p : particles) {
 			GL11.glPushMatrix();
-			GL11.glColor3f(p.R, p.G, p.B);
-			GL11.glTranslatef(p.xPos, p.yPos, p.zPos);
-			GL11.glScalef(p.xScale, p.yScale, p.zScale);
+			GL11.glColor3f(p.color[0], p.color[1], p.color[2]);
+			GL11.glTranslatef(p.position[0], p.position[1], p.position[2]);
+			GL11.glScalef(p.scale[0], p.scale[1], p.scale[2]);
 			GL11.glBegin(GL11.GL_QUADS);
 				//bot
 				GL11.glVertex3f(0f, 0f, 0f);
