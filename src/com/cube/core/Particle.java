@@ -7,7 +7,7 @@ public class Particle {
 	public float maximum[];
 	public float scale[];
 	public float color[];
-	/*
+	
 	public float xPos;
 	public float yPos;
 	public float zPos;
@@ -27,7 +27,7 @@ public class Particle {
 	public float xScale;
 	public float yScale;
 	public float zScale;
-	*/
+	
 	public float direction;
 	public float acceleration;
 	public float deceleration;
