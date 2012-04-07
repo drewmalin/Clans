@@ -126,7 +126,6 @@ public class Graphics {
 			drawEffects();
 			Resources.map.draw();
 		GL11.glPopMatrix();
-
 		Display.update();
 		Display.sync(Engine.framerate);
 		

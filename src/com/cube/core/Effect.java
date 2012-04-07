@@ -10,12 +10,9 @@ public class Effect {
 	private ArrayList<Particle> particles;
 	private Random randGenerator;
 	
-	//private float xPosition, yPosition, zPosition;
 	public float position[];
 	public float color[];
 	public float scale[];
-	//private float R, G, B;
-	//private float scaleX, scaleY, scaleZ;
 	private float deceleration;
 	
 	public Effect() {

@@ -12,14 +12,11 @@ public class Unit extends Entity {
 		direction[0] = 0;
 		direction[1] = 0;
 		direction[2] = -1;
-		
-		float theta = (float) Math.acos(direction[0]);
-		System.out.println(theta);
 	}
 	
 	public void update() {
-		//arccos direction[0]
-		float theta = (float) Math.acos(direction[0]);
-		System.out.println(theta);
+		/*TODO
+		 * Update the y rotation of the unit based on the direction vector
+		 */
 	}
 }
