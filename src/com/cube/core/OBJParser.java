@@ -16,11 +16,11 @@ public class OBJParser {
 	
 	public ArrayList<Vertex> v;
 	public ArrayList<Vertex> vn;
-	public ArrayList<Texture> t;
+	public ArrayList<TextureVert> t;
 	public ArrayList<PolyFace> f;
 	
 	public Vertex vertex;
-	public Texture texture;
+	public TextureVert texture;
 	public PolyFace polyface;
 	
 	public float maxX = -1000000;
@@ -41,7 +41,7 @@ public class OBJParser {
 	public OBJParser(String str) {
 		v = new ArrayList<Vertex>();
 		vn = new ArrayList<Vertex>();
-		t = new ArrayList<Texture>();
+		t = new ArrayList<TextureVert>();
 		f = new ArrayList<PolyFace>();
 		
 		try {
@@ -93,7 +93,7 @@ public class OBJParser {
 					updateBoundingBox(vertex);
 				}
 				else if (flag.equals("vt")) {
-					texture = new Texture(strLine);
+					texture = new TextureVert(strLine);
 					t.add(texture);
 				}
 				else if (flag.equals("vn")) {

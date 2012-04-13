@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import org.lwjgl.opengl.GL11;
+
 
 public class Resources {
 	
@@ -18,12 +20,16 @@ public class Resources {
 	public static ArrayList<Light> lights;
 	public static ArrayList<Clan> clans;
 	public static ArrayList<Entity> entities;
+	public static ArrayList<Texture> textures;
 	public static Object[] objectLibrary;
+	public static TextureLoader texLoader;
 	
 	public static void initialize() {
 		entities = new ArrayList<Entity>();
 		lights = new ArrayList<Light>();
 		clans = new ArrayList<Clan>();
+		textures = new ArrayList<Texture>();
+		texLoader = new TextureLoader();
 		
 		map = new Map(10);
 		
@@ -31,6 +37,18 @@ public class Resources {
 	}
 	
 	public static void loadLevel(String file) {
+		////////////////////***<temporary location>***////////////////////
+		
+		try{
+			textures.add(texLoader.getTexture("brookstoneFTW.png"));
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+		}catch (IOException e)
+		{
+			FileLogger.logger.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+		}
+		
+		////////////////////**</temporary location>***////////////////////
 		try {
 			//sound = new Sound();
 			fstream = new FileInputStream(file);

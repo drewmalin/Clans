@@ -7,7 +7,7 @@ public abstract class Drawable {
 	
 	public ArrayList<Vertex> vertexArray;
 	public ArrayList<Vertex> vertexNormalArray;
-	public ArrayList<Texture> textureArray;
+	public ArrayList<TextureVert> textureArray;
 	public ArrayList<PolyFace> polyfaceArray;
 	
 	public abstract void draw();
@@ -15,7 +15,7 @@ public abstract class Drawable {
 	public Drawable() {
 		vertexArray = new ArrayList<Vertex>();
 		vertexNormalArray = new ArrayList<Vertex>();
-		textureArray = new ArrayList<Texture>();
+		textureArray = new ArrayList<TextureVert>();
 		polyfaceArray = new ArrayList<PolyFace>();
 	}
 	
@@ -59,6 +59,12 @@ public abstract class Drawable {
 								    vertexNormalArray.get(normIndex).z);
 					
 				}
+				if (textureArray.size() > 0) {
+					texIndex = polyfaceArray.get(i).textureIndices.get(j);
+
+					GL11.glTexCoord2f(textureArray.get(texIndex).x,
+								      textureArray.get(texIndex).y);
+				}
 				if (vertexArray.size() > 0) {
 
 					vertIndex = polyfaceArray.get(i).vertexIndices.get(j);
@@ -68,12 +74,7 @@ public abstract class Drawable {
 								    vertexArray.get(vertIndex).z);
 					
 				}
-				if (textureArray.size() > 0) {
-					texIndex = polyfaceArray.get(i).textureIndices.get(j);
-
-					GL11.glTexCoord2f(textureArray.get(texIndex).x,
-								      textureArray.get(texIndex).y);
-				}
+				
 				
 			}
 
