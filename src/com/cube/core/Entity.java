@@ -20,7 +20,7 @@ public class Entity {
 		rotation 	= new float[3];
 		
 		position[0] = position[1] = position[2] = 0f;
-		color[0] = color[1] = color[2] = 0f;
+		color[0] = color[1] = color[2] = 1f;
 		rotation[0] = rotation[1] = rotation[2] = 0f;
 		
 		scale = .1f;
@@ -32,6 +32,7 @@ public class Entity {
 	public void draw() {
 		GL11.glPushMatrix();
 		GL11.glLoadIdentity();
+		GL11.glColor3f(color[0], color[1], color[2]);
 		GL11.glTranslatef(position[0], position[1], position[2]);
 		GL11.glRotatef(rotation[0], 1, 0, 0);
 		GL11.glRotatef(rotation[1], 0, 1, 0);

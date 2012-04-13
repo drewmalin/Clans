@@ -80,27 +80,5 @@ public abstract class Drawable {
 
 		}
 		GL11.glEnd();
-		/*
-		GL11.glBegin(GL11.GL_LINES);
-		for (int i = 0; i < polyfaceArray.size(); i++) {
-			for (int j = 0; j < polyfaceArray.get(i).vertexIndices.size(); j++) {
-				
-				if (vertexNormalArray.size() > 0 && vertexArray.size() > 0) {
-
-				vertIndex = polyfaceArray.get(i).vertexIndices.get(j);
-				normIndex = polyfaceArray.get(i).normalIndices.get(j);
-				
-				GL11.glVertex3f(vertexNormalArray.get(vertIndex).x, 
-						vertexNormalArray.get(vertIndex).y, 
-						vertexNormalArray.get(vertIndex).z);
-				
-				GL11.glVertex3f(vertexNormalArray.get(vertIndex).x + vertexNormalArray.get(normIndex).x, 
-						vertexNormalArray.get(vertIndex).y + vertexNormalArray.get(normIndex).y-1, 
-						vertexNormalArray.get(vertIndex).z + vertexNormalArray.get(normIndex).z-1);
-				}
-			}
-		}
-		GL11.glEnd();
-		*/
 	}
 }

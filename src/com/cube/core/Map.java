@@ -21,6 +21,9 @@ public class Map extends Drawable {
 	
 	private void drawGrid() {
 		
+		GL11.glPushMatrix();
+		GL11.glLoadIdentity();
+		
 		GL11.glColor3f(.9f, 0f, 0f);
 
 		GL11.glBegin(GL11.GL_LINES);
@@ -40,6 +43,8 @@ public class Map extends Drawable {
 		}
 		
 		GL11.glEnd();
+		
+		GL11.glPopMatrix();
 	}
 
 }
