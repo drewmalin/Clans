@@ -23,7 +23,7 @@ public class Light {
 	}
 	
 	public void setPosition(int x, int y, int z) {
-		position.put(x).put(y).put(z).put(0.0f).flip();
+		position.put(x).put(y).put(z).put(1.0f).flip();
 	}
 
 	public void setColor(float f, float g, float h, float i) {

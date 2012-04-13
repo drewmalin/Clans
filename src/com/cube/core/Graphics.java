@@ -48,13 +48,13 @@ public class Graphics {
 		GL11.glEnable(GL11.GL_LIGHTING);											// enables lighting
 
 		matSpecular = BufferUtils.createFloatBuffer(4);
-		matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+		matSpecular.put(0.7f).put(0.7f).put(0.7f).put(1.0f).flip();
 		
 		lModelAmbient = BufferUtils.createFloatBuffer(4);
-		lModelAmbient.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
+		lModelAmbient.put(0.3f).put(0.3f).put(0.3f).put(1.0f).flip();
 		
 		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, matSpecular);				// sets specular material color
-		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);					// sets shininess
+		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 5.0f);					// sets shininess
 		GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, lModelAmbient);				// global ambient light 
 
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);										// enables opengl to use glColor3f to define material color
