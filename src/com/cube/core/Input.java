@@ -75,13 +75,13 @@ public class Input {
 					case Keyboard.KEY_ESCAPE:
 						System.exit(0);
 						break;
-						/*
 					case Keyboard.KEY_UP:
-						Graphics.camera.changeThetaX(1);
+						Resources.clans.get(0).units.get(0).rotation[1] += 10;
 						break;
 					case Keyboard.KEY_DOWN:
-						Graphics.camera.changeThetaX(-1);
+						Resources.clans.get(0).units.get(0).rotation[1] -= 10;
 						break;
+						/*
 					case Keyboard.KEY_LEFT:
 						Graphics.camera.changeThetaY(1);
 						break;

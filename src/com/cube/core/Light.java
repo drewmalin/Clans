@@ -22,8 +22,9 @@ public class Light {
 		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, position);	// sets light position
 	}
 	
-	public void setPosition(int x, int y, int z) {
-		position.put(x).put(y).put(z).put(1.0f).flip();
+
+	public void setPosition(float x, float y, float z) {
+		position.put(x).put(y).put(z).put(0f).flip();
 	}
 
 	public void setColor(float f, float g, float h, float i) {

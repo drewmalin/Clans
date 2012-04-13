@@ -2,6 +2,8 @@ package com.cube.core;
 
 import org.lwjgl.opengl.GL11;
 
+import com.cube.states.State;
+
 public class Entity {
 	public int id;
 	public float[] position;
@@ -10,6 +12,8 @@ public class Entity {
 	public float scale;
 	public boolean show;
 
+	public State currentState;
+	
 	public Entity() {
 		position 	= new float[3];
 		color 		= new float[3];
@@ -22,6 +26,7 @@ public class Entity {
 		scale = .1f;
 		show = true;
 		id = -1;
+		
 	}
 	
 	public void draw() {
@@ -34,5 +39,25 @@ public class Entity {
 		GL11.glScalef(scale, scale, scale);
 		Resources.objectLibrary[id].draw();
 		GL11.glPopMatrix();
+	}
+	
+	public void startState() {
+		if (currentState != null) {
+			currentState.enter(this);
+		}
+	}
+	
+	public void changeState(State newState) {
+		if (currentState != null && newState != null) {
+			currentState.exit(this);
+			currentState = newState;
+			currentState.enter(this);
+		}
+	}
+	
+	public void update() {
+		if (currentState != null) {
+			currentState.execute(this);
+		}
 	}
 }

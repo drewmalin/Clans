@@ -2,6 +2,8 @@ package com.cube.core;
 
 import java.util.ArrayList;
 
+import com.cube.states.NeutralState;
+
 public class Clan {
 	
 	public static ArrayList<Unit> units;
@@ -25,10 +27,17 @@ public class Clan {
 	}
 	
 	public void draw() {
-		
 		for (Unit u : units) {
 			if (u.show) {
 				u.draw();
+			}
+		}
+	}
+	
+	public void update() {
+		for (Unit u : units) {
+			if (u.show) {
+				u.update();
 			}
 		}
 	}
@@ -50,6 +59,8 @@ public class Clan {
 		}
 		for (int i = 0; i < hunter; i++) {
 			u = new Unit(1);
+			u.currentState = NeutralState.getState();
+			u.startState();
 			units.add(u);
 		}
 	}
