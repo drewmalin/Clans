@@ -31,7 +31,7 @@ public class Resources {
 		textures = new ArrayList<Texture>();
 		texLoader = new TextureLoader();
 		
-		map = new Map(10);
+		map = new Map(100);
 		
 		FileLogger.logger.log(Level.INFO, "Resources initialized");
 	}
