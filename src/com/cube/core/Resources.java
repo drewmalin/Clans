@@ -87,25 +87,28 @@ public class Resources {
 						clan.id = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("meat")) {
-						clan.meat = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+						clan.meatCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("berry")) {
-						clan.berry = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+						clan.berryCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("farmer")) {
-						clan.farmer = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+						clan.farmerCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("hunter")) {
-						clan.hunter = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+						clan.hunterCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("builder")) {
-						clan.builder = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+						clan.builderCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("warrior")) {
-						clan.warrior = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+						clan.warriorCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("color")) {
 						clan.color = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					}
+					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("position")) {
+						clan.position = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 				}
 				clans.add(clan);
@@ -148,7 +151,7 @@ public class Resources {
 				Entity entity = new Entity();
 				while (!(strLine = br.readLine().trim()).equals("</entity>")) {
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("id")) {
-						entity.id = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+						entity.objectID = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("position")) {
 						entity.position = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));

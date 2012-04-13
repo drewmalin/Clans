@@ -1,44 +1,62 @@
 package com.cube.core;
 
+import javax.vecmath.Vector2d;
+
 import org.lwjgl.opengl.GL11;
 
 import com.cube.states.State;
 
 public class Entity {
-	public int id;
+	public int objectID;
 	public float[] position;
+	public float[] destination;
 	public float[] color;
 	public float[] rotation;
 	public float scale;
 	public boolean show;
+	public int type;
 
 	public State currentState;
+
+	public Vector2d force;
+	public Vector2d acceleration;
+	public Vector2d velocity;
+	public double mass;
+	public double max_v;
 	
 	public Entity() {
 		position 	= new float[3];
 		color 		= new float[3];
 		rotation 	= new float[3];
+		destination = new float[3];
 		
-		position[0] = position[1] = position[2] = 0f;
-		color[0] = color[1] = color[2] = 1f;
-		rotation[0] = rotation[1] = rotation[2] = 0f;
+		force 			= new Vector2d(0, 0);
+		acceleration 	= new Vector2d(0, 0);
+		velocity 		= new Vector2d(0, 0);
+		mass			= 100;
+		max_v			= .1;
 		
-		scale = .1f;
-		show = true;
-		id = -1;
+		position[0] = position[1] 	= position[2] 	= 0f;
+		color[0] 	= color[1] 		= color[2] 		= 1f;
+		rotation[0] = rotation[1]	 = rotation[2] 	= 0f;
+		destination[0] = destination[1] = destination[2] = 0f;
+		
+		scale 		= .1f;
+		show 		= true;
+		objectID 	= -1;
 		
 	}
 	
 	public void draw() {
 		GL11.glPushMatrix();
-		GL11.glLoadIdentity();
-		GL11.glColor3f(color[0], color[1], color[2]);
-		GL11.glTranslatef(position[0], position[1], position[2]);
-		GL11.glRotatef(rotation[0], 1, 0, 0);
-		GL11.glRotatef(rotation[1], 0, 1, 0);
-		GL11.glRotatef(rotation[2], 0, 0, 1);
-		GL11.glScalef(scale, scale, scale);
-		Resources.objectLibrary[id].draw();
+			GL11.glLoadIdentity();
+			GL11.glColor3f(color[0], color[1], color[2]);
+			GL11.glTranslatef(position[0], position[1], position[2]);
+			GL11.glRotatef(rotation[0], 1, 0, 0);
+			GL11.glRotatef(rotation[1], 0, 1, 0);
+			GL11.glRotatef(rotation[2], 0, 0, 1);
+			GL11.glScalef(scale, scale, scale);
+			Resources.objectLibrary[objectID].draw();
 		GL11.glPopMatrix();
 	}
 	
@@ -56,7 +74,10 @@ public class Entity {
 		}
 	}
 	
-	public void update() {
+	public void update(int timeElapsed) {
+		
+		Physics.updatePosition(this);
+		
 		if (currentState != null) {
 			currentState.execute(this);
 		}

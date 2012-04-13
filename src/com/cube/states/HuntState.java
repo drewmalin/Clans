@@ -1,26 +1,42 @@
 package com.cube.states;
 
+import javax.vecmath.Vector2d;
+
 import com.cube.core.Entity;
+import com.cube.core.Physics;
 
 public class HuntState extends State {
 
 	int counter;
-	
+	Vector2d tempVect;
+
 	@Override
 	public void enter(Entity e) {
 		
 		counter = 0;
 		System.out.println("Entity " + e + " is now hunting!");
-		
+		Physics.updateDestination(e);
+		e.force.set(e.destination[0] * .01, e.destination[2] * .01);
 	}
 
 	@Override
 	public void execute(Entity e) {
 
-		counter++;
-		if (counter >= 100) {
-			e.changeState( AttackState.getState() );
+		//------------Code for wander------------//
+
+		if (Physics.distSquared(e.position, e.destination) < 10) {
+			System.out.println("setting a new target");
+			// We are close enough to the destination to determine a new one
+			Physics.updateDestination(e);
+			e.force.set(e.destination[0] * .01, e.destination[2] * .01);
 		}
+		
+		tempVect = Physics.updateVelocity(e);
+		e.force.set(tempVect.x * .1, tempVect.y * .1);
+
+//		System.out.println("Current position: " + Physics.printArray(e.position));
+//		System.out.println("destination: " + Physics.printArray(e.destination));
+
 	}
 
 	@Override

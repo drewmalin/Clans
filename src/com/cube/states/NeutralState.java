@@ -1,5 +1,6 @@
 package com.cube.states;
 
+import com.cube.core.Clan;
 import com.cube.core.Entity;
 
 public class NeutralState extends State {
@@ -18,7 +19,8 @@ public class NeutralState extends State {
 	public void execute(Entity e) {
 		
 		counter++;
-		if (counter >= 100) {
+		if (counter >= 100 && e.type == Clan.HUNTER) {
+			System.out.println("Entity " + e + " is going to start hunting...");
 			e.changeState( HuntState.getState() );
 		}
 	}

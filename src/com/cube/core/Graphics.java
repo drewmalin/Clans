@@ -156,11 +156,17 @@ public class Graphics {
 	}
 	
 	private static void updateScene() {
+		int timeElapsed_ms = (int) Timer.getNanoDelta() / 1000000;
+
+		if (timeElapsed_ms > 10) {
+			timeElapsed_ms = 1;
+		}
+
 		for (Entity e : Resources.entities) {
-			e.update();
+			e.update(timeElapsed_ms);
 		}
 		for (Clan c : Resources.clans) {
-			c.update();
+			c.update(timeElapsed_ms);
 		}
 	}
 	
