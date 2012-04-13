@@ -44,8 +44,9 @@ public class Graphics {
 
 	private static void setupLighting() {
 		
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);											// enables lighting
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 
 		matSpecular = BufferUtils.createFloatBuffer(4);
 		matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
@@ -61,7 +62,7 @@ public class Graphics {
 		GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT_AND_DIFFUSE);			// tell opengl glColor3f effects the ambient and diffuse properties of material		
 			
 		Light sun = new Light("SUN");
-		sun.setPosition(0, 7, 0);
+		sun.setPosition(-50, 50, -50);
 		sun.setColor(1f, 1f, 1f, 1f);
 		sun.create(GL11.GL_LIGHT0);
 		Resources.lights.add(sun);
@@ -126,6 +127,9 @@ public class Graphics {
 			drawEffects();
 			Resources.map.draw();
 		GL11.glPopMatrix();
+		
+		updateScene();
+		
 		Display.update();
 		Display.sync(Engine.framerate);
 		
@@ -144,6 +148,19 @@ public class Graphics {
 	private static void drawObjects() {
 		for (Entity e : Resources.entities) {
 			e.draw();
+		}
+	}
+	private static void drawLights() {
+		for (Light light : Resources.lights)
+			light.draw();
+	}
+	
+	private static void updateScene() {
+		for (Entity e : Resources.entities) {
+			e.update();
+		}
+		for (Clan c : Resources.clans) {
+			c.update();
 		}
 	}
 	
@@ -165,10 +182,5 @@ public class Graphics {
 				camera.getUp(0),		camera.getUp(1), 		camera.getUp(2)
 			);
 
-	}
-
-	private static void drawLights() {
-		for (Light light : Resources.lights)
-			light.draw();
 	}
 }

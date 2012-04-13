@@ -15,6 +15,7 @@ public class Unit extends Entity {
 	}
 	
 	public void update() {
+		super.update();
 		/*TODO
 		 * Update the y rotation of the unit based on the direction vector
 		 */
