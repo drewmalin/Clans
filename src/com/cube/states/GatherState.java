@@ -2,7 +2,6 @@ package com.cube.states;
 
 import javax.vecmath.Vector2d;
 
-import com.cube.core.Clan;
 import com.cube.core.Entity;
 
 public class GatherState extends State {
@@ -17,7 +16,7 @@ public class GatherState extends State {
 	public void enter(Entity e) {
 		
 		System.out.println("Entity " + e + " is now gathering!");
-		
+		e.pause = 0;
 	}
 
 	/* 
@@ -27,22 +26,30 @@ public class GatherState extends State {
 	@Override
 	public void execute(Entity e) {
 		
-		if (e.focusEntity.inventoryEmpty()) {
-			e.type = Entity.NEUTRAL;
-			e.focusEntity.rotation[0] += 180;
-			e.focusEntity = null;
-			if (e.type == Clan.HUNTER)
-				e.changeState( HuntState.getState() );
+				
+		if (e.pause < 250) {
+			e.pause++;
 		}
 		else {
+			System.out.println("Grabbin mah resources");
+
+			e.pause = 0;
 			e.inventory++;
 			e.focusEntity.inventory--;
+		
+			if (e.focusEntity.inventoryEmpty()) {
+				System.out.println("This resource is depleted! Returning the last of its bits.");
+				e.focusEntity.type = Entity.NEUTRAL;
+				e.focusEntity.rotation[0] += 180;
+				e.focusEntity.position[1] += 1;
+				e.focusEntity = null;
+			}
+			
 			e.destination[0] = 0;
 			e.destination[1] = 0;
 			e.destination[2] = 0;
 			e.changeState( TravelState.getState() );
 		}
-
 	}
 
 	@Override

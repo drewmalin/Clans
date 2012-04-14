@@ -140,5 +140,8 @@ public class Physics {
 	public static void haltEntity(Entity e) {
 		e.velocity.x = 0;
 		e.velocity.y = 0;		
+		
+		e.force.x = 0;
+		e.force.y = 0;
 	}
 }

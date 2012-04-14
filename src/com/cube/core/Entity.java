@@ -31,6 +31,7 @@ public class Entity {
 	public double mass;
 	public double max_v;
 	public int inventory;
+	public int pause;
 	
 	public Entity() {
 		

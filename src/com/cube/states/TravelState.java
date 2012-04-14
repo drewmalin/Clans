@@ -16,6 +16,7 @@ public class TravelState extends State {
 		System.out.println("Entity " + e + " is now traveling!");
 		Physics.haltEntity(e);
 
+		e.pause = 0;
 	}
 
 	@Override
@@ -28,15 +29,24 @@ public class TravelState extends State {
 				e.changeState( GatherState.getState() );
 			}
 			else if (e.type == Clan.HUNTER && !e.inventoryEmpty()) {
-				System.out.println("Arrived, going to start depositing...");
-				e.inventory = 0;
-				if (e.focusEntity.inventoryEmpty()) {
-					e.changeState( HuntState.getState() );
+				
+				if (e.pause < 250) {
+					e.pause++;
 				}
 				else {
-					e.destination[0] = e.focusEntity.position[0];
-					e.destination[1] = e.focusEntity.position[1];
-					e.destination[2] = e.focusEntity.position[2];
+					System.out.println("Arrived, going to start depositing...");
+
+					e.pause = 0;
+					
+					e.inventory = 0;
+					if (e.focusEntity == null || e.focusEntity.inventoryEmpty()) {
+						e.changeState( HuntState.getState() );
+					}
+					else {
+						e.destination[0] = e.focusEntity.position[0];
+						e.destination[1] = e.focusEntity.position[1];
+						e.destination[2] = e.focusEntity.position[2];
+					}
 				}
 			}
 		}
