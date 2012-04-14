@@ -1,6 +1,5 @@
 package com.cube.states;
 
-import com.cube.core.Clan;
 import com.cube.core.Entity;
 
 public class GatherState extends State {

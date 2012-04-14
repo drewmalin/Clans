@@ -11,9 +11,9 @@ import com.cube.gui.Window;
 
 public class Input {
 	
-	private static float panSpeed = .1f;
-	private static float rotateSpeed = .1f;
-	private static float scrollSpeed = .1f;
+	private static float panSpeed 		= .1f;
+	private static float rotateSpeed 	= .1f;
+	private static float scrollSpeed 	= .1f;
 	private static int deltaX = 0;
 	private static int deltaY = 0;
 	

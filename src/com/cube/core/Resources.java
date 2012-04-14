@@ -72,6 +72,17 @@ public class Resources {
 		
 		while ((strLine = br.readLine()) != null) {
 			
+			// Check for comments
+			if (strLine.contains("<!--")) {
+				while (!strLine.contains("-->")) {
+					strLine = br.readLine();
+				}
+				continue;
+			}
+			// Check for blank lines
+			if (strLine.isEmpty()) {
+				continue;
+			}
 			if (strLine.equals("<info>")) {
 				while (!(strLine = br.readLine().trim()).equals("</info>")) {
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("libcount")) {
@@ -161,6 +172,9 @@ public class Resources {
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("rotation")) {
 						entity.rotation = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					}
+					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("type")) {
+						entity.type = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 				}
 				entities.add(entity);
