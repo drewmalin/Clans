@@ -87,9 +87,7 @@ public class Window extends Canvas {
 				switch (Keyboard.getEventKey()) {
 					//Quit the game
 					case Keyboard.KEY_ESCAPE:
-						if (id == Menu.START)
-							System.exit(0);
-						else if (id == Menu.PAUSE)
+						if (id == Menu.PAUSE)
 							Menu.unPause();
 						break;
 				}

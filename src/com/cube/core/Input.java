@@ -5,6 +5,9 @@ import java.util.logging.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import com.cube.gui.Menu;
+import com.cube.gui.Window;
+
 
 public class Input {
 	
@@ -19,6 +22,12 @@ public class Input {
 	}
 
 	public static void poll() {
+		for (Window w : Menu.windows) {
+			if (w.stealContext) {
+				w.poll();
+				return;
+			}
+		}
 		pollKeyboard();
 		pollMouse();
 	}
@@ -73,7 +82,8 @@ public class Input {
 				switch (Keyboard.getEventKey()) {
 					//Quit the game
 					case Keyboard.KEY_ESCAPE:
-						System.exit(0);
+						Menu.pause();
+						//System.exit(0);
 						break;
 					case Keyboard.KEY_UP:
 						Resources.clans.get(0).units.get(0).rotation[1] += 10;

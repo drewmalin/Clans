@@ -1,5 +1,6 @@
 package com.cube.core;
 
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.logging.Level;
 
@@ -10,6 +11,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.Pbuffer;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
+
+import com.cube.core.Engine;
+import com.cube.gui.Menu;
+import com.cube.gui.Window;
 
 
 public class Graphics {
@@ -124,19 +129,20 @@ public class Graphics {
 			drawLights();
 			drawClans();
 			drawObjects();
-			drawEffects();
+			updatePhysics();
 			Resources.map.draw();
+			drawGUI();
 		GL11.glPopMatrix();
-		
-		updateScene();
 		
 		Display.update();
 		Display.sync(Engine.framerate);
 		
 	}
 	
-	private static void drawEffects() {
-		Physics.drawEffects();
+	private static void updatePhysics() {
+		if (!Menu.windows.get(Menu.PAUSE).stealContext) {
+			Physics.drawEffects();
+		}
 	}
 	
 	private static void drawClans() {
@@ -153,21 +159,6 @@ public class Graphics {
 	private static void drawLights() {
 		for (Light light : Resources.lights)
 			light.draw();
-	}
-	
-	private static void updateScene() {
-		int timeElapsed_ms = (int) Timer.getNanoDelta() / 1000000;
-
-		if (timeElapsed_ms > 10) {
-			timeElapsed_ms = 1;
-		}
-
-		for (Entity e : Resources.entities) {
-			e.update(timeElapsed_ms);
-		}
-		for (Clan c : Resources.clans) {
-			c.update(timeElapsed_ms);
-		}
 	}
 	
 	private static void updateCamera() {
@@ -188,5 +179,51 @@ public class Graphics {
 				camera.getUp(0),		camera.getUp(1), 		camera.getUp(2)
 			);
 
+	}
+	
+	public static void enable3D() {
+		GL11.glDepthMask(true);
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		
+		GLU.gluPerspective(
+							Engine.frust, 
+							(float)Engine.WIDTH/(float)Engine.HEIGHT, 
+							Engine.zNear, Engine.zFar);
+		GLU.gluLookAt(
+						camera.getPosition(0),	camera.getPosition(1), 	camera.getPosition(2),
+						camera.getTarget(0),	camera.getTarget(1), 	camera.getTarget(2),
+						camera.getUp(0),		camera.getUp(1), 		camera.getUp(2));
+			
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glLoadIdentity();
+
+	}
+	
+	/* Function to disable 3D for drawing to the screen. This function is meant to be used prior
+	 * to drawing a menu or GUI.
+	 */
+	public static void disable3D() {
+		GL11.glDepthMask(false);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+	}
+	
+	public static void drawGUI() {
+		disable3D();
+		GL11.glDisable(GL11.GL_LIGHTING);											
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0, Engine.WIDTH, Engine.HEIGHT, 0, -1, 1);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+		GL11.glPushMatrix();	
+		Menu.draw();	
+		GL11.glPopMatrix();
+		
+		GL11.glEnable(GL11.GL_LIGHTING);											
+		enable3D();
 	}
 }

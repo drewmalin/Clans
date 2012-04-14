@@ -103,7 +103,7 @@ public class MessageBox {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);	
 	
 				print();
-	
+
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glPopMatrix();
 		}
