@@ -83,34 +83,31 @@ public class Input {
 					//Quit the game
 					case Keyboard.KEY_ESCAPE:
 						Menu.pause();
-						//System.exit(0);
 						break;
 					case Keyboard.KEY_UP:
-						Resources.clans.get(0).units.get(0).rotation[1] += 10;
+						System.out.println("Key UP!");
 						break;
 					case Keyboard.KEY_DOWN:
-						Resources.clans.get(0).units.get(0).rotation[1] -= 10;
+						System.out.println("Key DOWN!");
 						break;
-						/*
 					case Keyboard.KEY_LEFT:
-						Graphics.camera.changeThetaY(1);
+						System.out.println("Key LEFT!");
 						break;
 					case Keyboard.KEY_RIGHT:
-						Graphics.camera.changeThetaY(-1);
+						System.out.println("Key RIGHT!");
 						break;
 					case Keyboard.KEY_W:
-						Graphics.camera.panForward(-1);
+						System.out.println("Key W!");
 						break;
 					case Keyboard.KEY_S:
-						Graphics.camera.panForward(1);
+						System.out.println("Key S!");
 						break;
 					case Keyboard.KEY_A:
-						Graphics.camera.panRight(1);
+						System.out.println("Key A!");
 						break;
 					case Keyboard.KEY_D:
-						Graphics.camera.panRight(-1);
+						System.out.println("Key D!");
 						break;
-						*/
 				}
 			}
 		}

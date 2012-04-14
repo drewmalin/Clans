@@ -42,9 +42,11 @@ public class HuntState extends State {
 					e.destination[2] = x.position[2];
 					System.out.println("Entity " + e + " is going to start hunting...");
 					e.changeState( GatherState.getState() );
+					return;
 				}
 			}
 		}
+		
 		if (Physics.distSquared(e.position, e.destination) < 10) {
 			System.out.println("setting a new target");
 			Physics.updateDestination(e, 25);
