@@ -19,6 +19,10 @@ public class Map extends Drawable {
 		drawGrid();
 	}
 	
+	/*
+	 * Method to draw a red grid along the y=0 plane. Setting the size parm (passed to the
+	 * Map's constructor) determines how large the grid will be.
+	 */
 	private void drawGrid() {
 		
 		GL11.glPushMatrix();

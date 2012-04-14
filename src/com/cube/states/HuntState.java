@@ -15,7 +15,7 @@ public class HuntState extends State {
 		
 		counter = 0;
 		System.out.println("Entity " + e + " is now hunting!");
-		Physics.updateDestination(e);
+		Physics.updateDestination(e, 25);
 		e.force.set(e.destination[0] * .01, e.destination[2] * .01);
 	}
 
@@ -27,7 +27,7 @@ public class HuntState extends State {
 		if (Physics.distSquared(e.position, e.destination) < 10) {
 			System.out.println("setting a new target");
 			// We are close enough to the destination to determine a new one
-			Physics.updateDestination(e);
+			Physics.updateDestination(e, 25);
 			e.force.set(e.destination[0] * .01, e.destination[2] * .01);
 		}
 		
@@ -46,8 +46,16 @@ public class HuntState extends State {
 
 	}
 	
-	//----- Singleton attributes and methods ----//
-
+	//-------------------------------------------------------------------------//
+	//------------------------ Singleton Necessities --------------------------//
+	//-------------------------------------------------------------------------//
+	
+	/*
+	 * The following is required for every singleton. Characteristics of java and object orientation
+	 * means that this needs to be copied (and slightly modified) for each new state :(. This will 
+	 * probably be modified in the future to be a bit cleaner.
+	 */
+	
 	// Self reference
 	protected static State ref;
 	

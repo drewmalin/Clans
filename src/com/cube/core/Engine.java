@@ -26,7 +26,6 @@ public class Engine {
 	public static void start() {
 		
 		FileLogger.initialize();
-		
 		Resources.initialize();
 		Graphics.initialize();
 		Input.initialize();

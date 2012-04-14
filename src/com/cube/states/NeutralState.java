@@ -32,8 +32,16 @@ public class NeutralState extends State {
 
 	}
 
-	//----- Singleton attributes and methods ----//
-
+	//-------------------------------------------------------------------------//
+	//------------------------ Singleton Necessities --------------------------//
+	//-------------------------------------------------------------------------//
+	
+	/*
+	 * The following is required for every singleton. Characteristics of java and object orientation
+	 * means that this needs to be copied (and slightly modified) for each new state :(. This will 
+	 * probably be modified in the future to be a bit cleaner.
+	 */
+	
 	// Self reference
 	protected static State ref;
 	
