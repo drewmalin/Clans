@@ -5,7 +5,6 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import javax.vecmath.Vector2d;
-import javax.vecmath.Vector2f;
 
 public class Physics {
 	public static ArrayList<Effect> effects;

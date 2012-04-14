@@ -66,42 +66,49 @@
     <id>0</id>
     <position>-10 0 -10</position>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
 <entity>
     <id>9</id>
     <position>-3 1.5 -10.5</position>
     <rotation>0 45 135</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
 <entity>
     <id>8</id>
     <position>10 0 -10</position>
     <rotation>0 0 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
 <entity>
     <id>8</id>
     <position>-10 0 10</position>
     <rotation>0 180 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
 <entity>
     <id>8</id>
     <position>0 0 16</position>
     <rotation>0 90 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
 <entity>
     <id>10</id>
     <position>4 0 4</position>
     <rotation>0 180 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
 <entity>
     <id>7</id>
     <position>0 0 -15</position>
     <rotation>0 0 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
 <map>
 	<file>res/map/map.bmp</file>

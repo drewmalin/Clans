@@ -7,6 +7,12 @@ import org.lwjgl.opengl.GL11;
 import com.cube.states.State;
 
 public class Entity {
+	
+	public static int NEUTRAL 		= 0;
+	public static int HUNTABLE 		= 1;
+	public static int GATHERABLE 	= 2;
+	public static int MINEABLE 		= 3;
+	
 	public int objectID;
 	public float[] position;
 	public float[] destination;
@@ -25,6 +31,7 @@ public class Entity {
 	public double max_v;
 	
 	public Entity() {
+		
 		position 	= new float[3];
 		color 		= new float[3];
 		rotation 	= new float[3];
@@ -44,7 +51,11 @@ public class Entity {
 		scale 		= .1f;
 		show 		= true;
 		objectID 	= -1;
-		
+			
+	}
+	
+	public void setType(int _type) {
+		type = _type;
 	}
 	
 	public void draw() {

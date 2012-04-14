@@ -17,10 +17,10 @@ public class Clan {
 	public float[] color;
 	public float[] position;
 
-	public static int FARMER = 0;
-	public static int BUILDER = 1;
-	public static int WARRIOR = 2;
-	public static int HUNTER = 3;
+	public static int FARMER = 10;
+	public static int BUILDER = 11;
+	public static int WARRIOR = 12;
+	public static int HUNTER = 13;
 	
 	public Clan() {
 		units = new ArrayList<Unit>();
