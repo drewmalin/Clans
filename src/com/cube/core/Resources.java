@@ -37,7 +37,7 @@ public class Resources {
 	}
 	
 	public static void loadLevel(String file) {
-		////////////////////***<temporary location>***////////////////////
+		////////////////////***<temporary location>***/////////////////////
 		
 		try{
 			textures.add(texLoader.getTexture("brookstoneFTW.png"));
