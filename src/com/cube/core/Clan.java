@@ -54,24 +54,28 @@ public class Clan {
 		
 		for (int i = 0; i < farmerCount; i++) {
 			u = new Unit(FARMER, 1, this);
+			u.inventory = 0;
 			u.currentState = NeutralState.getState();
 			u.startState();
 			units.add(u);
 		}
 		for (int i = 0; i < builderCount; i++) {
 			u = new Unit(BUILDER, 1, this);
+			u.inventory = 0;
 			u.currentState = NeutralState.getState();
 			u.startState();
 			units.add(u);
 		}
 		for (int i = 0; i < warriorCount; i++) {
 			u = new Unit(WARRIOR, 1, this);
+			u.inventory = 0;
 			u.currentState = NeutralState.getState();
 			u.startState();
 			units.add(u);
 		}
 		for (int i = 0; i < hunterCount; i++) {
 			u = new Unit(HUNTER, 1, this);
+			u.inventory = 0;
 			u.currentState = NeutralState.getState();
 			u.startState();
 			units.add(u);

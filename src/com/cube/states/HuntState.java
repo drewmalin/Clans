@@ -36,12 +36,15 @@ public class HuntState extends State {
 		// We are close enough to the destination to determine a new one
 		for (Entity x : Resources.entities) {
 			if (x.type == Entity.HUNTABLE) {
-				if (Physics.distSquared(x.position, e.position) < 10) {
-					e.destination[0] = x.position[0];
-					e.destination[1] = x.position[1];
-					e.destination[2] = x.position[2];
-					System.out.println("Entity " + e + " is going to start hunting...");
-					e.changeState( GatherState.getState() );
+				if (Physics.distSquared(x.position, e.position) < 400) {
+					System.out.println("Target spotted... Entity " + e + " is going to start traveling...");
+					e.focusEntity = x;
+					
+					e.destination[0] = e.focusEntity.position[0];
+					e.destination[1] = e.focusEntity.position[1];
+					e.destination[2] = e.focusEntity.position[2];
+
+					e.changeState( TravelState.getState() );
 					return;
 				}
 			}

@@ -1,6 +1,5 @@
 package com.cube.core;
 
-import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.logging.Level;
 
@@ -14,7 +13,6 @@ import org.lwjgl.util.glu.GLU;
 
 import com.cube.core.Engine;
 import com.cube.gui.Menu;
-import com.cube.gui.Window;
 
 
 public class Graphics {

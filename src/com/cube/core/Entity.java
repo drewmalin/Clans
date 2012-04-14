@@ -23,12 +23,14 @@ public class Entity {
 	public int type;
 
 	public State currentState;
-
+	public Entity focusEntity;
+	
 	public Vector2d force;
 	public Vector2d acceleration;
 	public Vector2d velocity;
 	public double mass;
 	public double max_v;
+	public int inventory;
 	
 	public Entity() {
 		
@@ -51,7 +53,8 @@ public class Entity {
 		scale 		= .1f;
 		show 		= true;
 		objectID 	= -1;
-			
+		
+		inventory = 2; //full inventory
 	}
 	
 	public void setType(int _type) {
@@ -105,5 +108,12 @@ public class Entity {
 		if (currentState != null) {
 			currentState.execute(this);
 		}
+	}
+
+	public boolean inventoryEmpty() {
+		if (inventory == 0) 
+			return true;
+		else 
+			return false;
 	}
 }

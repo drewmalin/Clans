@@ -133,4 +133,12 @@ public class Physics {
 		e.position[2] += e.velocity.y;		
 	}
 
+
+	/*
+	 * Stop!
+	 */
+	public static void haltEntity(Entity e) {
+		e.velocity.x = 0;
+		e.velocity.y = 0;		
+	}
 }
