@@ -132,38 +132,7 @@ public class Effect {
 			GL11.glColor3f(p.color[0], p.color[1], p.color[2]);
 			GL11.glTranslatef(p.position[0], p.position[1], p.position[2]);
 			GL11.glScalef(p.scale[0], p.scale[1], p.scale[2]);
-			GL11.glBegin(GL11.GL_QUADS);
-				//bot
-				GL11.glVertex3f(0f, 0f, 0f);
-				GL11.glVertex3f(1f, 0f, 0f);
-				GL11.glVertex3f(1f, 0f, -1f);
-				GL11.glVertex3f(0f, 0f, -1f);
-				//top
-				GL11.glVertex3f(0f, 1f, 0f);
-				GL11.glVertex3f(1f, 1f, 0f);
-				GL11.glVertex3f(1f, 1f, -1f);
-				GL11.glVertex3f(0f, 1f, -1f);
-				//front
-				GL11.glVertex3f(0f, 0f, 0f);
-				GL11.glVertex3f(1f, 0f, 0f);
-				GL11.glVertex3f(1f, 1f, 0f);
-				GL11.glVertex3f(0f, 1f, 0f);
-				//back
-				GL11.glVertex3f(0f, 0f, -1f);
-				GL11.glVertex3f(1f, 0f, -1f);
-				GL11.glVertex3f(1f, 1f, -1f);
-				GL11.glVertex3f(0f, 1f, -1f);
-				//right
-				GL11.glVertex3f(1f, 0f, 0f);
-				GL11.glVertex3f(1f, 0f, -1f);
-				GL11.glVertex3f(1f, 1f, -1f);
-				GL11.glVertex3f(1f, 1f, 0f);
-				//left
-				GL11.glVertex3f(0f, 0f, 0f);
-				GL11.glVertex3f(0f, 0f, -1f);
-				GL11.glVertex3f(0f, 1f, -1f);
-				GL11.glVertex3f(0f, 1f, 0f);
-			GL11.glEnd();
+			Graphics.drawCube();
 			GL11.glPopMatrix();
 		}
 	}

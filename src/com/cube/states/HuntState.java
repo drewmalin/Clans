@@ -40,9 +40,7 @@ public class HuntState extends State {
 					System.out.println("Target spotted... Entity " + e + " is going to start traveling...");
 					e.focusEntity = x;
 					
-					e.destination[0] = e.focusEntity.position[0];
-					e.destination[1] = e.focusEntity.position[1];
-					e.destination[2] = e.focusEntity.position[2];
+					e.setDestination(e.focusEntity.position);
 
 					e.changeState( TravelState.getState() );
 					return;

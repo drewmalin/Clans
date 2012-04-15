@@ -2,6 +2,8 @@ package com.cube.core;
 
 import java.util.ArrayList;
 
+import org.lwjgl.opengl.GL11;
+
 import com.cube.states.NeutralState;
 
 public class Clan {
@@ -39,6 +41,8 @@ public class Clan {
 				u.draw();
 			}
 		}
+
+		drawMeatStockpile();
 	}
 	
 	public void update(int timeElapsed) {
@@ -54,31 +58,57 @@ public class Clan {
 		
 		for (int i = 0; i < farmerCount; i++) {
 			u = new Unit(FARMER, 1, this);
-			u.inventory = 0;
+			u.inventory.setCap(4);
 			u.currentState = NeutralState.getState();
 			u.startState();
 			units.add(u);
 		}
 		for (int i = 0; i < builderCount; i++) {
 			u = new Unit(BUILDER, 1, this);
-			u.inventory = 0;
+			u.inventory.setCap(4);
 			u.currentState = NeutralState.getState();
 			u.startState();
 			units.add(u);
 		}
 		for (int i = 0; i < warriorCount; i++) {
 			u = new Unit(WARRIOR, 1, this);
-			u.inventory = 0;
+			u.inventory.setCap(4);
 			u.currentState = NeutralState.getState();
 			u.startState();
 			units.add(u);
 		}
 		for (int i = 0; i < hunterCount; i++) {
 			u = new Unit(HUNTER, 1, this);
-			u.inventory = 0;
+			u.inventory.setCap(8);
 			u.currentState = NeutralState.getState();
 			u.startState();
 			units.add(u);
 		}
+	}
+	
+	public void drawMeatStockpile() {
+		
+		float spacing = .5f;
+		int renderDimension = (int) Math.ceil(Math.pow(meatCount, 1.0/3.0));
+		
+		GL11.glPushMatrix();
+
+			for (int i = 0; i < meatCount; i++) {
+				
+				GL11.glLoadIdentity();
+				GL11.glColor3f(1.0f, 1.0f, 1.0f);
+	
+				GL11.glTranslatef(position[0] + (spacing * (i % renderDimension)), 
+						position[1]  + (spacing * (int) (i / (renderDimension * renderDimension))),
+						position[2]  + (spacing * (((int)(i/renderDimension)) % renderDimension)));
+				GL11.glRotatef(0, 1, 0, 0);
+				GL11.glRotatef(0, 0, 1, 0);
+				GL11.glRotatef(0, 0, 0, 1);
+				GL11.glScalef(.25f, .25f, .25f);
+				
+				Graphics.drawCube();
+			}
+
+		GL11.glPopMatrix();
 	}
 }

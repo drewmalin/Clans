@@ -24,28 +24,32 @@ public class TravelState extends State {
 		if (Physics.distSquared(e.destination, e.position) < 5) {
 			Physics.haltEntity(e);
 			
-			if (e.type == Clan.HUNTER && e.inventoryEmpty()) {
+			if (e.type == Clan.HUNTER && e.inventory.isEmpty()) { //Assume you've arrived at a resource (gather)
 				System.out.println("Arrived, going to start gathering...");
 				e.changeState( GatherState.getState() );
 			}
-			else if (e.type == Clan.HUNTER && !e.inventoryEmpty()) {
-				
-				if (e.pause < 250) {
+			else if (e.type == Clan.HUNTER && !e.inventory.isEmpty()) { //Assume you've arrived at home (deposit)
+
+				if (e.pause < 100) {
 					e.pause++;
 				}
 				else {
-					System.out.println("Arrived, going to start depositing...");
+					System.out.println("Depositing mah resources... ");
+					System.out.println("Inventory count: " + e.inventory.count());
 
 					e.pause = 0;
 					
-					e.inventory = 0;
-					if (e.focusEntity == null || e.focusEntity.inventoryEmpty()) {
-						e.changeState( HuntState.getState() );
-					}
-					else {
-						e.destination[0] = e.focusEntity.position[0];
-						e.destination[1] = e.focusEntity.position[1];
-						e.destination[2] = e.focusEntity.position[2];
+					//e.inventory = 0;
+					e.inventory.removeItem();
+					e.clanRef.meatCount++;
+					
+					if (e.inventory.isEmpty()) { //Done depositing
+						if (e.focusEntity == null || e.focusEntity.inventory.isEmpty()) { //Last target is empty
+							e.changeState( HuntState.getState() );
+						}
+						else { //Last target still has resources
+							e.setDestination(e.focusEntity.position);
+						}
 					}
 				}
 			}

@@ -176,6 +176,10 @@ public class Resources {
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("type")) {
 						entity.type = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
+					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("resources")) {
+						entity.inventory.setCap(Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<'))));
+						entity.inventory.fill();
+					}
 				}
 				entities.add(entity);
 			}

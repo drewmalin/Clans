@@ -63,7 +63,7 @@
 	<hunter>1</hunter>
 	<warrior>0</warrior>
 	<builder>0</builder>
-	<position>-10 0 -10</position>
+	<position>-0 0 0</position>
     <color>0 .74 1</color>
 </clan>
 <effect>
@@ -133,6 +133,7 @@
     <rotation>0 45 0</rotation>
     <scale>.1</scale>
     <type>1</type>
+    <resources>30</resources>
 </entity>
 
 <!-- Wolf -->
@@ -142,6 +143,7 @@
     <rotation>0 75 0</rotation>
     <scale>.1</scale>
     <type>1</type>
+    <resources>30</resources>
 </entity>
 
 <!-- Wolf -->
@@ -151,6 +153,7 @@
     <rotation>0 245 0</rotation>
     <scale>.1</scale>
     <type>1</type>
+    <resources>30</resources>
 </entity>
 
 <!-- Wolf -->
@@ -160,6 +163,7 @@
     <rotation>0 20 0</rotation>
     <scale>.1</scale>
     <type>1</type>
+    <resources>30</resources>
 </entity>
 
 <!-- Mine -->
@@ -170,6 +174,7 @@
     <scale>.1</scale>
     <type>0</type>
 </entity>
+
 <map>
 	<file>res/map/map.bmp</file>
 	<scale>1</scale>
