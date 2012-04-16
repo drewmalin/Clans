@@ -1,14 +1,15 @@
 package com.cube.core;
 
-import org.lwjgl.util.vector.Vector3f;
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 
 public class Camera {
 	
-	private float position[];
-	private float target[];
-	private float up[];
-	private float direction[];
-
+	private Vector3f target;
+	private Vector3f up;
+	private Vector3f position;
+	private Vector2f direction;
+	
 	private float radius;
 	private float thetaX;
 	private float thetaY;
@@ -18,10 +19,11 @@ public class Camera {
 	private static float ZOOM_SPEED = 0.5f;
 	
 	public Camera() {
-		position 		= new float[3];
-		target 			= new float[3];
-		up 				= new float[3];
-		direction	 	= new float[3];
+		target 			= new Vector3f(0, 0, 0);
+		up		 		= new Vector3f(0, 0, 0);
+		position 		= new Vector3f(0, 0, 0);
+		direction 		= new Vector2f(0, 0);
+		
 		
 		radius 			= 0f;
 		thetaX 			= 0f;
@@ -35,17 +37,20 @@ public class Camera {
 	 * determined programatically using these inputs, we need to calculate that position.
 	 */
 	public void updatePosition() {
-		float x, y, z;
-
-		direction[0] = (float) (Math.sin(thetaY / 180 * Math.PI) * (Math.cos(thetaX / 180 * Math.PI)));
-		direction[1] = (float) (Math.sin(thetaX / 180 * Math.PI));
-		direction[2] = (float) (Math.cos(thetaY / 180 * Math.PI) * (Math.cos(thetaX / 180 * Math.PI)));
-			
-		x = (float) (target[0] + radius * direction[0]);
-		y = (float) (target[1] + radius * direction[1]);
-		z = (float) (target[2] + radius * direction[2]);
 		
-		setPosition(x, y, z);
+		position.x = (float) (Math.sin(thetaY / 180 * Math.PI) * (Math.cos(thetaX / 180 * Math.PI)));
+		position.y = (float) (Math.sin(thetaX / 180 * Math.PI));
+		position.z = (float) (Math.cos(thetaY / 180 * Math.PI) * (Math.cos(thetaX / 180 * Math.PI)));		
+		position.normalize();
+		
+		direction.x = position.x;
+		direction.y = position.z;
+		direction.normalize();
+		
+		position.scale(radius);
+		position.add(target);
+		
+		setPosition(position.x, position.y, position.z);
 
 	}
 	
@@ -56,11 +61,12 @@ public class Camera {
 	 * camera to pan backwards.
 	 */
 	public void panForward(float x) {
-		target[0] += direction[0] * x;
-		target[2] += direction[2] * x;
 
-		position[0] += direction[0] * x;
-		position[2] += direction[2] * x;
+		target.x += direction.x * x;
+		target.z += direction.y * x;
+
+		position.x += direction.x * x;
+		position.z += direction.y * x;
 	}
 	
 	/*
@@ -70,17 +76,17 @@ public class Camera {
 	 * causes the camera to pan left.
 	 */
 	public void panRight(float x) {
-		Vector3f 	newVec 		= new Vector3f(0f, 0f, 0f);
-		Vector3f 	up 			= new Vector3f(0f, 1f, 0f);
-		Vector3f 	targetVec 	= new Vector3f(direction[0], direction[1], direction[2]);
+		Vector3f 	newVec 		= new Vector3f(0, 0, 0);
+		Vector3f 	up 			= new Vector3f(0, 1, 0);
+		Vector3f 	targetVec 	= new Vector3f(direction.x, 0, direction.y);
 		
-		Vector3f.cross(targetVec, up, newVec);
+		newVec.cross(targetVec, up);
+		
+		target.x += newVec.x * x;
+		target.z += newVec.z * x;
 
-		target[0] += newVec.x * x;
-		target[2] += newVec.z * x;
-
-		position[0] += newVec.x * x;
-		position[2] += newVec.z * x;
+		position.x += newVec.x * x;
+		position.z += newVec.z * x;
 	}
 	
 	/*
@@ -140,10 +146,11 @@ public class Camera {
 	 * Sets the final position of the camera in world coordinates. For use internally to the Camera class within the
 	 * updatePosition method.
 	 */
-	private void setPosition(float x, float y, float z) {
-		position[0] = x;
-		position[1] = y;
-		position[2] = z;
+	private void setPosition(double x, double y, double z) {
+
+		position.x = (float)x;
+		position.y = (float)y;
+		position.z = (float)z;
 	}
 	
 	/*
@@ -151,9 +158,9 @@ public class Camera {
 	 * For use in camera initialization.
 	 */
 	public void setTarget(float x, float y, float z) {
-		target[0] = x;
-		target[1] = y;
-		target[2] = z;
+		target.x = x;
+		target.y = y;
+		target.z = z;
 	}
 
 	/*
@@ -161,9 +168,9 @@ public class Camera {
 	 * of the camera. For use primarily in camera initialization.
 	 */
 	public void setUp(float x, float y, float z) {
-		up[0] = x;
-		up[1] = y;
-		up[2] = z;
+		up.x = x;
+		up.y = y;
+		up.z = z;
 	}
 	
 	/*
@@ -171,15 +178,33 @@ public class Camera {
 	 */
 	public float getPosition(int index) {
 		assert ((index >= 0) && index <3);
-		return position[index];
-	}
+		switch (index) {
+		case 0:
+			return position.x;
+		case 1:
+			return position.y;
+		case 2:
+			return position.z;
+		default:
+			return 0;
+	}	}
 	
 	/*
 	 * Returns the world position of the camera's target.
 	 */
 	public float getTarget(int index) {
 		assert ((index >= 0) && index <3);
-		return target[index];
+		
+		switch (index) {
+			case 0:
+				return target.x;
+			case 1:
+				return target.y;
+			case 2:
+				return target.z;
+			default:
+				return 0;
+		}
 	}
 	
 	/*
@@ -187,6 +212,15 @@ public class Camera {
 	 */
 	public float getUp(int index) {
 		assert ((index >= 0) && index <3);
-		return up[index];
+		switch (index) {
+			case 0:
+				return up.x;
+			case 1:
+				return up.y;
+			case 2:
+				return up.z;
+			default:
+				return 0;	
+		}
 	}
 }

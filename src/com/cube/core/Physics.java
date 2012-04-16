@@ -60,6 +60,8 @@ public class Physics {
 		for (float a : array) {
 			ret += (a + ", ");
 		}
+		
+		ret = ret.substring(0, ret.lastIndexOf(","));
 		return ret + ")";
 	}
 	

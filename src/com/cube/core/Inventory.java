@@ -54,28 +54,33 @@ public class Inventory {
 	
 	public void draw(Entity e) {
 		
-		float spacing = .5f;
+		float spacing = .2f;
 		
 		startX = e.position[0] + e.direction[0];
 		startY = e.position[1] + 1;
 		startZ = e.position[2] + e.direction[2];
-		
+			
 		GL11.glPushMatrix();
 
 			for (int i = 0; i < itemCount; i++) {
 				
 				GL11.glLoadIdentity();
 				GL11.glColor3f(1.0f, 1.0f, 1.0f);
-
-				GL11.glTranslatef(startX + (spacing * (i % renderDimension)), 
-							      startY + (spacing * (int) (i / (renderDimension * renderDimension))),
-						          startZ + (spacing * (((int)(i/renderDimension)) % renderDimension)));
+								
+				GL11.glTranslatef(startX, startY, startZ);
+								
 				GL11.glRotatef(e.rotation[0], 1, 0, 0);
-				GL11.glRotatef(e.rotation[1], 0, 1, 0);
+				GL11.glRotatef(135 + e.rotation[1], 0, 1, 0);
 				GL11.glRotatef(e.rotation[2], 0, 0, 1);
-				GL11.glScalef(.25f, .25f, .25f);
 				
+				GL11.glTranslatef(0 + (spacing * (i % renderDimension)), 
+						          0 + (spacing * (int) (i / (renderDimension * renderDimension))),
+						          0 + (spacing * (((int)(i/renderDimension)) % renderDimension)));
+
+				GL11.glScalef(.15f, .15f, .15f);
+
 				Graphics.drawCube();
+
 			}
 
 		GL11.glPopMatrix();
