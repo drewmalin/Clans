@@ -8,8 +8,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import com.cube.core.Engine;
-import com.cube.core.FileLogger;
 import com.cube.gui.MessageBox;
+import com.cube.util.FileLogger;
 
 public class Menu {
 	public static int PAUSE = 0;

@@ -6,6 +6,8 @@ import java.util.logging.Level;
 
 import javax.vecmath.Vector2d;
 
+import com.cube.util.FileLogger;
+
 public class Physics {
 	public static ArrayList<Effect> effects;
 	

@@ -1,4 +1,4 @@
-package com.cube.core;
+package com.cube.util;
 
 import java.util.logging.FileHandler;
 import java.util.logging.Level;

@@ -10,6 +10,11 @@ import java.util.logging.Level;
 
 import org.lwjgl.opengl.GL11;
 
+import com.cube.util.FileLogger;
+import com.cube.util.OBJParser;
+import com.cube.util.Texture;
+import com.cube.util.TextureLoader;
+
 
 public class Resources {
 	

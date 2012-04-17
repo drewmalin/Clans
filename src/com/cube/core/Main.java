@@ -2,6 +2,8 @@ package com.cube.core;
 
 import java.util.logging.Level;
 
+import com.cube.util.FileLogger;
+
 public class Main {
 	
 	public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.cube.core;
+package com.cube.util;
 
 public class TextureVert {
 	public float x;

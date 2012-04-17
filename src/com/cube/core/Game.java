@@ -3,6 +3,8 @@ package com.cube.core;
 import java.util.logging.Level;
 
 import com.cube.gui.Menu;
+import com.cube.util.FileLogger;
+import com.cube.util.Timer;
 
 public class Game {
 

@@ -3,6 +3,11 @@ package com.cube.core;
 import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
+import com.cube.util.OBJParser;
+import com.cube.util.PolyFace;
+import com.cube.util.TextureVert;
+import com.cube.util.Vertex;
+
 public abstract class Drawable {
 	
 	public ArrayList<Vertex> vertexArray;

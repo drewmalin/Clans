@@ -1,4 +1,4 @@
-package com.cube.core;
+package com.cube.util;
 
 import org.lwjgl.util.vector.Vector3f;
 

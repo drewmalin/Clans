@@ -7,6 +7,7 @@ import org.lwjgl.input.Mouse;
 
 import com.cube.gui.Menu;
 import com.cube.gui.Window;
+import com.cube.util.FileLogger;
 
 
 public class Input {

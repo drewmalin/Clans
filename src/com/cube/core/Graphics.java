@@ -13,6 +13,7 @@ import org.lwjgl.util.glu.GLU;
 
 import com.cube.core.Engine;
 import com.cube.gui.Menu;
+import com.cube.util.FileLogger;
 
 
 public class Graphics {

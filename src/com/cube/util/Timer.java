@@ -1,6 +1,7 @@
-package com.cube.core;
+package com.cube.util;
 
 import java.util.logging.Level;
+
 
 public class Timer {
 	private static long lastCheckTime;
