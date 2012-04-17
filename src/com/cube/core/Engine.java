@@ -49,6 +49,7 @@ public class Engine {
 	public static void enterGameLoop() throws Exception {
 		
 		while( Display.isCloseRequested() == false ) {
+			
 			Timer.update();
 			
 			if (Timer.frameDelta < Timer.FRAME_LENGTH_MINIMUM)

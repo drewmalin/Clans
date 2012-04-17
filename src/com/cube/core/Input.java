@@ -98,19 +98,23 @@ public class Input {
 						System.out.println("Key RIGHT!");
 						break;
 					case Keyboard.KEY_W:
-						System.out.println("Key W!");
 						break;
 					case Keyboard.KEY_S:
-						System.out.println("Key S!");
 						break;
 					case Keyboard.KEY_A:
-						System.out.println("Key A!");
 						break;
 					case Keyboard.KEY_D:
-						System.out.println("Key D!");
 						break;
 				}
 			}
 		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_W))
+			Graphics.camera.panForward(-panSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_S))
+			Graphics.camera.panForward(panSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_A))
+			Graphics.camera.panRight(panSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_D))
+			Graphics.camera.panRight(-panSpeed);
 	}
 }
