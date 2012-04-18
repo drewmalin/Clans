@@ -7,13 +7,14 @@ import org.lwjgl.input.Mouse;
 
 import com.cube.gui.Menu;
 import com.cube.gui.Window;
+import com.cube.util.FileLogger;
 
 
 public class Input {
 	
-	private static float panSpeed = .1f;
-	private static float rotateSpeed = .1f;
-	private static float scrollSpeed = .1f;
+	private static float panSpeed 		= .1f;
+	private static float rotateSpeed 	= .1f;
+	private static float scrollSpeed 	= .1f;
 	private static int deltaX = 0;
 	private static int deltaY = 0;
 	
@@ -83,36 +84,37 @@ public class Input {
 					//Quit the game
 					case Keyboard.KEY_ESCAPE:
 						Menu.pause();
-						//System.exit(0);
 						break;
 					case Keyboard.KEY_UP:
-						Resources.clans.get(0).units.get(0).rotation[1] += 10;
+						System.out.println("Key UP!");
 						break;
 					case Keyboard.KEY_DOWN:
-						Resources.clans.get(0).units.get(0).rotation[1] -= 10;
+						System.out.println("Key DOWN!");
 						break;
-						/*
 					case Keyboard.KEY_LEFT:
-						Graphics.camera.changeThetaY(1);
+						System.out.println("Key LEFT!");
 						break;
 					case Keyboard.KEY_RIGHT:
-						Graphics.camera.changeThetaY(-1);
+						System.out.println("Key RIGHT!");
 						break;
 					case Keyboard.KEY_W:
-						Graphics.camera.panForward(-1);
 						break;
 					case Keyboard.KEY_S:
-						Graphics.camera.panForward(1);
 						break;
 					case Keyboard.KEY_A:
-						Graphics.camera.panRight(1);
 						break;
 					case Keyboard.KEY_D:
-						Graphics.camera.panRight(-1);
 						break;
-						*/
 				}
 			}
 		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_W))
+			Graphics.camera.panForward(-panSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_S))
+			Graphics.camera.panForward(panSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_A))
+			Graphics.camera.panRight(panSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_D))
+			Graphics.camera.panRight(-panSpeed);
 	}
 }

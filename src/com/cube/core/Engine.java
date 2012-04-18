@@ -5,6 +5,8 @@ import java.util.logging.Level;
 import org.lwjgl.opengl.Display;
 
 import com.cube.gui.Menu;
+import com.cube.util.FileLogger;
+import com.cube.util.Timer;
 
 
 
@@ -26,7 +28,6 @@ public class Engine {
 	public static void start() {
 		
 		FileLogger.initialize();
-		
 		Resources.initialize();
 		Graphics.initialize();
 		Input.initialize();
@@ -48,6 +49,7 @@ public class Engine {
 	public static void enterGameLoop() throws Exception {
 		
 		while( Display.isCloseRequested() == false ) {
+			
 			Timer.update();
 			
 			if (Timer.frameDelta < Timer.FRAME_LENGTH_MINIMUM)

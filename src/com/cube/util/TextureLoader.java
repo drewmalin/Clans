@@ -1,4 +1,4 @@
-package com.cube.core;
+package com.cube.util;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -23,6 +23,7 @@ import java.util.Hashtable;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.GL11;
+
 
 /**
  * A utility class to load textures for JOGL. This source is based

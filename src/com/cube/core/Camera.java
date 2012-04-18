@@ -1,33 +1,31 @@
 package com.cube.core;
 
-import org.lwjgl.util.vector.Vector3f;
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 
 public class Camera {
 	
-	private float position[];
-	private float target[];
-	private float angle[];
-	private float up[];
+	private Vector3f target;
+	private Vector3f up;
+	private Vector3f position;
+	private Vector2f direction;
+	
 	private float radius;
-	private float height;
-	private float theta;
 	private float thetaX;
 	private float thetaY;
-	private float direction[];
 	                      
-	private static float ZOOM_IN = 2;
-	private static float ZOOM_OUT = 60;
+	private static float ZOOM_IN 	= 2;
+	private static float ZOOM_OUT 	= 60;
 	private static float ZOOM_SPEED = 0.5f;
 	
 	public Camera() {
-		position 		= new float[3];
-		target 			= new float[3];
-		angle 			= new float[3];
-		up 				= new float[3];
-		direction	 	= new float[3];
+		target 			= new Vector3f(0, 0, 0);
+		up		 		= new Vector3f(0, 0, 0);
+		position 		= new Vector3f(0, 0, 0);
+		direction 		= new Vector2f(0, 0);
+		
+		
 		radius 			= 0f;
-		height 			= 0f;
-		theta 			= 0f;
 		thetaX 			= 0f;
 		thetaY 			= 0f;
 	}
@@ -39,156 +37,190 @@ public class Camera {
 	 * determined programatically using these inputs, we need to calculate that position.
 	 */
 	public void updatePosition() {
-		float x, y, z;
-
-		direction[0] = (float) (Math.sin(thetaY / 180 * Math.PI) * (Math.cos(thetaX / 180 * Math.PI)));
-		direction[1] = (float) (Math.sin(thetaX / 180 * Math.PI));
-		direction[2] = (float) (Math.cos(thetaY / 180 * Math.PI) * (Math.cos(thetaX / 180 * Math.PI)));
-			
-		x = (float) (target[0] + radius * direction[0]);
-		y = (float) (target[1] + radius * direction[1]);
-		z = (float) (target[2] + radius * direction[2]);
 		
-		setPosition(x, y, z);
+		position.x = (float) (Math.sin(thetaY / 180 * Math.PI) * (Math.cos(thetaX / 180 * Math.PI)));
+		position.y = (float) (Math.sin(thetaX / 180 * Math.PI));
+		position.z = (float) (Math.cos(thetaY / 180 * Math.PI) * (Math.cos(thetaX / 180 * Math.PI)));		
+		position.normalize();
+		
+		direction.x = position.x;
+		direction.y = position.z;
+		direction.normalize();
+		
+		position.scale(radius);
+		position.add(target);
+		
+		setPosition(position.x, position.y, position.z);
 
 	}
 	
-	public void setTheta(float t) {
-		theta = t;
+	/*
+	 * The camera's translational movement is controlled through panning. This method ensures that the
+	 * camera's target pans across the world in lock-step with the camera itself, to avoid any sort of
+	 * angular change in the camera's direction. Note: negating the panForward parameter causes the
+	 * camera to pan backwards.
+	 */
+	public void panForward(float x) {
+
+		target.x += direction.x * x;
+		target.z += direction.y * x;
+
+		position.x += direction.x * x;
+		position.z += direction.y * x;
 	}
 	
+	/*
+	 * Similar to panning forward, panRight maintains movement equality with the camera's target. Panning
+	 * left and right necessitates determining the vector to the left and right of the camera, so the cross
+	 * product of the up vector and the current direction is taken. Note: negating the panRight parameter
+	 * causes the camera to pan left.
+	 */
+	public void panRight(float x) {
+		Vector3f 	newVec 		= new Vector3f(0, 0, 0);
+		Vector3f 	up 			= new Vector3f(0, 1, 0);
+		Vector3f 	targetVec 	= new Vector3f(direction.x, 0, direction.y);
+		
+		newVec.cross(targetVec, up);
+		
+		target.x += newVec.x * x;
+		target.z += newVec.z * x;
+
+		position.x += newVec.x * x;
+		position.z += newVec.z * x;
+	}
+	
+	/*
+	 * ThetaX represents the camera's rotation about its local x-axis. 
+	 */
 	public void setThetaX(float t) {
 		thetaX = t;
 	}
 	
-	public void changeThetaX(float t) {
-		thetaX += t;
-		
-		thetaX = (thetaX > 90 ? 90 : thetaX < 0 ? 0 : thetaX);
-	}
-	
-	public void changeThetaY(float t) {
-		thetaY += t;
-	}
-	
+	/*
+	 * ThetaY represents the camera's rotation about its local y-axis.
+	 */
 	public void setThetaY(float t) {
 		thetaY = t;
 	}
 	
+	/*
+	 * The value of thetaX is changed slowly by the user's input. The saved value is capped at 90 (or 89.99...)
+	 * so that the camera does not flip about its y-axis at thetaX values greater than 90.
+	 */
+	public void changeThetaX(float t) {
+		thetaX += t;
+		
+		thetaX = (thetaX > 90 ? 89.99f : thetaX < 0 ? 0 : thetaX);
+	}
+	
+	/*
+	 * The value of thetaY is changed slowly by the user's input. The value is always kept between 0 and 360 for
+	 * debugging purposes (as it's not immediately easy to translate 3214 degrees into anything meaningful).
+	 */
+	public void changeThetaY(float t) {
+		thetaY += t;
+		
+		thetaY = (thetaY > 360 ? thetaY - 360 : thetaY < 0 ? thetaY + 360 : thetaY);
+
+	}
+	
+	/*
+	 * The camera's radius is the straight-line distance from the camera position to the camera's target. Scrolling
+	 * in and out increases and decreases this radius. The ZOOM_SPEED modifier controls the value of each incremental
+	 * change to the radius, which ZOOM_IN and ZOOM_OUT serve as minimum and maximum zoom values.
+	 */
 	public void modifyRadius(float r) {
 		radius += r * ZOOM_SPEED;
 		if (radius < ZOOM_IN || radius > ZOOM_OUT)
 			radius -= r * ZOOM_SPEED;
 	}
-	public void modifyTheta(float t) {
-		theta += t;
-		if (theta < -1.5 || theta > 1.5)
-			theta -= t;
-
-	}
+	
+	/*
+	 * Sets the initial radius value. For use in camera initialization.
+	 */
 	public void setRadius(float r) {
 		radius = r;
 	}
 	
-	public void setHeight(float h) {
-		height = h;
+	/*
+	 * Sets the final position of the camera in world coordinates. For use internally to the Camera class within the
+	 * updatePosition method.
+	 */
+	private void setPosition(double x, double y, double z) {
+
+		position.x = (float)x;
+		position.y = (float)y;
+		position.z = (float)z;
 	}
 	
-	public void setPosition(float x, float y, float z) {
-		position[0] = x;
-		position[1] = y;
-		position[2] = z;
-	}
-	
+	/*
+	 * Sets the initial target of the camera (the point in world coordinates towards which the camera will be directed).
+	 * For use in camera initialization.
+	 */
 	public void setTarget(float x, float y, float z) {
-		target[0] = x;
-		target[1] = y;
-		target[2] = z;
-	}
-	
-	public void setAngle(float x, float y, float z) {
-		angle[0] = x;
-		angle[1] = y;
-		angle[2] = z;
+		target.x = x;
+		target.y = y;
+		target.z = z;
 	}
 
+	/*
+	 * Sets the vector that will be used to signify 'up' for the camera. This has the effect of setting the orientation
+	 * of the camera. For use primarily in camera initialization.
+	 */
 	public void setUp(float x, float y, float z) {
-		up[0] = x;
-		up[1] = y;
-		up[2] = z;
+		up.x = x;
+		up.y = y;
+		up.z = z;
 	}
 	
+	/*
+	 * Returns the world position of the camera.
+	 */
 	public float getPosition(int index) {
 		assert ((index >= 0) && index <3);
-		return position[index];
-	}
+		switch (index) {
+		case 0:
+			return position.x;
+		case 1:
+			return position.y;
+		case 2:
+			return position.z;
+		default:
+			return 0;
+	}	}
 	
+	/*
+	 * Returns the world position of the camera's target.
+	 */
 	public float getTarget(int index) {
 		assert ((index >= 0) && index <3);
-		return target[index];
+		
+		switch (index) {
+			case 0:
+				return target.x;
+			case 1:
+				return target.y;
+			case 2:
+				return target.z;
+			default:
+				return 0;
+		}
 	}
 	
-	public float getAngle(int index) {
-		assert ((index >= 0) && index <3);
-		return angle[index];
-	}
-	
+	/*
+	 * Returns the up value for the camera's orientation. For use in camera rendering.
+	 */
 	public float getUp(int index) {
 		assert ((index >= 0) && index <3);
-		return up[index];
-	}
-
-	public void changePositionX(float delta) {
-		position[0] += delta;
-	}
-	
-	public void changePositionY(float delta) {
-		position[1] += delta;
-	}
-	
-	public void changePositionZ(float delta) {
-		position[2] += delta;
-	}
-
-	public void setPositionY(float val) {
-		position[1] = val;
-	}
-
-	public void changeTargetZ(float d) {
-		target[2] = d;
-	}
-	
-	public float getRadius() {
-		return radius;
-	}
-	
-	public float getHeight() {
-		return height;
-	}
-	public float getTheta() {
-		return theta;
-	}
-
-	
-	public void panForward(float x) {
-		target[0] += direction[0] * x;
-		target[2] += direction[2] * x;
-
-		position[0] += direction[0] * x;
-		position[2] += direction[2] * x;
-	}
-	
-	public void panRight(float x) {
-		Vector3f 	newVec 		= new Vector3f(0f, 0f, 0f);
-		Vector3f 	up 			= new Vector3f(0f, 1f, 0f);
-		Vector3f 	targetVec 	= new Vector3f(direction[0], direction[1], direction[2]);
-		
-		Vector3f.cross(targetVec, up, newVec);
-
-		target[0] += newVec.x * x;
-		target[2] += newVec.z * x;
-
-		position[0] += newVec.x * x;
-		position[2] += newVec.z * x;
+		switch (index) {
+			case 0:
+				return up.x;
+			case 1:
+				return up.y;
+			case 2:
+				return up.z;
+			default:
+				return 0;	
+		}
 	}
 }

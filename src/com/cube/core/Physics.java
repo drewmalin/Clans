@@ -5,7 +5,8 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import javax.vecmath.Vector2d;
-import javax.vecmath.Vector2f;
+
+import com.cube.util.FileLogger;
 
 public class Physics {
 	public static ArrayList<Effect> effects;
@@ -24,13 +25,23 @@ public class Physics {
 		}
 	}
 	
-	//------------- Misc ------------------//
+	//-------------------------------------------------------------------------//
+	//---------------------- Miscellaneous Functions --------------------------//
+	//-------------------------------------------------------------------------//
 	public static Random generator;
 	
+	/*
+	 * Method to return a random number between the values of -1.0 and 1.0.
+	 */
 	public static double randomClamped() {
 		return (generator.nextFloat() * 2) - 1;
 	}
 	
+	/*
+	 * Method to return the Euclidean distance between two 3D points. The distance returned
+	 * from the function is the squared distance--the use of the expensive square root operator
+	 * has been avoided.
+	 */
 	public static double distSquared(float[] point1, float[] point2) {
 		float a, b, c;
 		
@@ -42,23 +53,31 @@ public class Physics {
 	}
 	
 	// *** Temporary location *** //
+	/*
+	 * Method to neatly print the contents of a float array.
+	 */
 	public static String printArray(float[] array) {
 		String ret = "(";
 		
 		for (float a : array) {
 			ret += (a + ", ");
 		}
+		
+		ret = ret.substring(0, ret.lastIndexOf(","));
 		return ret + ")";
 	}
 	
-	//------------- Wander ----------------//
-	public static double targetDistance = 25;
+	//-------------------------------------------------------------------------//
+	//--------------------------- Movement Functions --------------------------//
+	//-------------------------------------------------------------------------//
 	
 	/*
-	 * generateTarget takes the current position of the entity and randomly generates a 
-	 * target position within targetDistance of the entity.
+	 * Entities within the game each have a destination towards which they can travel. The updateDestination
+	 * method calculates a new random destination (for use mainly with any sort of wander, hunt, or search
+	 * type of movement). The calculation of a new destination places the destination at targetDistance away
+	 * from the entity parm's current position.
 	 */
-	public static void updateDestination(Entity e) {
+	public static void updateDestination(Entity e, double targetDistance) {
 		double currentX = e.position[0];
 		double currentZ = e.position[2];
 		Vector2d target;
@@ -75,6 +94,13 @@ public class Physics {
 		e.destination[2] = (float) target.y;
 	}
 	
+	/*
+	 * In order to encourage an entity to move towards its destination position, the updateVelocity
+	 * method provides a push in that direction. The purpose of this method is to return the new
+	 * force vector the entity would require to arrive at its destination, however, the entity has
+	 * a current velocity vector, meaning this force only slightly modifies the entity's movement;
+	 * it does not guarantee instant arrival at the destination.
+	 */
 	public static Vector2d updateVelocity(Entity e) {
 		Vector2d velocityFix = new Vector2d();
 		
@@ -89,6 +115,13 @@ public class Physics {
 		return velocityFix;
 	}
 
+	/*
+	 * As entities move through space, their position must be updated based on their current movement.
+	 * updatePosition calculates the current acceleration, velocity vector, and new position of the
+	 * entity parm. This means that movement through the world is judged by the force vector applied
+	 * to entities (this could have been replaced with just applying a velocity vector, but the ability
+	 * for mass to play a role in later movement seems cool to me).
+	 */
 	public static void updatePosition(Entity e) {
 		// a = F/m
 		e.acceleration.x = e.force.x / e.mass;
@@ -104,4 +137,15 @@ public class Physics {
 		e.position[2] += e.velocity.y;		
 	}
 
+
+	/*
+	 * Stop!
+	 */
+	public static void haltEntity(Entity e) {
+		e.velocity.x = 0;
+		e.velocity.y = 0;		
+		
+		e.force.x = 0;
+		e.force.y = 0;
+	}
 }

@@ -1,13 +1,19 @@
+<!-- Info section is used to inform the engine about the number
+     of objects it should expect for the object library. -->
 <info>
     <libcount>11</libcount>
 </info>
+
+<!-- Library section: the engine only needs to store each object
+     once, so the library section designates each unique entry in
+     the library. -->
 <lib>
     <id>0</id>
     <file>res/obj/Bonfire.obj</file>
 </lib>
 <lib>
     <id>1</id>
-    <file>res/obj/FooMan.obj</file>
+    <file>res/obj/EdFooMan3.obj</file>
 </lib>
 <lib>
     <id>2</id>
@@ -45,6 +51,10 @@
     <id>10</id>
     <file>res/obj/Wolf.obj</file>
 </lib>
+
+<!-- Clan information includes the id of the clan (to uniquely identify
+     it against other clans in the world) and the current level of 
+     resources and units. -->
 <clan>
     <id>0</id>
 	<meat>0</meat>
@@ -53,7 +63,7 @@
 	<hunter>1</hunter>
 	<warrior>0</warrior>
 	<builder>0</builder>
-	<position>-10 0 -10</position>
+	<position>-0 0 0</position>
     <color>0 .74 1</color>
 </clan>
 <effect>
@@ -62,49 +72,115 @@
     <color>1 1 1</color>
 	<count>500</count>
 </effect>
+
+<!-- Entities each are given a unique type that dictates how they can
+     be interacted with (if at all):
+     
+     0 - NEUTRAL    (no interaction, e.g. static scenery)
+     1 - HUNTABLE
+     2 - GATHERABLE
+     3 - MINEABLE
+  -->
+  
+<!-- Bonfire -->
 <entity>
     <id>0</id>
     <position>-10 0 -10</position>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
+
+<!-- Shovel -->
 <entity>
     <id>9</id>
     <position>-3 1.5 -10.5</position>
     <rotation>0 45 135</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
+
+<!-- Pine Tree -->
 <entity>
     <id>8</id>
     <position>10 0 -10</position>
     <rotation>0 0 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
+
+<!-- Pine Tree -->
 <entity>
     <id>8</id>
     <position>-10 0 10</position>
     <rotation>0 180 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
+
+<!-- Pine Tree -->
 <entity>
     <id>8</id>
     <position>0 0 16</position>
     <rotation>0 90 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
+
+<!-- Wolf -->
 <entity>
     <id>10</id>
-    <position>4 0 4</position>
-    <rotation>0 180 0</rotation>
+    <position>-20 0 20</position>
+    <rotation>0 45 0</rotation>
     <scale>.1</scale>
+    <type>1</type>
+    <resources>30</resources>
 </entity>
+
+<!-- Wolf -->
+<entity>
+    <id>10</id>
+    <position>20 0 -20</position>
+    <rotation>0 75 0</rotation>
+    <scale>.1</scale>
+    <type>1</type>
+    <resources>30</resources>
+</entity>
+
+<!-- Wolf -->
+<entity>
+    <id>10</id>
+    <position>-20 0 -20</position>
+    <rotation>0 245 0</rotation>
+    <scale>.1</scale>
+    <type>1</type>
+    <resources>30</resources>
+</entity>
+
+<!-- Wolf -->
+<entity>
+    <id>10</id>
+    <position>20 0 20</position>
+    <rotation>0 20 0</rotation>
+    <scale>.1</scale>
+    <type>1</type>
+    <resources>30</resources>
+</entity>
+
+<!-- Mine -->
 <entity>
     <id>7</id>
     <position>0 0 -15</position>
     <rotation>0 0 0</rotation>
     <scale>.1</scale>
+    <type>0</type>
 </entity>
+
 <map>
 	<file>res/map/map.bmp</file>
 	<scale>1</scale>
 	<colorID>1</colorID>
 </map>
+
+<texture>
+	<file>FooMan6.png</file>
+</texture>

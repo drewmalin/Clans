@@ -1,4 +1,4 @@
-package com.cube.core;
+package com.cube.util;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -8,16 +8,19 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
+
 public class OBJParser {
+	
+	public ArrayList<Vertex> v;
+	public ArrayList<Vertex> vn;
+	public ArrayList<TextureVert> t;
 
 	private FileInputStream fstream;
 	private DataInputStream in;
 	private BufferedReader br;
 	
-	public ArrayList<Vertex> v;
-	public ArrayList<Vertex> vn;
-	public ArrayList<TextureVert> t;
-	public ArrayList<PolyFace> f;
+	public ArrayList<GeometryGroup> ggs;
+	private int groupCount;
 	
 	public Vertex vertex;
 	public TextureVert texture;
@@ -39,10 +42,14 @@ public class OBJParser {
 	 * Treat anything remaining as junk
 	 */
 	public OBJParser(String str) {
+		
 		v = new ArrayList<Vertex>();
 		vn = new ArrayList<Vertex>();
 		t = new ArrayList<TextureVert>();
-		f = new ArrayList<PolyFace>();
+		
+		ggs = new ArrayList<GeometryGroup>();
+		groupCount = 0;
+		
 		
 		try {
 			fstream = new FileInputStream(str);
@@ -83,8 +90,21 @@ public class OBJParser {
  
 			if (strLine.length() > 1) {
 				flag = strLine.substring(0, 2);
-				
-				if (flag.equals("# ") || flag.equals("g ")) {
+				//This requires a comment with the status of the group to follow immediately after the 'g'
+				if (flag.equals("g ")) {
+					ggs.add(new GeometryGroup());
+					groupCount++;
+					strLine = br.readLine();
+					if(strLine != null) {
+						flag = strLine.substring(0, 2);
+						if(flag.equals("# ") && (strLine.substring(2, 3).equals("S"))) {
+							ggs.get(groupCount-1).status = Integer.valueOf(strLine.substring(4, 5));
+							continue;
+						}
+					}
+					
+				}
+				if (flag.equals("# ")) {
 					continue;
 				}
 				else if (flag.equals("v ")) {
@@ -116,7 +136,7 @@ public class OBJParser {
 						polyface.addVertexAndTextureAndNormal(strLine);
 					}
 					polyface.calcNormals();
-					f.add(polyface);
+					ggs.get(groupCount - 1).f.add(polyface);
 				}
 				else {
 					continue;

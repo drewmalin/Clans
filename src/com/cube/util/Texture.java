@@ -31,7 +31,7 @@
  * 
  * Modified by Ben Roye
  */
-package com.cube.core;
+package com.cube.util;
 
 import static org.lwjgl.opengl.GL11.*;
 
