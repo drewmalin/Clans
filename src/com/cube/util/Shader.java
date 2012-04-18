@@ -72,7 +72,7 @@ public class Shader {
 	public void loadVertexShader() {
 		try {
 			//Prepare the file for reading
-			BufferedReader reader = new BufferedReader(new FileReader(vertexShaderSourceFile));
+			BufferedReader reader = new BufferedReader(new FileReader(BASE_DIR + vertexShaderSourceFile));
             String line;
             //Read the file, line by line
             while ((line = reader.readLine()) != null) {
@@ -94,7 +94,7 @@ public class Shader {
 	public void loadFragmentShader() {
 		try {
 			//Prepare the file for reading
-			BufferedReader reader = new BufferedReader(new FileReader(fragmentShaderSourceFile));
+			BufferedReader reader = new BufferedReader(new FileReader(BASE_DIR + fragmentShaderSourceFile));
             String line;
             //Read the file, line by line
             while ((line = reader.readLine()) != null) {
