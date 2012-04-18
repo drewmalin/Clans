@@ -18,6 +18,7 @@ public class Game {
 		
 		if (!Menu.windows.get(Menu.PAUSE).stealContext)
 			updateScene();
+		
 	}
 	
 	private static void updateScene() {

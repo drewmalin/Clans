@@ -9,6 +9,6 @@ public class TextureVert {
 		String[] tokens = data.split("\\s");
 		
 		x = Float.valueOf(tokens[0]);
-		y = Float.valueOf(tokens[1]);
+		y = 1 - Float.valueOf(tokens[1]);
 	}
 }
