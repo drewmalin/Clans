@@ -97,14 +97,6 @@ public class Input {
 					case Keyboard.KEY_RIGHT:
 						System.out.println("Key RIGHT!");
 						break;
-					case Keyboard.KEY_W:
-						break;
-					case Keyboard.KEY_S:
-						break;
-					case Keyboard.KEY_A:
-						break;
-					case Keyboard.KEY_D:
-						break;
 				}
 			}
 		}
