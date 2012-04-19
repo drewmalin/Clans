@@ -1,17 +1,18 @@
 package com.cube.core;
 
 import org.lwjgl.opengl.GL11;
-
+import com.cube.util.Texture;
 
 public class Unit extends Entity {
 			
-	public Unit(int _type, int _id, Clan c) {
+	public Unit(int _type, int _id, Clan c, Texture tex) {
 		type = _type;
 		objectID = _id;
 		clanRef = c;
 		
 		show = true;
 
+		this.tex = tex;
 	}
 	
 	public void update(int timeElapsed) {
@@ -30,8 +31,11 @@ public class Unit extends Entity {
 			GL11.glRotatef(rotation[1], 0, 1, 0);
 			GL11.glRotatef(rotation[2], 0, 0, 1);
 			GL11.glScalef(scale, scale, scale);
-			
-			Resources.objectLibrary[objectID].draw();
+			if(tex == null) {
+				Resources.objectLibrary[objectID].draw();
+			}else{
+				Resources.objectLibrary[objectID].draw(tex);
+			}
 			inventory.draw(this);
 			
 			GL11.glColor3f(1.0f, 0f, 0f);

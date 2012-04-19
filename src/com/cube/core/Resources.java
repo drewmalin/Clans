@@ -8,12 +8,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import org.lwjgl.opengl.GL11;
+
 
 import com.cube.util.FileLogger;
 import com.cube.util.OBJParser;
 import com.cube.util.Texture;
 import com.cube.util.TextureLoader;
+import com.cube.util.GeometryGroup;
 
 
 public class Resources {
@@ -43,7 +44,7 @@ public class Resources {
 	
 	public static void loadLevel(String file) {
 		////////////////////***<temporary location>***/////////////////////
-		
+		/*
 		try{
 			textures.add(texLoader.getTexture("brookstoneFTW.png"));
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -52,7 +53,7 @@ public class Resources {
 			FileLogger.logger.log(Level.SEVERE, e.getMessage());
 			e.printStackTrace();
 		}
-		
+		*/
 		////////////////////**</temporary location>***////////////////////
 		try {
 			//sound = new Sound();
@@ -188,6 +189,14 @@ public class Resources {
 				}
 				entities.add(entity);
 			}
+			/* Textures */
+			if (strLine.equals("<texture>")) {
+				while (!(strLine = br.readLine().trim()).equals("</texture>")) {
+					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("file")) {
+						textures.add(texLoader.getTexture(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<'))));
+					}
+				}
+			}
 			/* Add models to the model library */
 			if (strLine.equals("<lib>")) {
 				Object object = new Object();
@@ -211,7 +220,9 @@ public class Resources {
 			we.vertexArray = parser.v;
 			we.vertexNormalArray = parser.vn;
 			we.textureArray = parser.t;
-			we.polyfaceArray = parser.f;
+			for(GeometryGroup gg : parser.ggs) {
+				we.geoGroups.add(gg);
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

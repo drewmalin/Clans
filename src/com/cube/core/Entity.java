@@ -5,6 +5,7 @@ import javax.vecmath.Vector2d;
 import org.lwjgl.opengl.GL11;
 
 import com.cube.states.State;
+import com.cube.util.Texture;
 
 public class Entity {
 	
@@ -34,11 +35,14 @@ public class Entity {
 	
 	public Inventory inventory;
 	
+	public Texture tex;
+	
 	//** Temporary Variables... implementation will change **//
 	//public int inventory;
 	public int pause;
 	public Clan clanRef;
 
+	public int timedump;
 	
 	public Entity() {
 		
@@ -67,6 +71,9 @@ public class Entity {
 		//inventory = 2; //full inventory
 		inventory = new Inventory();
 		clanRef = null;
+		
+		tex = null;
+		timedump = 0;
 	}
 	
 	public void setType(int _type) {
@@ -82,7 +89,12 @@ public class Entity {
 			GL11.glRotatef(rotation[1], 0, 1, 0);
 			GL11.glRotatef(rotation[2], 0, 0, 1);
 			GL11.glScalef(scale, scale, scale);
-			Resources.objectLibrary[objectID].draw();
+			if(tex == null)
+			{
+				Resources.objectLibrary[objectID].draw();
+			}else{
+				Resources.objectLibrary[objectID].draw(tex);
+			}
 		GL11.glPopMatrix();
 	}
 	
@@ -118,6 +130,8 @@ public class Entity {
 		if (currentState != null) {
 			currentState.execute(this);
 		}
+		
+		timedump += timeElapsed;
 	}
 /*
 	public boolean inventoryEmpty() {

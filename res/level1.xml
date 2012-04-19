@@ -13,7 +13,7 @@
 </lib>
 <lib>
     <id>1</id>
-    <file>res/obj/Man.obj</file>
+    <file>res/obj/EdFooMan3.obj</file>
 </lib>
 <lib>
     <id>2</id>
@@ -180,3 +180,7 @@
 	<scale>1</scale>
 	<colorID>1</colorID>
 </map>
+
+<texture>
+	<file>FooMan6.png</file>
+</texture>
