@@ -38,7 +38,6 @@ public class Entity {
 	public Texture tex;
 	
 	//** Temporary Variables... implementation will change **//
-	//public int inventory;
 	public int pause;
 	public Clan clanRef;
 
@@ -133,14 +132,6 @@ public class Entity {
 		
 		timedump += timeElapsed;
 	}
-/*
-	public boolean inventoryEmpty() {
-		if (inventory == 0) 
-			return true;
-		else 
-			return false;
-	}
-	*/
 
 	public void retire() {
 		focusEntity.type = Entity.NEUTRAL;
