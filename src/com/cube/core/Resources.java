@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import javax.vecmath.Vector3d;
+
 
 
 import com.cube.util.FileLogger;
@@ -31,6 +33,7 @@ public class Resources {
 	public static TextureLoader texLoader;
 	
 	public static void initialize() {
+		
 		entities = new ArrayList<Entity>();
 		lights = new ArrayList<Light>();
 		clans = new ArrayList<Clan>();
@@ -171,7 +174,7 @@ public class Resources {
 						entity.objectID = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("position")) {
-						entity.position = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+						entity.position = parseVector3d(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
 					}
 					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("scale")) {
 						entity.scale = Float.parseFloat(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
@@ -255,5 +258,20 @@ public class Resources {
 			ret[idx++] = Integer.parseInt(token);
 		}
 		return ret;
+	}
+	
+	public static Vector3d parseVector3d(String s) {
+		Vector3d ret = new Vector3d();
+		String[] tokens = s.split("\\s");
+
+		ret.x = Double.parseDouble(tokens[0]);
+		ret.y = Double.parseDouble(tokens[1]);
+		ret.z = Double.parseDouble(tokens[2]);
+
+		return ret;
+	}
+	
+	public static float[] getNextColorID() {
+		return null;
 	}
 }

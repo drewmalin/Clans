@@ -8,9 +8,9 @@ public class Inventory {
 	private int itemCount;
 	private int renderDimension;
 	
-	private float startX;
-	private float startY;
-	private float startZ;
+	private double startX;
+	private double startY;
+	private double startZ;
 	
 	public Inventory() {
 		capacity = itemCount = renderDimension = 0;
@@ -56,9 +56,9 @@ public class Inventory {
 		
 		float spacing = .2f;
 		
-		startX = e.position[0] + e.direction[0];
-		startY = e.position[1] + 1;
-		startZ = e.position[2] + e.direction[2];
+		startX = e.position.x + e.direction.x;
+		startY = e.position.y + 1;
+		startZ = e.position.z + e.direction.z;
 			
 		GL11.glPushMatrix();
 
@@ -67,7 +67,7 @@ public class Inventory {
 				GL11.glLoadIdentity();
 				GL11.glColor3f(1.0f, 1.0f, 1.0f);
 								
-				GL11.glTranslatef(startX, startY, startZ);
+				GL11.glTranslated(startX, startY, startZ);
 								
 				GL11.glRotatef(e.rotation[0], 1, 0, 0);
 				GL11.glRotatef(135 + e.rotation[1], 0, 1, 0);

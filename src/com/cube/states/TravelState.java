@@ -15,8 +15,6 @@ public class TravelState extends State {
 		
 		System.out.println("Entity " + e + " is now traveling!");
 		Physics.haltEntity(e);
-
-		e.pause = 0;
 	}
 
 	@Override
@@ -30,16 +28,10 @@ public class TravelState extends State {
 			}
 			else if (e.type == Clan.HUNTER && !e.inventory.isEmpty()) { //Assume you've arrived at home (deposit)
 
-				if (e.pause < 50) {
-					e.pause++;
-				}
-				else {
+				if (e.pause(50)) {
 					System.out.println("Depositing mah resources... ");
 					System.out.println("Inventory count: " + e.inventory.count());
 
-					e.pause = 0;
-					
-					//e.inventory = 0;
 					e.inventory.removeItem();
 					e.clanRef.meatCount++;
 					

@@ -27,7 +27,7 @@ public class Unit extends Entity {
 		GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 			GL11.glColor3f(color[0], color[1], color[2]);
-			GL11.glTranslatef(position[0], position[1], position[2]);
+			GL11.glTranslated(position.x, position.y, position.z);
 			GL11.glRotatef(rotation[0], 1, 0, 0);
 			GL11.glRotatef(rotation[1], 0, 1, 0);
 			GL11.glRotatef(rotation[2], 0, 0, 1);

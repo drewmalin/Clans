@@ -7,20 +7,15 @@ public class NeutralState extends State {
 	
 	@Override
 	public void enter(Entity e) {
-		
-		e.pause = 0;
-		System.out.println("Entity " + e + " is now neutral!");
-		
+		System.out.println("Entity " + e + " is now neutral!");		
 	}
 
 	@Override
 	public void execute(Entity e) {
 		
-		e.pause++;
-		if (e.pause >= 100 && e.type == Clan.HUNTER) {
+		if (e.pause(100) && e.type == Clan.HUNTER) {
 			System.out.println("Entity " + e + " is going to start hunting...");
 			e.changeState( HuntState.getState() );
-			e.pause = 0;
 		}
 	}
 

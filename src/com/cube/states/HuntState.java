@@ -21,7 +21,7 @@ public class HuntState extends State {
 		System.out.println("Entity " + e + " is now hunting!");
 		
 		Physics.updateDestination(e, 25);
-		e.force.set(e.destination[0] * Physics.SLOW, e.destination[2] * Physics.SLOW);
+		e.force.set(e.destination.x * Physics.SLOW, e.destination.z * Physics.SLOW);
 	}
 
 	/*
@@ -51,7 +51,7 @@ public class HuntState extends State {
 		if (Physics.distSquared(e.position, e.destination) < 10) {
 			System.out.println("setting a new target");
 			Physics.updateDestination(e, 25);
-			e.force.set(e.destination[0] * .01, e.destination[2] * .01);
+			e.force.set(e.destination.x * .01, e.destination.z * .01);
 		}
 		
 		tempVect = Physics.updateVelocity(e);

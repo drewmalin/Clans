@@ -14,9 +14,7 @@ public class GatherState extends State {
 	 */
 	@Override
 	public void enter(Entity e) {
-		
 		System.out.println("Entity " + e + " is now gathering!");
-		e.pause = 0;
 	}
 
 	/* 
@@ -26,14 +24,9 @@ public class GatherState extends State {
 	@Override
 	public void execute(Entity e) {
 		
-				
-		if (e.pause < 100) {
-			e.pause++;
-		}
-		else {
+		
+		if (e.pause(100)) {
 			System.out.println("Grabbin mah resources...");
-
-			e.pause = 0;
 			e.inventory.addItem();
 			e.focusEntity.inventory.removeItem();
 			System.out.println("Inventory count: " + e.inventory.count());

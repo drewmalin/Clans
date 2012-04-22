@@ -55,6 +55,16 @@ public class Physics {
 		return a + b + c;
 	}
 	
+	public static double distSquared(Vector3d point1, Vector3d point2) {
+		double a, b, c;
+		
+		a = (point1.x - point2.x) * (point1.x - point2.x);
+		b = (point1.y - point2.y) * (point1.y - point2.y);
+		c = (point1.z - point2.z) * (point1.z - point2.z);
+
+		return a + b + c;
+	}
+	
 	// *** Temporary location *** //
 	/*
 	 * Method to neatly print the contents of a float array.
@@ -101,8 +111,8 @@ public class Physics {
 	 * from the entity parm's current position.
 	 */
 	public static void updateDestination(Entity e, double targetDistance) {
-		double currentX = e.position[0];
-		double currentZ = e.position[2];
+		double currentX = e.position.x;
+		double currentZ = e.position.z;
 		Vector2d target;
 		Vector2d current;
 		
@@ -113,8 +123,8 @@ public class Physics {
 		target.scale(targetDistance);
 		target.add(current);
 		
-		e.destination[0] = (float)target.x;
-		e.destination[2] = (float) target.y;
+		e.destination.x = (float)target.x;
+		e.destination.z = (float) target.y;
 	}
 	
 	/*
@@ -128,8 +138,8 @@ public class Physics {
 		Vector2d velocityFix = new Vector2d();
 		Vector2d obstacleAvoid = new Vector2d();
 		
-		velocityFix.x = e.destination[0] - e.position[0];
-		velocityFix.y = e.destination[2] - e.position[2];
+		velocityFix.x = e.destination.x - e.position.x;
+		velocityFix.y = e.destination.z - e.position.z;
 		velocityFix.normalize();
 		velocityFix.scale(e.max_v);
 		
@@ -142,6 +152,13 @@ public class Physics {
 		return velocityFix;
 	}
 	
+	/*
+	 * Function to avoid obstacles in the path of the unit/entity. The function creates a rectangle extending 20
+	 * distance-units in front of the entity, and 1 distance-unit to either side. Each entity has a 1-distance-unit 
+	 * radius collision circle around them. If these collision circles ever overlap the unit's rectangle, the unit
+	 * is push laterally in the direction that will avoid collision the quickest, and slows down depending on how 
+	 * close the colliding entity's collision circle is.
+	 */
 	public static Vector2d avoidObstacles(Entity e) {
 		
 		Vector2d push = new Vector2d(0, 0);
@@ -152,19 +169,19 @@ public class Physics {
 			//If the entity is not the current entity, and the entity is neutral
 			if (!e.equals(ent) && ent.type == Entity.NEUTRAL) {
 				
-				Vector2d globalEntPos = new Vector2d(ent.position[0], ent.position[2]);
-				Vector2d globalEPos = new Vector2d(e.position[0], e.position[2]);
-				Vector3d tempDir = new Vector3d(e.direction[0], e.direction[1], e.direction[2]);
+				Vector2d globalEntPos = new Vector2d(ent.position.x, ent.position.z);
+				Vector2d globalEPos = new Vector2d(e.position.x, e.position.z);
+				Vector3d tempDir = new Vector3d(e.direction.x, e.direction.y, e.direction.z);
 				tempDir.normalize();
 				
 				dist = distSquared(e.position, ent.position);
 
 				// If the two entities are close enough to eventually collide
 				if (dist < 25 && globalEntPos.dot(globalEPos) > 0) {
-					
+
 					//Convert the ent position to move it into e's local axis
-					globalEntPos.x = (globalEntPos.x - e.position[0]);
-					globalEntPos.y = (globalEntPos.y - e.position[2]);
+					globalEntPos.x = (globalEntPos.x - e.position.x);
+					globalEntPos.y = (globalEntPos.y - e.position.z);
 					rotateVector(globalEntPos, -e.rotation[1]);
 
 					//From here on, disregard the rotation of e
@@ -221,8 +238,8 @@ public class Physics {
 		if (Math.abs(e.velocity.x) > e.max_v) e.velocity.x = e.max_v * (e.velocity.x / Math.abs(e.velocity.x));
 		if (Math.abs(e.velocity.y) > e.max_v) e.velocity.y = e.max_v * (e.velocity.y / Math.abs(e.velocity.y));
 
-		e.position[0] += e.velocity.x;
-		e.position[2] += e.velocity.y;		
+		e.position.x += e.velocity.x;
+		e.position.z += e.velocity.y;		
 	}
 
 
