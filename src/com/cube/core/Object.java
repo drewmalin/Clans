@@ -15,10 +15,7 @@ public class Object extends Drawable {
 
 	@Override
 	public void draw() {
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		Resources.textures.get(1).bind();
 		drawOBJ();
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
 	
 	public void draw(Texture tex)

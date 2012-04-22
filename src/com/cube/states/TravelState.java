@@ -30,7 +30,7 @@ public class TravelState extends State {
 			}
 			else if (e.type == Clan.HUNTER && !e.inventory.isEmpty()) { //Assume you've arrived at home (deposit)
 
-				if (e.pause < 50) {
+				if (e.pause < 100) {
 					e.pause++;
 				}
 				else {
@@ -39,6 +39,7 @@ public class TravelState extends State {
 
 					e.pause = 0;
 					
+					//e.inventory = 0;
 					e.inventory.removeItem();
 					e.clanRef.meatCount++;
 					
@@ -55,7 +56,7 @@ public class TravelState extends State {
 		}
 		else {
 			tempVect = Physics.updateVelocity(e);
-			e.force.set(tempVect.x * Physics.FAST, tempVect.y * Physics.FAST);
+			e.force.set(tempVect.x * .1, tempVect.y * .1);
 		}
 	}
 
