@@ -2,7 +2,7 @@ varying vec4 FinalColor;
 
 void main()
 {
-  vec3 LightPosition = vec3(20, 10, 20);
+  vec3 LightPosition = vec3(0, 100, 0);
 	vec3 ecPosition = vec3(gl_ModelViewMatrix * gl_Vertex);
 	vec3 tnorm = normalize(gl_NormalMatrix * gl_Normal);
 	vec3 lightVec = normalize(LightPosition - ecPosition);

@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 public class Shader {
-	//Base directory which will store all of the shader code
-	public static final String BASE_DIR = "res/shaders/";
 	
 	//Handles on the shader program and shaders
 	private int shaderProgram;
@@ -72,7 +70,7 @@ public class Shader {
 	public void loadVertexShader() {
 		try {
 			//Prepare the file for reading
-			BufferedReader reader = new BufferedReader(new FileReader(BASE_DIR + vertexShaderSourceFile));
+			BufferedReader reader = new BufferedReader(new FileReader(ShaderManager.BASE_DIR + vertexShaderSourceFile));
             String line;
             //Read the file, line by line
             while ((line = reader.readLine()) != null) {
@@ -94,7 +92,7 @@ public class Shader {
 	public void loadFragmentShader() {
 		try {
 			//Prepare the file for reading
-			BufferedReader reader = new BufferedReader(new FileReader(BASE_DIR + fragmentShaderSourceFile));
+			BufferedReader reader = new BufferedReader(new FileReader(ShaderManager.BASE_DIR + fragmentShaderSourceFile));
             String line;
             //Read the file, line by line
             while ((line = reader.readLine()) != null) {

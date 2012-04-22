@@ -14,11 +14,13 @@ import org.lwjgl.util.glu.GLU;
 import com.cube.core.Engine;
 import com.cube.gui.Menu;
 import com.cube.util.FileLogger;
+import com.cube.util.ShaderManager;
 
 
 public class Graphics {
 	
 	public static Camera camera;
+	public static ShaderManager shaderManager;
 	private static FloatBuffer matSpecular;
 	private static FloatBuffer lModelAmbient;
 	
@@ -28,6 +30,7 @@ public class Graphics {
 		createDisplay();
 		setupLighting();
 		setupBlend();
+		setupShaderManager();
 		FileLogger.logger.log(Level.INFO, "Graphics initialized");
 	}
 
@@ -71,6 +74,11 @@ public class Graphics {
 		sun.create(GL11.GL_LIGHT0);
 		Resources.lights.add(sun);
 
+	}
+
+	private static void setupShaderManager() {
+		shaderManager = new ShaderManager();
+		shaderManager.initialize();
 	}
 
 	private static void createDisplay() {
@@ -228,42 +236,36 @@ public class Graphics {
 	
 	public static void drawCube() {
 		GL11.glBegin(GL11.GL_QUADS);
-		// Bottom
-		GL11.glNormal3f(0f, -1f, 0f);
-		GL11.glVertex3f(0f, 0f, 0f);
-		GL11.glVertex3f(1f, 0f, 0f);
-		GL11.glVertex3f(1f, 0f, -1f);
-		GL11.glVertex3f(0f, 0f, -1f);
-		// Top
-		GL11.glNormal3f(0f, 1f, 0f);
-		GL11.glVertex3f(0f, 1f, 0f);
-		GL11.glVertex3f(1f, 1f, 0f);
-		GL11.glVertex3f(1f, 1f, -1f);
-		GL11.glVertex3f(0f, 1f, -1f);
-		// Front
-		GL11.glNormal3f(0f, 0f, 1f);
-		GL11.glVertex3f(0f, 0f, 0f);
-		GL11.glVertex3f(1f, 0f, 0f);
-		GL11.glVertex3f(1f, 1f, 0f);
-		GL11.glVertex3f(0f, 1f, 0f);
-		// Back
-		GL11.glNormal3f(0f, 0f, -1f);
-		GL11.glVertex3f(0f, 0f, -1f);
-		GL11.glVertex3f(1f, 0f, -1f);
-		GL11.glVertex3f(1f, 1f, -1f);
-		GL11.glVertex3f(0f, 1f, -1f);
-		// Right
-		GL11.glNormal3f(1f, 0f, 0f);
-		GL11.glVertex3f(1f, 0f, 0f);
-		GL11.glVertex3f(1f, 0f, -1f);
-		GL11.glVertex3f(1f, 1f, -1f);
-		GL11.glVertex3f(1f, 1f, 0f);
-		// Left
-		GL11.glNormal3f(-1f, 0f, 0f);
-		GL11.glVertex3f(0f, 0f, 0f);
-		GL11.glVertex3f(0f, 0f, -1f);
-		GL11.glVertex3f(0f, 1f, -1f);
-		GL11.glVertex3f(0f, 1f, 0f);
+			// Bottom
+			GL11.glVertex3f(0f, 0f, 0f);
+			GL11.glVertex3f(1f, 0f, 0f);
+			GL11.glVertex3f(1f, 0f, -1f);
+			GL11.glVertex3f(0f, 0f, -1f);
+			// Top
+			GL11.glVertex3f(0f, 1f, 0f);
+			GL11.glVertex3f(1f, 1f, 0f);
+			GL11.glVertex3f(1f, 1f, -1f);
+			GL11.glVertex3f(0f, 1f, -1f);
+			// Front
+			GL11.glVertex3f(0f, 0f, 0f);
+			GL11.glVertex3f(1f, 0f, 0f);
+			GL11.glVertex3f(1f, 1f, 0f);
+			GL11.glVertex3f(0f, 1f, 0f);
+			// Back
+			GL11.glVertex3f(0f, 0f, -1f);
+			GL11.glVertex3f(1f, 0f, -1f);
+			GL11.glVertex3f(1f, 1f, -1f);
+			GL11.glVertex3f(0f, 1f, -1f);
+			// Right
+			GL11.glVertex3f(1f, 0f, 0f);
+			GL11.glVertex3f(1f, 0f, -1f);
+			GL11.glVertex3f(1f, 1f, -1f);
+			GL11.glVertex3f(1f, 1f, 0f);
+			// Left
+			GL11.glVertex3f(0f, 0f, 0f);
+			GL11.glVertex3f(0f, 0f, -1f);
+			GL11.glVertex3f(0f, 1f, -1f);
+			GL11.glVertex3f(0f, 1f, 0f);
 		GL11.glEnd();
-		}
+	}
 }

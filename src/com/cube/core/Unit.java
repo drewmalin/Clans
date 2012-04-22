@@ -2,6 +2,7 @@ package com.cube.core;
 
 import org.lwjgl.opengl.GL11;
 import com.cube.util.Texture;
+import com.cube.util.ShaderManager.ShaderType;
 
 public class Unit extends Entity {
 			
@@ -31,11 +32,15 @@ public class Unit extends Entity {
 			GL11.glRotatef(rotation[1], 0, 1, 0);
 			GL11.glRotatef(rotation[2], 0, 0, 1);
 			GL11.glScalef(scale, scale, scale);
+			//Bind shaders
+			Graphics.shaderManager.bindShader(ShaderType.HEMISPHERE);
 			if(tex == null) {
 				Resources.objectLibrary[objectID].draw();
 			}else{
 				Resources.objectLibrary[objectID].draw(tex);
 			}
+			//Unbind shaders
+			Graphics.shaderManager.unbindShader(ShaderType.HEMISPHERE);
 			inventory.draw(this);
 		GL11.glPopMatrix();
 	}
