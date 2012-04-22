@@ -163,4 +163,10 @@ public class Entity {
 			return true;
 		}
 	}
+
+	public void setColorID(float[] nextColorID) {
+		colorID[0] = nextColorID[0];
+		colorID[1] = nextColorID[1];
+		colorID[2] = nextColorID[2];
+	}
 }

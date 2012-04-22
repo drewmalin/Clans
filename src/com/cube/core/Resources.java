@@ -24,6 +24,7 @@ public class Resources {
 	private static FileInputStream fstream;
 	private static DataInputStream in;
 	private static BufferedReader br;
+	private static float[] lastColorID;
 	public static Map map;
 	public static ArrayList<Light> lights;
 	public static ArrayList<Clan> clans;
@@ -190,6 +191,7 @@ public class Resources {
 						entity.inventory.fill();
 					}
 				}
+				entity.setColorID(getNextColorID());
 				entities.add(entity);
 			}
 			/* Textures */
@@ -272,6 +274,25 @@ public class Resources {
 	}
 	
 	public static float[] getNextColorID() {
-		return null;
+		if (lastColorID == null) {
+			lastColorID = new float[3];
+			lastColorID[0] = lastColorID[1] = lastColorID[2] = 0;
+			return lastColorID;
+		}
+		else if (lastColorID[2] == 255) {
+			return null;
+		}
+		else {
+			lastColorID[0]++;
+			if (lastColorID[0] > 255) {
+				lastColorID[0] = 0;
+				lastColorID[1]++;
+			}
+			if (lastColorID[1] > 255) {
+				lastColorID[1] = 0;
+				lastColorID[2]++;
+			}
+			return lastColorID;
+		}
 	}
 }
