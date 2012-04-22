@@ -21,7 +21,7 @@ public class HuntState extends State {
 		System.out.println("Entity " + e + " is now hunting!");
 		
 		Physics.updateDestination(e, 25);
-		e.force.set(e.destination[0] * .01, e.destination[2] * .01);
+		e.force.set(e.destination[0] * Physics.SLOW, e.destination[2] * Physics.SLOW);
 	}
 
 	/*
@@ -55,7 +55,7 @@ public class HuntState extends State {
 		}
 		
 		tempVect = Physics.updateVelocity(e);
-		e.force.set(tempVect.x * .1, tempVect.y * .1);
+		e.force.set(tempVect.x * Physics.FAST, tempVect.y * Physics.FAST);
 
 	}
 

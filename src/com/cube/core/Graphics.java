@@ -229,31 +229,37 @@ public class Graphics {
 	public static void drawCube() {
 		GL11.glBegin(GL11.GL_QUADS);
 			// Bottom
+			GL11.glNormal3f(0f, -1f, 0f);
 			GL11.glVertex3f(0f, 0f, 0f);
 			GL11.glVertex3f(1f, 0f, 0f);
 			GL11.glVertex3f(1f, 0f, -1f);
 			GL11.glVertex3f(0f, 0f, -1f);
 			// Top
+			GL11.glNormal3f(0f, 1f, 0f);
 			GL11.glVertex3f(0f, 1f, 0f);
 			GL11.glVertex3f(1f, 1f, 0f);
 			GL11.glVertex3f(1f, 1f, -1f);
 			GL11.glVertex3f(0f, 1f, -1f);
 			// Front
+			GL11.glNormal3f(0f, 0f, 1f);
 			GL11.glVertex3f(0f, 0f, 0f);
 			GL11.glVertex3f(1f, 0f, 0f);
 			GL11.glVertex3f(1f, 1f, 0f);
 			GL11.glVertex3f(0f, 1f, 0f);
 			// Back
+			GL11.glNormal3f(0f, 0f, -1f);
 			GL11.glVertex3f(0f, 0f, -1f);
 			GL11.glVertex3f(1f, 0f, -1f);
 			GL11.glVertex3f(1f, 1f, -1f);
 			GL11.glVertex3f(0f, 1f, -1f);
 			// Right
+			GL11.glNormal3f(1f, 0f, 0f);
 			GL11.glVertex3f(1f, 0f, 0f);
 			GL11.glVertex3f(1f, 0f, -1f);
 			GL11.glVertex3f(1f, 1f, -1f);
 			GL11.glVertex3f(1f, 1f, 0f);
 			// Left
+			GL11.glNormal3f(-1f, 0f, 0f);
 			GL11.glVertex3f(0f, 0f, 0f);
 			GL11.glVertex3f(0f, 0f, -1f);
 			GL11.glVertex3f(0f, 1f, -1f);
