@@ -23,7 +23,6 @@ public class Unit extends Entity {
 	}
 	
 	public void draw() {
-		
 		GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 			GL11.glColor3f(color[0], color[1], color[2]);
@@ -38,6 +37,12 @@ public class Unit extends Entity {
 				Resources.objectLibrary[objectID].draw(tex);
 			}
 			inventory.draw(this);
+			
+			GL11.glColor3f(1.0f, 0f, 0f);
+			GL11.glBegin(GL11.GL_LINES);
+			GL11.glVertex2d(2 * velocity.x + position[0], 2 * velocity.y + position[2]);
+			GL11.glVertex2d(position[0], position[2]);
+			GL11.glEnd();
 		GL11.glPopMatrix();
 	}
 }

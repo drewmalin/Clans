@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
 import com.cube.util.OBJParser;
+import com.cube.util.PolyFace;
 import com.cube.util.TextureVert;
 import com.cube.util.Vertex;
 import com.cube.util.GeometryGroup;
