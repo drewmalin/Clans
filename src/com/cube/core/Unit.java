@@ -37,7 +37,6 @@ public class Unit extends Entity {
 				Resources.objectLibrary[objectID].draw(tex);
 			}
 			inventory.draw(this);
-			GL11.glEnd();
 		GL11.glPopMatrix();
 	}
 }
