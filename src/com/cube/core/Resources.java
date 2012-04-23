@@ -97,8 +97,8 @@ public class Resources {
 			}
 			if (strLine.equals("<info>")) {
 				while (!(strLine = br.readLine().trim()).equals("</info>")) {
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("libcount")) {
-						int libcount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("libcount")) {
+						int libcount = Integer.parseInt(readElementValue(strLine));
 						objectLibrary = new Object[libcount];
 					}
 				}
@@ -106,64 +106,63 @@ public class Resources {
 			if (strLine.equals("<clan>")) {
 				Clan clan = new Clan();
 				while (!(strLine = br.readLine().trim()).equals("</clan>")) {
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("id")) {
-						clan.id = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("id")) {
+						clan.id = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("meat")) {
-						clan.meatCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("meat")) {
+						clan.meatCount = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("berry")) {
-						clan.berryCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("berry")) {
+						clan.berryCount = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("farmer")) {
-						clan.farmerCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("farmer")) {
+						clan.farmerCount = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("hunter")) {
-						clan.hunterCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("hunter")) {
+						clan.hunterCount = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("builder")) {
-						clan.builderCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("builder")) {
+						clan.builderCount = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("warrior")) {
-						clan.warriorCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("warrior")) {
+						clan.warriorCount = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("color")) {
-						clan.color = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("color")) {
+						clan.color = parseFloatArray(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("position")) {
-						clan.position = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("position")) {
+						clan.position = parseFloatArray(readElementValue(strLine));
 					}
 				}
 				clans.add(clan);
 			}
 			if (strLine.equals("<map>")) {
 				while (!(strLine = br.readLine().trim()).equals("</map>")) {
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("file")) {
-						map.file = strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<'));
-						//loadLocalFile(map.file, map);
+					if (readElementName(strLine).equals("file")) {
+						map.file = readElementValue(strLine);
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("scale")) {
-						map.scale = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("scale")) {
+						map.scale = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("colorID")) {
-						map.colorID = parseIntArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("colorID")) {
+						map.colorID = parseIntArray(readElementValue(strLine));
 					}
 				}
 			}
 			if (strLine.equals("<effect>")) {
 				Effect effect = new Effect();
 				while (!(strLine = br.readLine().trim()).equals("</effect>")) {
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("position")) {
-						effect.position = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("position")) {
+						effect.position = parseFloatArray(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("scale")) {
-						effect.scale = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("scale")) {
+						effect.scale = parseFloatArray(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("count")) {
-						effect.particleCount = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("count")) {
+						effect.particleCount = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("color")) {
-						effect.color = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("color")) {
+						effect.color = parseFloatArray(readElementValue(strLine));
 					}
 				}
 				effect.initializeParticles();
@@ -173,23 +172,23 @@ public class Resources {
 			if (strLine.equals("<entity>")) {
 				Entity entity = new Entity();
 				while (!(strLine = br.readLine().trim()).equals("</entity>")) {
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("id")) {
-						entity.objectID = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("id")) {
+						entity.objectID = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("position")) {
-						entity.position = parseVector3d(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("position")) {
+						entity.position = parseVector3d(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("scale")) {
-						entity.scale = Float.parseFloat(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("scale")) {
+						entity.scale = Float.parseFloat(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("rotation")) {
-						entity.rotation = parseFloatArray(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("rotation")) {
+						entity.rotation = parseFloatArray(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("type")) {
-						entity.type = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("type")) {
+						entity.type = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("resources")) {
-						entity.inventory.setCap(Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<'))));
+					if (readElementName(strLine).equals("resources")) {
+						entity.inventory.setCap(Integer.parseInt(readElementValue(strLine)));
 						entity.inventory.fill();
 					}
 				}
@@ -198,8 +197,8 @@ public class Resources {
 			/* Textures */
 			if (strLine.equals("<texture>")) {
 				while (!(strLine = br.readLine().trim()).equals("</texture>")) {
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("file")) {
-						textures.add(texLoader.getTexture(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<'))));
+					if (readElementName(strLine).equals("file")) {
+						textures.add(texLoader.getTexture(readElementValue(strLine)));
 					}
 				}
 			}
@@ -207,11 +206,11 @@ public class Resources {
 			if (strLine.equals("<lib>")) {
 				Object object = new Object();
 				while (!(strLine = br.readLine().trim()).equals("</lib>")) {
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("id")) {
-						object.id = Integer.parseInt(strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<')));
+					if (readElementName(strLine).equals("id")) {
+						object.id = Integer.parseInt(readElementValue(strLine));
 					}
-					if (strLine.substring(strLine.indexOf('<')+1,strLine.indexOf('>')).equals("file")) {
-						object.file = strLine.substring(strLine.indexOf('>')+1,strLine.lastIndexOf('<'));
+					if (readElementName(strLine).equals("file")) {
+						object.file = readElementValue(strLine);
 					}
 				}
 				loadLocalFile(object.file, object);
@@ -233,6 +232,13 @@ public class Resources {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String readElementName(String s) {
+		return s.substring(s.indexOf('<')+1, s.indexOf('>'));
+	}
+	public static String readElementValue(String s) {
+		return s.substring(s.indexOf('>')+1, s.lastIndexOf('<'));
 	}
 	
 	/* Function to read in 3 space-separated floats (e.g. 8.1 3.7 9.9) and store them in a float array
@@ -263,6 +269,10 @@ public class Resources {
 		return ret;
 	}
 	
+	/*
+	 * Function to read in 3 space-separated doubles (e.g. 4.1 5.6 2.8) and store them in a Vector3d object
+	 * (e.g. Vector3d = (4.1, 5.6, 2.8)
+	 */
 	public static Vector3d parseVector3d(String s) {
 		Vector3d ret = new Vector3d();
 		String[] tokens = s.split("\\s");
@@ -274,6 +284,10 @@ public class Resources {
 		return ret;
 	}
 	
+	/*
+	 * Generate unique color IDs for use with object selection. The color ID of {0, 0, 0} is reserved for a 
+	 * null selection (selection does not correspond to any entity)
+	 */
 	public static float[] getNextColorID() {
 		if (lastColorID == null) {
 			lastColorID = new float[3];
@@ -301,6 +315,11 @@ public class Resources {
 		}
 	}
 
+	/*
+	 * Convert the colorID generated above into a string for use as a key in the object selection hashmap (tried putting
+	 * the raw array into the hashmap as the key, although the compiler doesn't complain, no value is returned... thus:
+	 * strings!).
+	 */
 	public static String colorIDToStringKey(float[] colorID) {
 		return Float.toString(colorID[0]) + Float.toString(colorID[1]) + Float.toString(colorID[2]);
 	}

@@ -16,6 +16,7 @@ public class Entity {
 	public final static int MINEABLE 		= 3;
 	
 	protected int selectionRingRotation;
+	
 	public int objectID;
 	public Vector3d position;
 	public Vector3d destination;
@@ -37,14 +38,9 @@ public class Entity {
 	public double max_v;
 	
 	public Inventory inventory;
-	
 	public Texture tex;
-	
-	//** Temporary Variables... implementation will change **//
 	private int pause;
-	
 	public Clan clanRef;
-
 	public int timedump;
 	
 	public Entity() {
@@ -77,6 +73,11 @@ public class Entity {
 		pause = 0;
 		selectionRingRotation = 0;
 
+		/* Grab a unique color ID from Resources (float[3]) save it to this entity,
+		 * convert it into a string ({12, 34, 51} becomes 123451... hashmaps don't
+		 * work well with float arrays as keys) and save it to the global picking
+		 * hashmap.
+		 */
 		setColorID(Resources.getNextColorID());
 		Resources.pickingHashMap.put(Resources.colorIDToStringKey(colorID), this);
 		System.out.println("New Entity! ColorID: " + Physics.printArray(colorID));
@@ -117,6 +118,13 @@ public class Entity {
 		GL11.glPopMatrix();
 	}
 	
+	/*
+	 * Draws a texture underneath the entity. This texture is loaded in at load-time within the
+	 * Resources module. The scale/positioning are currently hard coded. The function assumes the
+	 * 'center' of the ring texture is at (textureWidth/2, textureHeight/2) and corrects for this
+	 * by translating, rotating, and translating again to get the rotation to center at the texture's
+	 * center.
+	 */
 	protected void drawSelectionRing() {
 		Texture texture = Resources.selectionRing;
 		if (selectionRingRotation > 360) selectionRingRotation -= 360;
@@ -130,9 +138,7 @@ public class Entity {
 		GL11.glLoadIdentity();
 		
 		//Translate to the unit's position
-		GL11.glTranslated(position.x - 1, position.y - 0.1, position.z - 1);
-		//Translate back to the original position (effect of rotating about center)
-		GL11.glTranslated(1, 0, 1);
+		GL11.glTranslated(position.x, position.y - 0.1, position.z);
 		//Rotate the ring about the origin
 		GL11.glRotatef(selectionRingRotation++, 0, 1, 0);
 		//Translate such that the center of the ring is at the origin
