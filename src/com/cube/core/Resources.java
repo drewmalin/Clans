@@ -33,7 +33,9 @@ public class Resources {
 	public static ArrayList<Texture> textures;
 	public static Object[] objectLibrary;
 	public static TextureLoader texLoader;
-	public static HashMap<float[], Entity> pickingHashMap;
+	public static HashMap<String, Entity> pickingHashMap;
+	
+	public static Texture selectionRing;
 
 	public static void initialize() {
 		
@@ -43,26 +45,22 @@ public class Resources {
 		textures = new ArrayList<Texture>();
 		texLoader = new TextureLoader();
 		
-		pickingHashMap = new HashMap<float[], Entity>();
+		pickingHashMap = new HashMap<String, Entity>();
 
 		map = new Map(100);
-		
+
 		FileLogger.logger.log(Level.INFO, "Resources initialized");
 	}
 	
 	public static void loadLevel(String file) {
 		////////////////////***<temporary location>***/////////////////////
-		/*
-		try{
-			textures.add(texLoader.getTexture("brookstoneFTW.png"));
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-		}catch (IOException e)
-		{
-			FileLogger.logger.log(Level.SEVERE, e.getMessage());
+		try {
+			selectionRing = texLoader.getTexture("ring.png");
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		*/
 		////////////////////**</temporary location>***////////////////////
+
 		try {
 			//sound = new Sound();
 			fstream = new FileInputStream(file);
@@ -297,5 +295,9 @@ public class Resources {
 			}
 			return lastColorID;
 		}
+	}
+
+	public static String colorIDToStringKey(float[] colorID) {
+		return Float.toString(colorID[0]) + Float.toString(colorID[1]) + Float.toString(colorID[2]);
 	}
 }

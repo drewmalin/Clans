@@ -14,6 +14,7 @@ public class Unit extends Entity {
 		show = true;
 
 		this.tex = tex;
+		selectionRingRotation = 0;
 	}
 	
 	public void update(int timeElapsed) {
@@ -49,6 +50,9 @@ public class Unit extends Entity {
 				Graphics.shaderManager.unbindShader(ShaderType.HEMISPHERE);
 				
 				inventory.draw(this);
+				
+				if (this == Input.selectedEntity)
+					drawSelectionRing();
 			}
 		GL11.glPopMatrix();
 	}

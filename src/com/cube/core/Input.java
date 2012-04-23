@@ -21,6 +21,8 @@ public class Input {
 	private static int deltaX = 0;
 	private static int deltaY = 0;
 	
+	public static Entity selectedEntity;
+	
 	public static void initialize() {
 		FileLogger.logger.log(Level.INFO, "Input initialized");
 	}
@@ -131,10 +133,12 @@ public class Input {
 		if (id[1] < 0) id[1] += 256;
 		if (id[2] < 0) id[2] += 256;
 		
-		Entity tempEnt = Resources.pickingHashMap.get(id);
+		selectedEntity = null;
+		Entity tempEnt = Resources.pickingHashMap.get(Resources.colorIDToStringKey(id));
 		System.out.println("clicked id: " + Physics.printArray(id));
 
 		if (tempEnt != null) {
+			selectedEntity = tempEnt;
 			System.out.println("clicked id: " + Physics.printArray(id));
 			System.out.println("position of entity: " + Physics.printVector(tempEnt.position));
 		}

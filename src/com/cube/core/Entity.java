@@ -15,6 +15,7 @@ public class Entity {
 	public final static int GATHERABLE 		= 2;
 	public final static int MINEABLE 		= 3;
 	
+	protected int selectionRingRotation;
 	public int objectID;
 	public Vector3d position;
 	public Vector3d destination;
@@ -74,9 +75,10 @@ public class Entity {
 		tex = null;
 		timedump = 0;
 		pause = 0;
-		
+		selectionRingRotation = 0;
+
 		setColorID(Resources.getNextColorID());
-		Resources.pickingHashMap.put(colorID, this);
+		Resources.pickingHashMap.put(Resources.colorIDToStringKey(colorID), this);
 		System.out.println("New Entity! ColorID: " + Physics.printArray(colorID));
 
 	}
@@ -108,6 +110,49 @@ public class Entity {
 					Resources.objectLibrary[objectID].draw(tex);
 				}
 			}
+			
+			if (this == Input.selectedEntity)
+				drawSelectionRing();
+			
+		GL11.glPopMatrix();
+	}
+	
+	protected void drawSelectionRing() {
+		Texture texture = Resources.selectionRing;
+		if (selectionRingRotation > 360) selectionRingRotation -= 360;
+		
+		GL11.glPushMatrix();
+		texture.bind();
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);	
+		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		GL11.glLoadIdentity();
+		
+		//Translate to the unit's position
+		GL11.glTranslated(position.x - 1, position.y - 0.1, position.z - 1);
+		//Translate back to the original position (effect of rotating about center)
+		GL11.glTranslated(1, 0, 1);
+		//Rotate the ring about the origin
+		GL11.glRotatef(selectionRingRotation++, 0, 1, 0);
+		//Translate such that the center of the ring is at the origin
+		GL11.glTranslated(-1, 0, -1);
+		
+		GL11.glScalef(3f, 3f, 3f);
+		GL11.glColor4f(1f, 1f, 1f, 1f);
+		
+		GL11.glBegin(GL11.GL_QUADS);	
+			GL11.glTexCoord2f(0, 0);
+			GL11.glVertex3d(0, 0, 0);
+			GL11.glTexCoord2f(1, 0);
+			GL11.glVertex3d(1, 0, 0);
+			GL11.glTexCoord2f(1, 1);
+			GL11.glVertex3d(1, 0, 1);
+			GL11.glTexCoord2f(0, 1);
+			GL11.glVertex3d(0, 0, 1);
+		GL11.glEnd();
+		GL11.glDisable(GL11.GL_TEXTURE_2D);	
+		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 	}
 	
