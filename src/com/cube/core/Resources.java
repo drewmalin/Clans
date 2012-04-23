@@ -277,7 +277,11 @@ public class Resources {
 	public static float[] getNextColorID() {
 		if (lastColorID == null) {
 			lastColorID = new float[3];
-			lastColorID[0] = lastColorID[1] = lastColorID[2] = 0;
+			
+			lastColorID[0] = 1;
+			lastColorID[1] = 0;
+			lastColorID[2] = 0;
+			
 			return lastColorID;
 		}
 		else if (lastColorID[2] == 255) {
