@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import javax.vecmath.Vector3d;
@@ -32,7 +33,8 @@ public class Resources {
 	public static ArrayList<Texture> textures;
 	public static Object[] objectLibrary;
 	public static TextureLoader texLoader;
-	
+	public static HashMap<float[], Entity> pickingHashMap;
+
 	public static void initialize() {
 		
 		entities = new ArrayList<Entity>();
@@ -41,6 +43,8 @@ public class Resources {
 		textures = new ArrayList<Texture>();
 		texLoader = new TextureLoader();
 		
+		pickingHashMap = new HashMap<float[], Entity>();
+
 		map = new Map(100);
 		
 		FileLogger.logger.log(Level.INFO, "Resources initialized");
@@ -191,7 +195,6 @@ public class Resources {
 						entity.inventory.fill();
 					}
 				}
-				entity.setColorID(getNextColorID());
 				entities.add(entity);
 			}
 			/* Textures */

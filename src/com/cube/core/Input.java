@@ -1,9 +1,12 @@
 package com.cube.core;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.logging.Level;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import com.cube.gui.Menu;
 import com.cube.gui.Window;
@@ -46,6 +49,8 @@ public class Input {
 				switch (Mouse.getEventButton()) {
 					case 0:	//Left click
 						System.out.println("left click");
+						Graphics.colorPickingMode();
+						processPick(Mouse.getX(), Mouse.getY());
 						break;
 					case 1: //Right click
 						System.out.println("right click");
@@ -108,5 +113,31 @@ public class Input {
 			Graphics.camera.panRight(panSpeed);
 		if (Keyboard.isKeyDown(Keyboard.KEY_D))
 			Graphics.camera.panRight(-panSpeed);
+	}
+	
+	public static void processPick(int pickX, int pickY) {
+		
+		float id[] = new float[3];
+
+		ByteBuffer pixels = ByteBuffer.allocateDirect(12).order(ByteOrder.nativeOrder());
+		
+		GL11.glReadPixels(pickX, pickY, 1, 1, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, pixels);
+		
+		id[0] = pixels.get();
+		id[1] = pixels.get();
+		id[2] = pixels.get();
+
+		if (id[0] < 0) id[0] += 256;
+		if (id[1] < 0) id[1] += 256;
+		if (id[2] < 0) id[2] += 256;
+		
+		Entity tempEnt = Resources.pickingHashMap.get(id);
+		System.out.println("clicked id: " + Physics.printArray(id));
+
+		if (tempEnt != null) {
+			System.out.println("clicked id: " + Physics.printArray(id));
+			System.out.println("position of entity: " + Physics.printVector(tempEnt.position));
+		}
+	
 	}
 }

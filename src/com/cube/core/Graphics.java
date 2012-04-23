@@ -21,6 +21,8 @@ public class Graphics {
 	
 	public static Camera camera;
 	public static ShaderManager shaderManager;
+	public static boolean colorPicking;
+
 	private static FloatBuffer matSpecular;
 	private static FloatBuffer lModelAmbient;
 	
@@ -144,6 +146,26 @@ public class Graphics {
 		Display.update();
 		Display.sync(Engine.framerate);
 		
+	}
+	
+	public static void colorPickingMode() {
+		
+		colorPicking = true;
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		
+		GL11.glPushMatrix();
+			GL11.glLoadIdentity();
+			drawClans();
+			drawObjects();
+		GL11.glPopMatrix();
+		
+		colorPicking = false;
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 	
 	private static void updatePhysics() {

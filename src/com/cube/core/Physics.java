@@ -79,6 +79,10 @@ public class Physics {
 		ret = ret.substring(0, ret.lastIndexOf(","));
 		return ret + ")";
 	}
+
+	public static String printVector(Vector3d position) {
+		return "(" + position.x + ", " + position.y + ", " + position.z + ")";
+	}
 	
 	public static void rotateVector(Vector2d vect, double theta) {
 		
