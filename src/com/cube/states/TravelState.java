@@ -12,40 +12,41 @@ public class TravelState extends State {
 
 	@Override
 	public void enter(Entity e) {
-		
 		System.out.println("Entity " + e + " is now traveling!");
 		Physics.haltEntity(e);
 	}
 
 	@Override
 	public void execute(Entity e) {
+		//If you've reached your destination, stop
 		if (Physics.distSquared(e.destination, e.position) < 5) {
 			Physics.haltEntity(e);
 			
-			if (e.type == Clan.HUNTER && e.inventory.isEmpty()) { //Assume you've arrived at a resource (gather)
-				System.out.println("Arrived, going to start gathering...");
-				e.changeState( GatherState.getState() );
-			}
-			else if (e.type == Clan.HUNTER && !e.inventory.isEmpty()) { //Assume you've arrived at home (deposit)
+			if (e.type == Clan.HUNTER) { 
+				//Assume you've arrived at a resource (gather)
+				if (e.inventory.isEmpty())
+					e.changeState( GatherState.getState() );
+				//Assume you've arrived at home (deposit)
+				else  { 
+					if (e.pause(50)) {
 
-				if (e.pause(50)) {
-					System.out.println("Depositing mah resources... ");
-					System.out.println("Inventory count: " + e.inventory.count());
-
-					e.inventory.removeItem();
-					e.clanRef.meatCount++;
-					
-					if (e.inventory.isEmpty()) { //Done depositing
-						if (e.focusEntity == null || e.focusEntity.inventory.isEmpty()) { //Last target is empty
-							e.changeState( HuntState.getState() );
-						}
-						else { //Last target still has resources
-							e.setDestination(e.focusEntity.position);
+						e.inventory.removeItem();
+						e.clanRef.meatCount++;
+						
+						if (e.inventory.isEmpty()) { //Done depositing
+							if (e.focusEntity == null || e.focusEntity.inventory.isEmpty()) { //Last target is empty
+								e.changeState( HuntState.getState() );
+							}
+							else { //Last target still has resources
+								e.setDestination(e.focusEntity.position);
+							}
 						}
 					}
 				}
 			}
+			
 		}
+		//If you haven't reached your destination yet, keep going
 		else {
 			tempVect = Physics.updateVelocity(e);
 			e.force.set(tempVect.x * Physics.FAST, tempVect.y * Physics.FAST);
@@ -54,9 +55,7 @@ public class TravelState extends State {
 
 	@Override
 	public void exit(Entity e) {
-
 		System.out.println("Entity " + e + " is no longer traveling.");
-
 	}
 
 	//-------------------------------------------------------------------------//

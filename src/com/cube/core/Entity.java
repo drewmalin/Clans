@@ -80,7 +80,6 @@ public class Entity {
 		 */
 		setColorID(Resources.getNextColorID());
 		Resources.pickingHashMap.put(Resources.colorIDToStringKey(colorID), this);
-		System.out.println("New Entity! ColorID: " + Physics.printArray(colorID));
 
 	}
 	

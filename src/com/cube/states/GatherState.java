@@ -25,35 +25,24 @@ public class GatherState extends State {
 	public void execute(Entity e) {
 		
 		
-		if (e.pause(100)) {
-			System.out.println("Grabbin mah resources...");
+		if (e.pause(50)) {
 			e.inventory.addItem();
 			e.focusEntity.inventory.removeItem();
-			System.out.println("Inventory count: " + e.inventory.count());
 
-			if (e.inventory.isFull()) {
-				System.out.println("My inventory is full! Returning to base...");
+			if (e.inventory.isFull() || e.focusEntity.inventory.isEmpty()) {
+				e.setDestination(e.clanRef.position);
+				e.changeState( TravelState.getState() );
 				
 				if (e.focusEntity.inventory.isEmpty()) {
 					e.retire();
 				}
-				e.setDestination(e.clanRef.position);
-				e.changeState( TravelState.getState() );
-			}
-			else if (e.focusEntity.inventory.isEmpty()) {
-				System.out.println("This resource is depleted! Returning the last of its bits.");
-				e.retire();
-				e.setDestination(e.clanRef.position);
-				e.changeState( TravelState.getState() );
 			}
 		}
 	}
 
 	@Override
 	public void exit(Entity e) {
-
 		System.out.println("Entity " + e + " is no longer gathering.");
-
 	}
 
 	//-------------------------------------------------------------------------//

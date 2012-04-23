@@ -3,31 +3,23 @@ package com.cube.states;
 import com.cube.core.Entity;
 
 public class AttackState extends State {
-	
-	int counter;
-	
+		
 	@Override
 	public void enter(Entity e) {
-
-		counter = 0;
 		System.out.println("Entity " + e + " is now attacking!");
-		
 	}
 	
 	@Override
 	public void execute(Entity e) {
 
-		counter++;
-		if (counter >= 100) {
+		if (e.pause(100)) {
 			e.changeState( NeutralState.getState() );
 		}
 	}
 	
 	@Override
 	public void exit(Entity e) {
-
 		System.out.println("Entity " + e + " is no longer attacking!");
-		
 	}
 	
 	//-------------------------------------------------------------------------//

@@ -79,11 +79,18 @@ public class Physics {
 		ret = ret.substring(0, ret.lastIndexOf(","));
 		return ret + ")";
 	}
-
+	
+	/*
+	 * Method to neatly print the contents of a Vector3d.
+	 */
 	public static String printVector(Vector3d position) {
 		return "(" + position.x + ", " + position.y + ", " + position.z + ")";
 	}
 	
+	/*
+	 * Rotate a vector theta degrees about the y axis. This is meant to be used for movement
+	 * vectors that are fixed to the x-z plane.
+	 */
 	public static void rotateVector(Vector2d vect, double theta) {
 		
 		double convertToRads = (float) ((2 * Math.PI) / 360); 
@@ -95,6 +102,11 @@ public class Physics {
 		vect.y = ry;
 	}
 	
+	/*
+	 * Clamp a value (original) to the range of min, max. For example, the parms (10, 6, 12)
+	 * will return 10 (original is within the range) whereas the parms(7, 12, 18) will return
+	 * 12 (12 is the closest value within the range to the original value).
+	 */
 	public static double clamp(double original, double min, double max) {
 		if (original >= min && original <= max)
 			return original;
@@ -213,7 +225,7 @@ public class Physics {
 						push.y = ((radius - globalEntPos.y) * brakingWeight);
 						
 						double multiplier = 1.0 + (20 + globalEntPos.y) / 20;
-						push.x = (radius - globalEntPos.x) * multiplier * .22;
+						push.x = (radius - globalEntPos.x) * multiplier * .5;
 						
 						rotateVector(push, e.rotation[1]);
 						
