@@ -2,7 +2,7 @@ package com.cube.core;
 
 import org.lwjgl.opengl.GL11;
 import com.cube.util.Texture;
-import com.cube.util.ShaderManager.ShaderType;
+import com.cube.util.ShaderManager;
 
 public class Unit extends Entity {
 			
@@ -40,14 +40,14 @@ public class Unit extends Entity {
 				GL11.glColor3f(color[0], color[1], color[2]);
 				
 				//Bind shaders
-				Graphics.shaderManager.bindShader(ShaderType.HEMISPHERE);
+				Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
 				if(tex == null) {
 					Resources.objectLibrary[objectID].draw();
 				}else{
 					Resources.objectLibrary[objectID].draw(tex);
 				}
 				//Unbind shaders
-				Graphics.shaderManager.unbindShader(ShaderType.HEMISPHERE);
+				Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
 				
 				inventory.draw(this);
 				

@@ -15,8 +15,7 @@ public class ShaderManager {
 	public static ArrayList<String> shaderFiles;
 	
 	//An enum of all of the shaders available
-	public static enum ShaderType {HEMISPHERE};
-	private static String[] shaderTypeString = {"hemi"};
+	public static final String HEMISPHERE = "hemi";
 
 	//ArrayList to contain the shaders
 	private HashMap<String, Shader> shaderMap;
@@ -38,13 +37,7 @@ public class ShaderManager {
 	public void bindShader(String key) {
 		shaderMap.get(key).bind();
 	}
-	
-	//Binds a shader directly from the hashmap
-	public void bindShader(ShaderType key) {
-		String keyString = shaderTypeString[key.ordinal()];
-		shaderMap.get(keyString).bind();
-	}
-	
+		
 	//Creates a shader from the source file parameters and returns it
 	public Shader createShader(String vertexShaderSource, String fragmentShaderSource) {
 		return new Shader(vertexShaderSource, fragmentShaderSource);
@@ -54,13 +47,7 @@ public class ShaderManager {
 	public final Shader getShader(String key) {
 		return shaderMap.get(key);
 	}
-	
-	//Grab a shader using the enum key
-	public Shader getShader(ShaderType key) {
-		String keyString = shaderTypeString[key.ordinal()];
-		return shaderMap.get(keyString);
-	}
-	
+		
 	public void initialize() {
 		findShaderFiles();
     	FileLogger.logger.log(Level.SEVERE, "Shaders initialized");
@@ -69,12 +56,6 @@ public class ShaderManager {
 	//Unbinds a shader directly from the hashmap
 	public void unbindShader(String key) {
 		shaderMap.get(key).unbind();
-	}
-
-	//Unbinds a shader directly from the hashmap
-	public void unbindShader(ShaderType key) {
-		String keyString = shaderTypeString[key.ordinal()];
-		shaderMap.get(keyString).unbind();
 	}
 
 //PRIVATE METHODS:::
