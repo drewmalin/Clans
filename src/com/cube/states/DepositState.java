@@ -1,27 +1,37 @@
 package com.cube.states;
 
-import com.cube.core.Clan;
 import com.cube.core.Entity;
 
-public class NeutralState extends State {
+public class DepositState extends State {
 	
 	@Override
 	public void enter(Entity e) {
-		if (debugMessages) System.out.println("Entity " + e + " is now neutral!");		
+		if (debugMessages) System.out.println("Entity " + e + " is now depositing resources!");		
 	}
 
 	@Override
 	public void execute(Entity e) {
 		
-		if (e.pause(10) && 
-		   (e.type == Clan.HUNTER || e.type == Entity.AGGRESSIVE || e.type == Entity.PASSIVE)) {
-			e.changeState( HuntState.getState() );
+		if (e.pause(10)) {
+
+			e.inventory.removeItem();
+			e.clanRef.meatCount++;
+			
+			if (e.inventory.isEmpty()) { 											//Done depositing
+				if (e.focusEntity == null || e.focusEntity.inventory.isEmpty()) { 	//Last target is empty
+					e.changeState( HuntState.getState() );
+				}
+				else { 																//Last target still has resources
+					e.setDestination(e.focusEntity.position);
+					e.changeState( TravelState.getState() );
+				}
+			}
 		}
 	}
 
 	@Override
 	public void exit(Entity e) {
-		if (debugMessages) System.out.println("Entity " + e + " is no longer neutral.");
+		if (debugMessages) System.out.println("Entity " + e + " is no longer depositing resources.");
 	}
 
 	//-------------------------------------------------------------------------//
@@ -40,7 +50,7 @@ public class NeutralState extends State {
 	// Return the instance of this singleton state
 	public static synchronized State getState() {
 		if (ref == null) {
-			ref = new NeutralState();
+			ref = new DepositState();
 		}
 		return ref;
 	}

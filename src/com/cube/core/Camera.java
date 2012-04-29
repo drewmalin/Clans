@@ -13,9 +13,9 @@ public class Camera {
 	private float radius;
 	private float thetaX;
 	private float thetaY;
-	                      
+	                  	
 	private static float ZOOM_IN 	= 2;
-	private static float ZOOM_OUT 	= 60;
+	private static float ZOOM_OUT 	= 400;
 	private static float ZOOM_SPEED = 0.5f;
 	
 	public Camera() {
@@ -28,6 +28,7 @@ public class Camera {
 		radius 			= 0f;
 		thetaX 			= 0f;
 		thetaY 			= 0f;
+				 
 	}
 
 	/*
@@ -49,6 +50,10 @@ public class Camera {
 		
 		position.scale(radius);
 		position.add(target);
+		
+		// Make sure the camera can't pass through the map
+		float worldPos = Resources.map.getHeight((float)position.x, (float)position.z) + 1;
+		if (position.y < worldPos) position.y = worldPos;
 		
 		setPosition(position.x, position.y, position.z);
 
@@ -146,8 +151,7 @@ public class Camera {
 	 * Sets the final position of the camera in world coordinates. For use internally to the Camera class within the
 	 * updatePosition method.
 	 */
-	private void setPosition(double x, double y, double z) {
-
+	private void setPosition(double x, double y, double z) {	
 		position.x = (float)x;
 		position.y = (float)y;
 		position.z = (float)z;
@@ -222,5 +226,12 @@ public class Camera {
 			default:
 				return 0;	
 		}
+	}
+	public float[] getPosition() {
+		float[] ret = new float[3];
+		ret[0] = position.x;
+		ret[1] = position.y;
+		ret[2] = position.z;
+		return ret;
 	}
 }

@@ -1,9 +1,3 @@
-<!-- Info section is used to inform the engine about the number
-     of objects it should expect for the object library. -->
-<info>
-    <libcount>11</libcount>
-</info>
-
 <!-- Library section: the engine only needs to store each object
      once, so the library section designates each unique entry in
      the library. -->
@@ -51,7 +45,14 @@
     <id>10</id>
     <file>res/obj/Wolf.obj</file>
 </lib>
-
+<lib>
+    <id>11</id>
+    <file>res/obj/berryBushSans.obj</file>
+</lib>
+<lib>
+    <id>12</id>
+    <file>res/obj/DoeDeer.obj</file>
+</lib>
 <!-- Clan information includes the id of the clan (to uniquely identify
      it against other clans in the world) and the current level of 
      resources and units. -->
@@ -60,16 +61,16 @@
 	<meat>0</meat>
 	<berry>0</berry>
 	<farmer>0</farmer>
-	<hunter>1</hunter>
+	<hunter>0</hunter>
 	<warrior>0</warrior>
 	<builder>0</builder>
-	<position>-0 0 0</position>
+	<position>-34.02 0 -70.96</position>
     <color>0 .74 1</color>
 </clan>
 <effect>
-	<position>-10 0 -9.75</position>
+	<position>-39.02 0.67 -75.96</position>
 	<scale>.15 .15 .15</scale>
-    <color>1 1 1</color>
+    <color>1 0 0</color>
 	<count>500</count>
 </effect>
 
@@ -77,15 +78,18 @@
      be interacted with (if at all):
      
      0 - NEUTRAL    (no interaction, e.g. static scenery)
-     1 - HUNTABLE
-     2 - GATHERABLE
-     3 - MINEABLE
+     1 - HUNTABLE   (entities that yield meat) <- may be deprecated
+     2 - PASSIVE    (entities that yield meat/will flee if attacked)
+     3 - AGGRESSIVE (entities that yield meat/will attack if attacked)
+     4 - GATHERABLE (indedible entities like trees, dead animals)
+     5 - MINEABLE   (mines, ore, gems, etc.)
+     6 - EDIBLE     (entities that could be immediately eaten, e.g. berries)
   -->
   
 <!-- Bonfire -->
 <entity>
     <id>0</id>
-    <position>-10 0 -10</position>
+    <position>-39.02 0.67 -75.96</position>
     <scale>.1</scale>
     <type>0</type>
 </entity>
@@ -99,71 +103,26 @@
     <type>0</type>
 </entity>
 
-<!-- Pine Tree -->
+<!-- Doe -->
 <entity>
-    <id>8</id>
-    <position>10 0 -10</position>
-    <rotation>0 0 0</rotation>
-    <scale>.1</scale>
-    <type>0</type>
-</entity>
-
-<!-- Pine Tree -->
-<entity>
-    <id>8</id>
-    <position>-10 0 10</position>
-    <rotation>0 180 0</rotation>
-    <scale>.1</scale>
-    <type>0</type>
-</entity>
-
-<!-- Pine Tree -->
-<entity>
-    <id>8</id>
-    <position>0 0 16</position>
-    <rotation>0 90 0</rotation>
-    <scale>.1</scale>
-    <type>0</type>
-</entity>
-
-<!-- Wolf -->
-<entity>
-    <id>10</id>
-    <position>-20 0 20</position>
-    <rotation>0 45 0</rotation>
-    <scale>.1</scale>
-    <type>1</type>
+    <id>12</id>
+    <position>-30 0 -30</position>
+    <rotation>0 20 0</rotation>
+    <scale>.07</scale>
+    <type>2</type>
     <resources>30</resources>
+    <targets>6</targets>
 </entity>
-
 <!-- Wolf -->
 <entity>
     <id>10</id>
-    <position>20 0 -20</position>
-    <rotation>0 75 0</rotation>
-    <scale>.1</scale>
-    <type>1</type>
-    <resources>30</resources>
-</entity>
-
-<!-- Wolf -->
-<entity>
-    <id>10</id>
-    <position>-20 0 -20</position>
+    <position>-10 0 -10</position>
     <rotation>0 245 0</rotation>
     <scale>.1</scale>
-    <type>1</type>
+    <type>3</type>
     <resources>30</resources>
-</entity>
-
-<!-- Wolf -->
-<entity>
-    <id>10</id>
-    <position>20 0 20</position>
-    <rotation>0 20 0</rotation>
-    <scale>.1</scale>
-    <type>1</type>
-    <resources>30</resources>
+    <targets>2</targets>
+    <maxvelocity>.2</maxvelocity>
 </entity>
 
 <!-- Mine -->
@@ -174,13 +133,18 @@
     <scale>.1</scale>
     <type>0</type>
 </entity>
-
+<!--
 <map>
-	<file>res/map/map.bmp</file>
+	<file>res/heightmaps/terrain-heightmap.bmp</file>
 	<scale>1</scale>
 	<colorID>1</colorID>
 </map>
-
+-->
+<map>
+	<file>res/heightmaps/terrain-heightmap.bmp</file>
+	<scale>1</scale>
+	<colorID>1</colorID>
+</map>
 <texture>
 	<file>FooMan6.png</file>
 </texture>

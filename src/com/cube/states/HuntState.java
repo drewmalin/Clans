@@ -2,6 +2,7 @@ package com.cube.states;
 
 import javax.vecmath.Vector2d;
 
+import com.cube.core.Clan;
 import com.cube.core.Entity;
 import com.cube.core.Physics;
 import com.cube.core.Resources;
@@ -18,7 +19,7 @@ public class HuntState extends State {
 	@Override
 	public void enter(Entity e) {
 		
-		System.out.println("Entity " + e + " is now hunting!");
+		if (debugMessages) System.out.println("Entity " + e + " is now hunting!");
 		
 		Physics.updateDestination(e, 25);
 		e.force.set(e.destination.x * Physics.SLOW, e.destination.z * Physics.SLOW);
@@ -32,27 +33,43 @@ public class HuntState extends State {
 	 */
 	@Override
 	public void execute(Entity e) {
-
-		// We are close enough to the destination to determine a new one
+		boolean print = false;
+		if (e.type == Clan.HUNTER) print = true;
+		// Look for resources
 		for (Entity x : Resources.entities) {
-			if (x.type == Entity.HUNTABLE) {
-				if (Physics.distSquared(x.position, e.position) < 400) {
+			if (e.targets.contains(x.type)) {
+
+				if (Physics.distSquared(x.position, e.position) < 400) {	//Entity spotted a resource
+
+					if (print) System.out.println("Type: " + x.type);
 
 					e.focusEntity = x;
 					e.setDestination(e.focusEntity.position);
-					e.changeState( TravelState.getState() );
 					
+					if (x.type == Entity.EDIBLE)
+						e.changeState( TravelState.getState() );
+					else {
+						e.changeState( AttackState.getState() );
+						e.focusEntity.focusEntity = e;
+
+						if (e.focusEntity.type == Entity.PASSIVE)				// If the focus is passive, it runs away
+							e.focusEntity.changeState( FleeState.getState() );
+						else													// If the focus is not passive, it counter attacks
+							e.focusEntity.changeState( AttackState.getState() );
+					}
 					return;
 				}
 			}
 		}
 		
+		// Didn't see anything and arrived at destination, set a new destination
 		if (Physics.distSquared(e.position, e.destination) < 10) {
 			Physics.updateDestination(e, 25);
 			e.force.set(e.destination.x * .01, e.destination.z * .01);
 		}
 		
-		tempVect = Physics.updateVelocity(e);
+		// Didn't see anything and has not arrived at destination, keep moving
+		tempVect = Physics.seekDestination(e);
 		e.force.set(tempVect.x * Physics.FAST, tempVect.y * Physics.FAST);
 
 	}
@@ -62,7 +79,7 @@ public class HuntState extends State {
 	 */
 	@Override
 	public void exit(Entity e) {
-		System.out.println("Entity " + e + " is no longer hunting!");
+		if (debugMessages) System.out.println("Entity " + e + " is no longer hunting!");
 	}
 	
 	//-------------------------------------------------------------------------//

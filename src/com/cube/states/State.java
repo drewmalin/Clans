@@ -4,6 +4,8 @@ import com.cube.core.Entity;
 
 public abstract class State {
 	
+	boolean debugMessages = true;
+	
 	// Executes when a state is entered
 	abstract public void enter(Entity e);
 	
@@ -15,4 +17,5 @@ public abstract class State {
 	
 	// Ensure access to constructor is blocked.
 	protected State() {}
+	
 }

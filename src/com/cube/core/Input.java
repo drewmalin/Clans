@@ -2,14 +2,19 @@ package com.cube.core;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.logging.Level;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 import com.cube.gui.Menu;
 import com.cube.gui.Window;
+import com.cube.states.TravelState;
 import com.cube.util.FileLogger;
 
 
@@ -21,9 +26,21 @@ public class Input {
 	private static int deltaX = 0;
 	private static int deltaY = 0;
 	
+	private	static	IntBuffer	viewport;
+	private static	FloatBuffer	modelview;
+	private static	FloatBuffer projection;
+	private static	FloatBuffer	positionNear;
+	
 	public static Entity selectedEntity;
 	
 	public static void initialize() {
+		
+		viewport	= BufferUtils.createIntBuffer(16);
+		modelview	= BufferUtils.createFloatBuffer(16);
+		projection	= BufferUtils.createFloatBuffer(16);
+		
+		positionNear	= BufferUtils.createFloatBuffer(3);
+		
 		FileLogger.logger.log(Level.INFO, "Input initialized");
 	}
 
@@ -52,10 +69,14 @@ public class Input {
 					case 0:	//Left click
 						System.out.println("left click");
 						Graphics.colorPickingMode();
-						processPick(Mouse.getX(), Mouse.getY());
+						selectedEntity = processPick(Mouse.getX(), Mouse.getY());
 						break;
 					case 1: //Right click
 						System.out.println("right click");
+						if (selectedEntity != null) {
+							selectedEntity.setDestination(getMousePosition(Mouse.getX(), Mouse.getY()));
+							selectedEntity.changeState( TravelState.getState() );
+						}
 						break;
 				}
 			}
@@ -92,21 +113,13 @@ public class Input {
 					case Keyboard.KEY_ESCAPE:
 						Menu.pause();
 						break;
-					case Keyboard.KEY_UP:
-						System.out.println("Key UP!");
-						break;
-					case Keyboard.KEY_DOWN:
-						System.out.println("Key DOWN!");
-						break;
-					case Keyboard.KEY_LEFT:
-						System.out.println("Key LEFT!");
-						break;
-					case Keyboard.KEY_RIGHT:
-						System.out.println("Key RIGHT!");
-						break;
 				}
 			}
 		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+			panSpeed = .5f;
+		else
+			panSpeed = .1f;
 		if (Keyboard.isKeyDown(Keyboard.KEY_W))
 			Graphics.camera.panForward(-panSpeed);
 		if (Keyboard.isKeyDown(Keyboard.KEY_S))
@@ -115,9 +128,17 @@ public class Input {
 			Graphics.camera.panRight(panSpeed);
 		if (Keyboard.isKeyDown(Keyboard.KEY_D))
 			Graphics.camera.panRight(-panSpeed);
+		
+		// ----- FOR DEBUGGING PURPOSES ---- //
+		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+			Resources.lights.get(0).moveSun(1);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+			Resources.lights.get(0).moveSun(-1);
+		}
 	}
 	
-	public static void processPick(int pickX, int pickY) {
+	public static Entity processPick(int pickX, int pickY) {
 		
 		float id[] = new float[3];
 
@@ -133,15 +154,33 @@ public class Input {
 		if (id[1] < 0) id[1] += 256;
 		if (id[2] < 0) id[2] += 256;
 		
-		selectedEntity = null;
 		Entity tempEnt = Resources.pickingHashMap.get(Resources.colorIDToStringKey(id));
-		System.out.println("clicked id: " + Physics.printArray(id));
-
-		if (tempEnt != null) {
-			selectedEntity = tempEnt;
-			System.out.println("clicked id: " + Physics.printArray(id));
-			System.out.println("position of entity: " + Physics.printVector(tempEnt.position));
-		}
-	
+		
+		return tempEnt;
 	}
+	
+	public static float[] getMousePosition(int mouseX, int mouseY) {
+	
+		ByteBuffer pixels = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder());
+		float[] pos = new float[3];
+
+		
+		//--------------------- Save the view matrices ------------------//
+		GL11.glGetFloat( GL11.GL_MODELVIEW_MATRIX, modelview );
+		GL11.glGetFloat( GL11.GL_PROJECTION_MATRIX, projection );
+		GL11.glGetInteger( GL11.GL_VIEWPORT, viewport );
+		//---------------------------------------------------------------//
+		
+		
+		GL11.glReadPixels(mouseX, mouseY, 1, 1, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, pixels);
+		GLU.gluUnProject((float)mouseX, (float)mouseY, pixels.getFloat(0), modelview, projection, viewport, positionNear);
+
+		
+		pos[0] = positionNear.get(0);
+		pos[1] = positionNear.get(1);
+		pos[2] = positionNear.get(2);
+
+		return pos;
+	}
+
 }
