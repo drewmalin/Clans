@@ -15,6 +15,11 @@ public class Unit extends Entity {
 
 		this.tex = tex;
 		selectionRingRotation = 0;
+		
+		position.x = c.position.x + 5;
+		position.z = c.position.z + 5;
+		
+		maxHealth = curHealth = 100;
 	}
 	
 	public void update(int timeElapsed) {
@@ -26,7 +31,7 @@ public class Unit extends Entity {
 		GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 			
-			GL11.glTranslated(position.x, position.y, position.z);
+			GL11.glTranslated(position.x, position.y + Resources.map.getHeight((float)position.x, (float)position.z), position.z);
 			GL11.glRotatef(rotation[0], 1, 0, 0);
 			GL11.glRotatef(rotation[1], 0, 1, 0);
 			GL11.glRotatef(rotation[2], 0, 0, 1);
@@ -34,7 +39,7 @@ public class Unit extends Entity {
 
 			if (Graphics.colorPicking) {
 				GL11.glColor3ub((byte)colorID[0], (byte)colorID[1], (byte)colorID[2]);
-				Resources.objectLibrary[objectID].drawOBJ();
+				Resources.objectLibrary.get(objectID).drawOBJ();
 			}
 			else {
 				GL11.glColor3f(color[0], color[1], color[2]);
@@ -42,10 +47,11 @@ public class Unit extends Entity {
 				//Bind shaders
 				Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
 				if(tex == null) {
-					Resources.objectLibrary[objectID].draw();
+					Resources.objectLibrary.get(objectID).draw();
 				}else{
-					Resources.objectLibrary[objectID].draw(tex);
+					Resources.objectLibrary.get(objectID).draw(tex);
 				}
+				
 				//Unbind shaders
 				Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
 				

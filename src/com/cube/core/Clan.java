@@ -2,6 +2,8 @@ package com.cube.core;
 
 import java.util.ArrayList;
 
+import javax.vecmath.Vector3d;
+
 import org.lwjgl.opengl.GL11;
 
 import com.cube.states.NeutralState;
@@ -17,22 +19,24 @@ public class Clan {
 	public int berryCount;
 	public int meatCount;
 	public float[] color;
-	public float[] position;
+	public Vector3d position;
 
-	public static int FARMER = 10;
-	public static int BUILDER = 11;
-	public static int WARRIOR = 12;
-	public static int HUNTER = 13;
+	public static int FARMER 	= 100;
+	public static int BUILDER 	= 101;
+	public static int WARRIOR 	= 102;
+	public static int HUNTER 	= 103;
+	
+	public static int influenceRadius = 100;
 	
 	public Clan() {
 		units = new ArrayList<Unit>();
-		position = new float[3];
-		farmerCount = 0;
-		builderCount = 0;
-		warriorCount = 0;
-		hunterCount = 0;
-		berryCount = 0;
-		meatCount = 0;
+		position = new Vector3d(0, 0, 0);
+		farmerCount 	= 0;
+		builderCount	= 0;
+		warriorCount 	= 0;
+		hunterCount 	= 0;
+		berryCount 		= 0;
+		meatCount 		= 0;
 	}
 	
 	public void draw() {
@@ -54,36 +58,35 @@ public class Clan {
 	}
 	
 	public void process() {
-		Unit u;
 		
 		for (int i = 0; i < farmerCount; i++) {
-			u = new Unit(FARMER, 1, this, Resources.textures.get(0));
-			u.inventory.setCap(4);
-			u.currentState = NeutralState.getState();
-			u.startState();
-			units.add(u);
+			createUnit(FARMER, 4);
 		}
 		for (int i = 0; i < builderCount; i++) {
-			u = new Unit(BUILDER, 1, this, Resources.textures.get(0));
-			u.inventory.setCap(4);
-			u.currentState = NeutralState.getState();
-			u.startState();
-			units.add(u);
+			createUnit(BUILDER, 4);
 		}
 		for (int i = 0; i < warriorCount; i++) {
-			u = new Unit(WARRIOR, 1, this, Resources.textures.get(0));
-			u.inventory.setCap(4);
-			u.currentState = NeutralState.getState();
-			u.startState();
-			units.add(u);
+			createUnit(WARRIOR, 4);
 		}
 		for (int i = 0; i < hunterCount; i++) {
-			u = new Unit(HUNTER, 1, this, Resources.textures.get(0));
-			u.inventory.setCap(16);
-			u.currentState = NeutralState.getState();
-			u.startState();
-			units.add(u);
+			createUnit(HUNTER, 16);
 		}
+	}
+	
+	public void createUnit(int type, int inv) {
+		Unit u;
+		u = new Unit(type, 1, this, Resources.textures.get(0));
+		u.inventory.setCap(inv);
+		u.currentState = NeutralState.getState();
+		u.startState();
+		
+		if (type == HUNTER) {
+			u.targets.add(Entity.AGGRESSIVE);
+			u.targets.add(Entity.PASSIVE);
+			u.targets.add(Entity.EDIBLE);
+		}
+		
+		units.add(u);
 	}
 	
 	public void drawMeatStockpile() {
@@ -99,9 +102,9 @@ public class Clan {
 				GL11.glLoadIdentity();
 				GL11.glColor3f(.4f, 1.0f, 1.0f);
 
-				GL11.glTranslatef(position[0] + (spacing * (i % renderDimension)), 
-						position[1]  + (spacing * (int) (i / (renderDimension * renderDimension))),
-						position[2]  + (spacing * (((int)(i/renderDimension)) % renderDimension)));
+				GL11.glTranslated(position.x + (spacing * (i % renderDimension)), 
+						position.y  + (spacing * (int) (i / (renderDimension * renderDimension))),
+						position.z  + (spacing * (((int)(i/renderDimension)) % renderDimension)));
 				GL11.glRotatef(0, 1, 0, 0);
 				GL11.glRotatef(0, 0, 1, 0);
 				GL11.glRotatef(0, 0, 0, 1);

@@ -13,6 +13,7 @@ import javax.vecmath.Vector3d;
 
 
 
+import com.cube.states.NeutralState;
 import com.cube.util.FileLogger;
 import com.cube.util.OBJParser;
 import com.cube.util.Texture;
@@ -31,7 +32,10 @@ public class Resources {
 	public static ArrayList<Clan> clans;
 	public static ArrayList<Entity> entities;
 	public static ArrayList<Texture> textures;
-	public static Object[] objectLibrary;
+	
+	public static ArrayList<Object> objectLibrary;
+	public static HashMap<String, Item> itemLibrary;
+
 	public static TextureLoader texLoader;
 	public static HashMap<String, Entity> pickingHashMap;
 	
@@ -50,6 +54,7 @@ public class Resources {
 		map = new Map(100);
 
 		FileLogger.logger.log(Level.INFO, "Resources initialized");
+		objectLibrary = new ArrayList<Object>();
 	}
 	
 	public static void loadLevel(String file) {
@@ -70,6 +75,7 @@ public class Resources {
 			for (Clan c : clans) {
 				c.process();
 			}
+			generateWorld();
 			in.close();
 			//if (sound.soundCount() > 0) sound.create();
 		} catch (Exception e) {
@@ -95,14 +101,7 @@ public class Resources {
 			if (strLine.isEmpty()) {
 				continue;
 			}
-			if (strLine.equals("<info>")) {
-				while (!(strLine = br.readLine().trim()).equals("</info>")) {
-					if (readElementName(strLine).equals("libcount")) {
-						int libcount = Integer.parseInt(readElementValue(strLine));
-						objectLibrary = new Object[libcount];
-					}
-				}
-			}
+
 			if (strLine.equals("<clan>")) {
 				Clan clan = new Clan();
 				while (!(strLine = br.readLine().trim()).equals("</clan>")) {
@@ -131,7 +130,7 @@ public class Resources {
 						clan.color = parseFloatArray(readElementValue(strLine));
 					}
 					if (readElementName(strLine).equals("position")) {
-						clan.position = parseFloatArray(readElementValue(strLine));
+						clan.position = parseVector3d(readElementValue(strLine));
 					}
 				}
 				clans.add(clan);
@@ -148,6 +147,7 @@ public class Resources {
 						map.colorID = parseIntArray(readElementValue(strLine));
 					}
 				}
+				map.initialize();
 			}
 			if (strLine.equals("<effect>")) {
 				Effect effect = new Effect();
@@ -187,11 +187,19 @@ public class Resources {
 					if (readElementName(strLine).equals("type")) {
 						entity.type = Integer.parseInt(readElementValue(strLine));
 					}
+					if (readElementName(strLine).equals("targets")) {
+						parseList(entity, readElementValue(strLine));
+					}
+					if (readElementName(strLine).equals("maxvelocity")) {
+						entity.max_v = Float.parseFloat(readElementValue(strLine));
+					}
 					if (readElementName(strLine).equals("resources")) {
 						entity.inventory.setCap(Integer.parseInt(readElementValue(strLine)));
 						entity.inventory.fill();
 					}
 				}
+				entity.currentState = NeutralState.getState();
+				entity.startState();
 				entities.add(entity);
 			}
 			/* Textures */
@@ -214,11 +222,19 @@ public class Resources {
 					}
 				}
 				loadLocalFile(object.file, object);
-				objectLibrary[object.id] = object;
+				objectLibrary.add(object);
 			}
 		}
 	}
 	
+	private static void parseList(Entity entity, String line) {
+		String[] tokens = line.split("\\s");
+		
+		for (String token : tokens) {
+			entity.targets.add(Integer.parseInt(token));
+		}
+	}
+
 	public static void loadLocalFile(String filename, Object we) {
 		try {
 			OBJParser parser = new OBJParser(filename);
@@ -322,5 +338,49 @@ public class Resources {
 	 */
 	public static String colorIDToStringKey(float[] colorID) {
 		return Float.toString(colorID[0]) + Float.toString(colorID[1]) + Float.toString(colorID[2]);
+	}
+	
+	public static void generateWorld() {
+		int pineTreeCount = 0;//Physics.generator.nextInt() % map.height/4;
+		int lollyTreeCount = 0;//Physics.generator.nextInt() % map.height/4;
+		int berryBushCount = 0;//Physics.generator.nextInt() % map.height/4;
+		
+		if (pineTreeCount < 0) pineTreeCount *= -1;
+		if (lollyTreeCount < 0) lollyTreeCount *= -1;
+		if (berryBushCount < 0) berryBushCount *= -1;
+		
+		System.out.println("Drawing " + pineTreeCount + " pine trees");
+		System.out.println("Drawing " + lollyTreeCount + " lolly trees");
+		System.out.println("Drawing " + berryBushCount + " berry bushes");
+		
+		for (int i = 0; i < pineTreeCount; i++) {
+			Entity entity = new Entity();
+			entity.objectID = 8;
+			entity.position = new Vector3d(((Physics.generator.nextDouble() * 2) - 1) * (map.width/2), 0, ((Physics.generator.nextDouble() * 2) - 1) * (map.height/2));
+			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
+			entity.type = Entity.GATHERABLE;
+			entity.scale = (Physics.generator.nextFloat() + .25f) * .1f;
+			entities.add(entity);
+		}
+		
+		for (int i = 0; i < lollyTreeCount; i++) {
+			Entity entity = new Entity();
+			entity.objectID = 6;
+			entity.position = new Vector3d(((Physics.generator.nextDouble() * 2) - 1) * (map.width/2), 0, ((Physics.generator.nextDouble() * 2) - 1) * (map.height/2));
+			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
+			entity.type = Entity.GATHERABLE;
+			entity.scale = (Physics.generator.nextFloat() + .25f) * .1f;
+			entities.add(entity);
+		}
+		
+		for (int i = 0; i < berryBushCount; i++) {
+			Entity entity = new Entity();
+			entity.objectID = 11;
+			entity.position = new Vector3d(((Physics.generator.nextDouble() * 2) - 1) * (map.width/2), 0, ((Physics.generator.nextDouble() * 2) - 1) * (map.height/2));
+			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
+			entity.type = Entity.EDIBLE;
+			entity.scale = (Physics.generator.nextFloat() + .25f) * .1f;
+			entities.add(entity);
+		}
 	}
 }

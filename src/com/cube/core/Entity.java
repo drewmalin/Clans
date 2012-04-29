@@ -1,19 +1,34 @@
 package com.cube.core;
 
+import java.util.ArrayList;
+
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
-
 import org.lwjgl.opengl.GL11;
-
 import com.cube.states.State;
 import com.cube.util.Texture;
 
 public class Entity {
 	
+	/* Entities each are given a unique type that dictates how they can
+    be interacted with (if at all):
+    
+    0 - NEUTRAL    (no interaction, e.g. static scenery)
+    1 - HUNTABLE   (entities that yield meat) <- may be deprecated
+    2 - PASSIVE    (entities that yield meat/will flee if attacked)
+    3 - AGGRESSIVE (entities that yield meat/will attack if attacked)
+    4 - GATHERABLE (indedible entities like trees, dead animals)
+    5 - MINEABLE   (mines, ore, gems, etc.)
+    6 - EDIBLE     (entities that could be immediately eaten, e.g. berries)
+	 */
+	
 	public final static int NEUTRAL 		= 0;
 	public final static int HUNTABLE 		= 1;
-	public final static int GATHERABLE 		= 2;
-	public final static int MINEABLE 		= 3;
+	public final static int PASSIVE			= 2;
+	public final static int AGGRESSIVE		= 3;
+	public final static int GATHERABLE 		= 4;
+	public final static int MINEABLE 		= 5;
+	public final static int EDIBLE			= 6;
 	
 	protected int selectionRingRotation;
 	
@@ -38,12 +53,21 @@ public class Entity {
 	public double max_v;
 	
 	public Inventory inventory;
+	
 	public Texture tex;
 	private int pause;
 	public Clan clanRef;
 	public int timedump;
 	
+	public ArrayList<Integer> targets;
+	public boolean underAttack;
+	
+	public int maxHealth;
+	public int curHealth;
+	
 	public Entity() {
+		
+		maxHealth = curHealth = 5;
 		
 		color 		= new float[3];
 		rotation 	= new float[3];
@@ -81,17 +105,23 @@ public class Entity {
 		setColorID(Resources.getNextColorID());
 		Resources.pickingHashMap.put(Resources.colorIDToStringKey(colorID), this);
 
+		targets = new ArrayList<Integer>();
+		underAttack = false;
 	}
 	
 	public void setType(int _type) {
 		type = _type;
 	}
 	
+	public void setMaxVelocity(float v) {
+		max_v = v;
+	}
+	
 	public void draw() {
 		GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 			
-			GL11.glTranslated(position.x, position.y, position.z);
+			GL11.glTranslated(position.x, position.y + Resources.map.getHeight((float)position.x, (float)position.z), position.z);
 			GL11.glRotatef(rotation[0], 1, 0, 0);
 			GL11.glRotatef(rotation[1], 0, 1, 0);
 			GL11.glRotatef(rotation[2], 0, 0, 1);
@@ -99,15 +129,15 @@ public class Entity {
 			
 			if (Graphics.colorPicking) {
 				GL11.glColor3ub((byte)colorID[0], (byte)colorID[1], (byte)colorID[2]);
-				Resources.objectLibrary[objectID].drawOBJ();
+				Resources.objectLibrary.get(objectID).drawOBJ();
 			}
 			else {
 				GL11.glColor3f(color[0], color[1], color[2]);
 				if(tex == null)
 				{
-					Resources.objectLibrary[objectID].draw();
+					Resources.objectLibrary.get(objectID).draw();
 				}else{
-					Resources.objectLibrary[objectID].draw(tex);
+					Resources.objectLibrary.get(objectID).draw(tex);
 				}
 			}
 			
@@ -137,7 +167,7 @@ public class Entity {
 		GL11.glLoadIdentity();
 		
 		//Translate to the unit's position
-		GL11.glTranslated(position.x, position.y - 0.1, position.z);
+		GL11.glTranslated(position.x, position.y - 0.1 + Resources.map.getHeight((float)position.x, (float)position.z), position.z);
 		//Rotate the ring about the origin
 		GL11.glRotatef(selectionRingRotation++, 0, 1, 0);
 		//Translate such that the center of the ring is at the origin
@@ -199,9 +229,7 @@ public class Entity {
 
 	public void retire() {
 		focusEntity.type = Entity.NEUTRAL;
-		focusEntity.rotation[0] += 180;
-		focusEntity.position.y += 1;
-		focusEntity = null;		
+		//focusEntity = null;		
 	}
 
 	public void setDestination(float[] target) {

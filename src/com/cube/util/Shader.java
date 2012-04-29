@@ -8,6 +8,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import org.lwjgl.opengl.GL20;
+
+import com.cube.core.Graphics;
+import com.cube.core.Resources;
+
 public class Shader {
 	
 	//Handles on the shader program and shaders
@@ -20,8 +25,8 @@ public class Shader {
 	//Strings to hold the shader code that will be compiled
 	private StringBuilder vertexShaderSource;
 	private StringBuilder fragmentShaderSource;
-	
-	private Shader() {
+		
+	private Shader() {		
 		//Initialize the shader program and vertex and fragment shaders
 		shaderProgram = glCreateProgram();
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -44,6 +49,15 @@ public class Shader {
 	
 	public void bind() {
 		glUseProgram(shaderProgram);
+
+		int location0 = GL20.glGetUniformLocation(shaderProgram, "cameraPosX");
+		int location1 = GL20.glGetUniformLocation(shaderProgram, "cameraPosY");
+		int location2 = GL20.glGetUniformLocation(shaderProgram, "cameraPosZ");
+
+		GL20.glUniform1f(location0, Graphics.camera.getPosition(0) + Resources.map.width/2);
+		GL20.glUniform1f(location1, Graphics.camera.getPosition(1));
+		GL20.glUniform1f(location2, Graphics.camera.getPosition(2) + Resources.map.height/2);
+
 	}
 	
 	public void unbind() {
@@ -113,6 +127,10 @@ public class Shader {
 	
 	public String getVertexShaderSourceFile() {
 		return vertexShaderSourceFile;
+	}
+	
+	public int getShaderProgram() {
+		return shaderProgram;
 	}
 	
 	public void setVertexShaderSourceFile(String source) {

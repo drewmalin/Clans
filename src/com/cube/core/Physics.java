@@ -91,7 +91,7 @@ public class Physics {
 	 * Rotate a vector theta degrees about the y axis. This is meant to be used for movement
 	 * vectors that are fixed to the x-z plane.
 	 */
-	public static void rotateVector(Vector2d vect, double theta) {
+	public static void rotateVector2d(Vector2d vect, double theta) {
 		
 		double convertToRads = (float) ((2 * Math.PI) / 360); 
 
@@ -100,6 +100,38 @@ public class Physics {
 		
 		vect.x = rx;
 		vect.y = ry;
+	}
+	
+	public static void rotateVector3d(Vector3d v, float rotX, float rotY, float rotZ) {
+		float convertToRads = (float) ((2 * Math.PI) / 360); 
+		double tempX, tempY, tempZ;
+		
+		//Rotate about the x axis
+		tempX = v.x;
+		tempY = (v.y * Math.cos(rotX * convertToRads)) - (v.z * Math.sin(rotX * convertToRads));
+		tempZ = (v.y * Math.sin(rotX * convertToRads)) + (v.z * Math.cos(rotX * convertToRads));
+		
+		v.x = tempX;
+		v.y = tempY;
+		v.z = tempZ;
+		
+		//Rotate about the y axis
+		tempX = (v.x * Math.cos(rotY * convertToRads)) + (v.z * Math.sin(rotY * convertToRads));
+		tempY = v.y;
+		tempZ = (-v.x * Math.sin(rotY * convertToRads)) + (v.z * Math.cos(rotY * convertToRads));
+		
+		v.x = tempX;
+		v.y = tempY;
+		v.z = tempZ;
+		
+		//Rotate about the z axis
+		tempX = (v.x * Math.cos(rotZ * convertToRads)) - (v.y * Math.sin(rotZ * convertToRads));
+		tempY = (v.x * Math.sin(rotZ * convertToRads)) + (v.y * Math.cos(rotZ * convertToRads));
+		tempZ = v.z;
+		
+		v.x = tempX;
+		v.y = tempY;
+		v.z = tempZ;
 	}
 	
 	/*
@@ -150,7 +182,7 @@ public class Physics {
 	 * a current velocity vector, meaning this force only slightly modifies the entity's movement;
 	 * it does not guarantee instant arrival at the destination.
 	 */
-	public static Vector2d updateVelocity(Entity e) {
+	public static Vector2d seekDestination(Entity e) {
 		Vector2d velocityFix = new Vector2d();
 		Vector2d obstacleAvoid = new Vector2d();
 		
@@ -182,13 +214,11 @@ public class Physics {
 		
 		// For all entities on the map
 		for (Entity ent : Resources.entities) {
-			//If the entity is not the current entity, and the entity is neutral
-			if (!e.equals(ent) && ent.type == Entity.NEUTRAL) {
+			//If the entity is not the current entity
+			if (!e.equals(ent) && ent != e.focusEntity) {
 				
 				Vector2d globalEntPos = new Vector2d(ent.position.x, ent.position.z);
 				Vector2d globalEPos = new Vector2d(e.position.x, e.position.z);
-				Vector3d tempDir = new Vector3d(e.direction.x, e.direction.y, e.direction.z);
-				tempDir.normalize();
 				
 				dist = distSquared(e.position, ent.position);
 
@@ -198,7 +228,7 @@ public class Physics {
 					//Convert the ent position to move it into e's local axis
 					globalEntPos.x = (globalEntPos.x - e.position.x);
 					globalEntPos.y = (globalEntPos.y - e.position.z);
-					rotateVector(globalEntPos, -e.rotation[1]);
+					rotateVector2d(globalEntPos, -e.rotation[1]);
 
 					//From here on, disregard the rotation of e
 					double top 		= -20;
@@ -227,7 +257,7 @@ public class Physics {
 						double multiplier = 1.0 + (20 + globalEntPos.y) / 20;
 						push.x = (radius - globalEntPos.x) * multiplier * .5;
 						
-						rotateVector(push, e.rotation[1]);
+						rotateVector2d(push, e.rotation[1]);
 						
 					}
 				}
@@ -268,5 +298,44 @@ public class Physics {
 		
 		e.force.x = 0;
 		e.force.y = 0;
+	}
+
+	public static Vector2d fleeFocusEntity(Entity e) {
+		Vector2d velocityFix = new Vector2d();
+		Vector2d obstacleAvoid = new Vector2d();
+		
+		velocityFix.x = e.position.x - e.focusEntity.position.x;
+		velocityFix.y = e.position.z - e.focusEntity.position.z;
+		velocityFix.normalize();
+		velocityFix.scale(e.max_v);
+		
+		velocityFix.sub(e.velocity);
+
+		obstacleAvoid = avoidObstacles(e);
+		velocityFix.add(obstacleAvoid);
+		return velocityFix;
+	}
+	
+	public static Vector2d pursueFocusEntity(Entity e) {
+		Vector2d velocityFix = new Vector2d();
+		Vector2d obstacleAvoid = new Vector2d();
+		Vector2d estimatedPosition = new Vector2d();
+		
+		double estimateTime = Math.sqrt(Physics.distSquared(e.position, e.focusEntity.position));
+		estimateTime /= (e.max_v + e.focusEntity.max_v);
+		
+		estimatedPosition.x = e.focusEntity.position.x + e.focusEntity.max_v * estimateTime;
+		estimatedPosition.y = e.focusEntity.position.z + e.focusEntity.max_v * estimateTime;
+		
+		velocityFix.x = estimatedPosition.x - e.position.x;
+		velocityFix.y = estimatedPosition.y - e.position.z;
+		velocityFix.normalize();
+		velocityFix.scale(e.max_v);
+		
+		velocityFix.sub(e.velocity);
+		
+		obstacleAvoid = avoidObstacles(e);
+		velocityFix.add(obstacleAvoid);
+		return velocityFix;
 	}
 }

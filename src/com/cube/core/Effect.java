@@ -94,9 +94,12 @@ public class Effect {
 			
 			p.deceleration += deceleration;
 						
-			p.color[0] += 0.01;
-			p.color[1] += 0.01;
-			p.color[2] += 0.01;
+			if (p.color[0] > 0)
+				p.color[0] -= 0.01;
+			if (p.color[1] > 0)
+				p.color[1] -= 0.01;
+			if (p.color[2] > 0)
+				p.color[2] -= 0.01;
 			
 			tempPos[0] = p.position[0];
 			tempPos[1] = p.position[1];
@@ -130,7 +133,7 @@ public class Effect {
 		for (Particle p : particles) {
 			GL11.glPushMatrix();
 			GL11.glColor3f(p.color[0], p.color[1], p.color[2]);
-			GL11.glTranslatef(p.position[0], p.position[1], p.position[2]);
+			GL11.glTranslatef(p.position[0], p.position[1] + Resources.map.getHeight(p.position[0], p.position[2]), p.position[2]);
 			GL11.glScalef(p.scale[0], p.scale[1], p.scale[2]);
 			Graphics.drawCube();
 			GL11.glPopMatrix();

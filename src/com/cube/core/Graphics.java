@@ -33,6 +33,7 @@ public class Graphics {
 		setupLighting();
 		setupBlend();
 		setupShaderManager();
+
 		FileLogger.logger.log(Level.INFO, "Graphics initialized");
 	}
 
@@ -45,12 +46,12 @@ public class Graphics {
 		camera = new Camera();
 		camera.setUp(0f, 1f, 0f);
 		camera.setTarget(0f, 0f, 0f); 
-		camera.setRadius(15.5f);
+		camera.setRadius(30f);
 		camera.setThetaX(46.9f);
 		camera.setThetaY(-22.3f);
 		camera.updatePosition();
 	}
-
+	
 	private static void setupLighting() {
 		
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -71,11 +72,11 @@ public class Graphics {
 		GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT_AND_DIFFUSE);			// tell opengl glColor3f effects the ambient and diffuse properties of material		
 			
 		Light sun = new Light("SUN");
-		sun.setPosition(-50, 50, -50);
+		sun.setPosition(0, 200, 0);
 		sun.setColor(1f, 1f, 1f, 1f);
 		sun.create(GL11.GL_LIGHT0);
+		sun.loadOBJ("res/obj/berryBushSans.obj");
 		Resources.lights.add(sun);
-
 	}
 
 	private static void setupShaderManager() {

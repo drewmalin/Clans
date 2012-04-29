@@ -2,6 +2,7 @@ package com.cube.states;
 
 import javax.vecmath.Vector2d;
 
+import com.cube.core.Clan;
 import com.cube.core.Entity;
 
 public class GatherState extends State {
@@ -14,7 +15,7 @@ public class GatherState extends State {
 	 */
 	@Override
 	public void enter(Entity e) {
-		System.out.println("Entity " + e + " is now gathering!");
+		if (debugMessages) System.out.println("Entity " + e + " is now gathering!");
 	}
 
 	/* 
@@ -25,16 +26,30 @@ public class GatherState extends State {
 	public void execute(Entity e) {
 		
 		
-		if (e.pause(50)) {
-			e.inventory.addItem();
-			e.focusEntity.inventory.removeItem();
-
-			if (e.inventory.isFull() || e.focusEntity.inventory.isEmpty()) {
-				e.setDestination(e.clanRef.position);
-				e.changeState( TravelState.getState() );
+		if (e.pause(10)) {
+			
+			if (e.type == Clan.HUNTER) {								// If the entity is a hunter, gather
+				e.inventory.addItem();
+				e.focusEntity.inventory.removeItem();
+	
+				if (e.inventory.isFull() || e.focusEntity.inventory.isEmpty()) {
+					e.setDestination(e.clanRef.position);
+					e.changeState( TravelState.getState() );
+					
+					if (e.focusEntity.inventory.isEmpty()) {
+						e.retire();
+					}
+				}
+			}
+			
+			else {														// If the entity is not a hunter, eat
+				e.focusEntity.inventory.removeItem();
 				
-				if (e.focusEntity.inventory.isEmpty()) {
-					e.retire();
+				if (e.inventory.isFull() || e.focusEntity.inventory.isEmpty()) {
+					e.changeState( HuntState.getState() );
+					if (e.focusEntity.inventory.isEmpty()) {
+						e.retire();
+					}
 				}
 			}
 		}
@@ -42,7 +57,7 @@ public class GatherState extends State {
 
 	@Override
 	public void exit(Entity e) {
-		System.out.println("Entity " + e + " is no longer gathering.");
+		if (debugMessages) System.out.println("Entity " + e + " is no longer gathering.");
 	}
 
 	//-------------------------------------------------------------------------//

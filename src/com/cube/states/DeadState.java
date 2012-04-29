@@ -1,27 +1,25 @@
 package com.cube.states;
 
-import com.cube.core.Clan;
 import com.cube.core.Entity;
+import com.cube.core.Physics;
 
-public class NeutralState extends State {
+public class DeadState extends State {
 	
 	@Override
 	public void enter(Entity e) {
-		if (debugMessages) System.out.println("Entity " + e + " is now neutral!");		
+		if (debugMessages) System.out.println("Entity " + e + " is now dead!");		
+		Physics.haltEntity(e);
+		e.type = Entity.NEUTRAL;
 	}
 
 	@Override
 	public void execute(Entity e) {
-		
-		if (e.pause(10) && 
-		   (e.type == Clan.HUNTER || e.type == Entity.AGGRESSIVE || e.type == Entity.PASSIVE)) {
-			e.changeState( HuntState.getState() );
-		}
+		//Only the black void...
 	}
 
 	@Override
 	public void exit(Entity e) {
-		if (debugMessages) System.out.println("Entity " + e + " is no longer neutral.");
+		if (debugMessages) System.out.println("Entity " + e + " is no longer dead (?).");
 	}
 
 	//-------------------------------------------------------------------------//
@@ -40,7 +38,7 @@ public class NeutralState extends State {
 	// Return the instance of this singleton state
 	public static synchronized State getState() {
 		if (ref == null) {
-			ref = new NeutralState();
+			ref = new DeadState();
 		}
 		return ref;
 	}

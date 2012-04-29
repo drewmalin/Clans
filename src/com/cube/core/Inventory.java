@@ -1,5 +1,7 @@
 package com.cube.core;
 
+import java.util.ArrayList;
+
 import org.lwjgl.opengl.GL11;
 
 public class Inventory {
@@ -7,13 +9,15 @@ public class Inventory {
 	private int capacity;
 	private int itemCount;
 	private int renderDimension;
-	
+	public ArrayList<Item> items;
+
 	private double startX;
 	private double startY;
 	private double startZ;
 	
 	public Inventory() {
-		capacity = itemCount = renderDimension = 0;
+		items = new ArrayList<Item>();
+		capacity = renderDimension = 0;
 		startX = startY = startZ = 0;
 	}
 	
@@ -57,7 +61,7 @@ public class Inventory {
 		float spacing = .2f;
 		
 		startX = e.position.x + e.direction.x;
-		startY = e.position.y + 1;
+		startY = e.position.y + 1 + Resources.map.getHeight((float)e.position.x, (float)e.position.z);
 		startZ = e.position.z + e.direction.z;
 			
 		GL11.glPushMatrix();
