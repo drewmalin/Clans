@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.cube.util.BMPparser;
 import com.cube.util.Quad;
+import com.cube.util.ShaderManager;
 import com.cube.util.Vertex;
 //import com.cube.util.ShaderManager.ShaderType;
 
@@ -39,9 +40,9 @@ public class Map extends Drawable {
 	public void draw() {
 		//drawGrid();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		//Graphics.shaderManager.bindShader(ShaderType.HEMISPHERE);
+		Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
 		drawMap();
-		//Graphics.shaderManager.unbindShader(ShaderType.HEMISPHERE);
+		Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
 	
