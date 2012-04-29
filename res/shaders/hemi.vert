@@ -1,3 +1,5 @@
+uniform vec4 ColorTest;
+
 varying vec4 FinalColor;
 
 void main()
@@ -11,7 +13,7 @@ void main()
 	float a = costheta * 0.5 + 0.5;
 	
   gl_TexCoord[0]  = gl_MultiTexCoord0;
-	FinalColor = mix(vec4(0,0,0,1), vec4(1,1,1,1), a) * gl_Color;
+	FinalColor = mix(vec4(0,0,0,1), vec4(1,1,1,1), a) * ColorTest;
 
 	gl_Position = ftransform();
 }

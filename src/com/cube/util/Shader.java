@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
+import javax.vecmath.*;
 
 public class Shader {
 	
@@ -109,6 +110,104 @@ public class Shader {
         if (glGetShader(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
 	    	FileLogger.logger.log(Level.SEVERE, "Fragment shader failed to compile!");
         }
+	}
+	
+	//Function for putting an integer into a shader
+	public void putInt(String varName, int x) {
+		bind();
+		int location = glGetUniformLocation(shaderProgram, varName);
+		glUniform1i(location, x);
+	}
+	
+	//Functions for putting ALL THE FLOATS into the a shader	
+	public void putFloat(String varName, float x) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform1f(location, x);
+	}
+	
+	public void putVec2f(String varName, Vector2d vec) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform2f(location, (float) vec.x, (float) vec.y);
+	}
+	
+	public void putVec2f(String varName, Vector2f vec) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform2f(location, vec.x, vec.y);
+	}
+	
+	public void putVec2f(String varName, float x, float y) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform2f(location, x, y);
+	}
+	
+	public void putVec3f(String varName, Vector3d vec) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform3f(location, (float) vec.x, (float) vec.y, (float) vec.z);
+	}
+	
+	public void putVec3f(String varName, Vector3f vec) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform3f(location, vec.x, vec.y, vec.z);
+	}
+	
+	public void putVec3f(String varName, float x, float y, float z) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform3f(location, x, y, z);
+	}
+	
+	public void putVec4f(String varName, Vector4d vec) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform4f(location, (float) vec.x, (float) vec.y, (float) vec.z, (float) vec.w);
+	}
+	
+	public void putVec4f(String varName, Vector4f vec) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+	}
+	
+	public void putVec4f(String varName, float x, float y, float z, float w) {
+		//bind the shader program that we want to add the variable to
+		bind();
+		//Grab the location of the variable
+		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
+		glUniform4f(location, x, y, z, w);
 	}
 	
 	public String getVertexShaderSourceFile() {

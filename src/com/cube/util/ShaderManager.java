@@ -50,7 +50,7 @@ public class ShaderManager {
 		
 	public void initialize() {
 		findShaderFiles();
-    	FileLogger.logger.log(Level.SEVERE, "Shaders initialized");
+    	FileLogger.logger.log(Level.INFO, "Shaders initialized");
 	}
 	
 	//Unbinds a shader directly from the hashmap
