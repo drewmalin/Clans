@@ -24,6 +24,7 @@ public class Physics {
 	public static void drawEffects() {
 		for (Effect e : effects) {
 			e.updateParticles();
+
 			e.drawParticles();
 		}
 	}
