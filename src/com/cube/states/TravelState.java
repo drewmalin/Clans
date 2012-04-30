@@ -36,7 +36,7 @@ public class TravelState extends State {
 		//If you haven't reached your destination yet, keep going
 		else {
 			tempVect = Physics.seekDestination(e);
-			e.force.set(tempVect.x * Physics.FAST, tempVect.y * Physics.FAST);
+			e.force.set(tempVect.x * Physics.SPEED.MEDIUM.value(), Physics.SPEED.MEDIUM.value());
 		}
 	}
 

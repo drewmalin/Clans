@@ -59,6 +59,8 @@ public class Input {
 		
 		int x = Mouse.getX();
 		int y = (Engine.HEIGHT - 1) - Mouse.getY();
+		float[] pos = new float[3];
+
 		deltaX = x - deltaX;
 		deltaY = y - deltaY;
 
@@ -74,7 +76,9 @@ public class Input {
 					case 1: //Right click
 						System.out.println("right click");
 						if (selectedEntity != null) {
-							selectedEntity.setDestination(getMousePosition(Mouse.getX(), Mouse.getY()));
+							pos = getMousePosition(Mouse.getX(), Mouse.getY());
+							pos[1] = 0;
+							selectedEntity.setDestination(pos);
 							selectedEntity.changeState( TravelState.getState() );
 						}
 						break;

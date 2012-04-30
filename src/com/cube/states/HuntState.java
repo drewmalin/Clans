@@ -22,7 +22,7 @@ public class HuntState extends State {
 		if (debugMessages) System.out.println("Entity " + e + " is now hunting!");
 		
 		Physics.updateDestination(e, 25);
-		e.force.set(e.destination.x * Physics.SLOW, e.destination.z * Physics.SLOW);
+		e.force.set(e.destination.x * Physics.SPEED.SLOW.value(), e.destination.z * Physics.SPEED.SLOW.value());
 	}
 
 	/*
@@ -50,7 +50,7 @@ public class HuntState extends State {
 						e.changeState( TravelState.getState() );
 					else {
 						e.changeState( AttackState.getState() );
-						e.focusEntity.focusEntity = e;
+						x.focusEntity = e;
 
 						if (e.focusEntity.type == Entity.PASSIVE)				// If the focus is passive, it runs away
 							e.focusEntity.changeState( FleeState.getState() );
@@ -65,12 +65,12 @@ public class HuntState extends State {
 		// Didn't see anything and arrived at destination, set a new destination
 		if (Physics.distSquared(e.position, e.destination) < 10) {
 			Physics.updateDestination(e, 25);
-			e.force.set(e.destination.x * .01, e.destination.z * .01);
+			e.force.set(e.destination.x * Physics.SPEED.SLOW.value(), e.destination.z * Physics.SPEED.SLOW.value());
 		}
 		
 		// Didn't see anything and has not arrived at destination, keep moving
 		tempVect = Physics.seekDestination(e);
-		e.force.set(tempVect.x * Physics.FAST, tempVect.y * Physics.FAST);
+		e.force.set(tempVect.x * Physics.SPEED.SLOW.value(), tempVect.y * Physics.SPEED.SLOW.value());
 
 	}
 

@@ -107,7 +107,67 @@
 <entity>
     <id>12</id>
     <position>-30 0 -30</position>
-    <rotation>0 20 0</rotation>
+    <rotation>0 0 0</rotation>
+    <scale>.07</scale>
+    <type>2</type>
+    <resources>30</resources>
+    <targets>6</targets>
+</entity>
+<!-- Doe -->
+<entity>
+    <id>12</id>
+    <position>-30 0 -30</position>
+    <rotation>0 0 0</rotation>
+    <scale>.07</scale>
+    <type>2</type>
+    <resources>30</resources>
+    <targets>6</targets>
+</entity>
+<!-- Doe -->
+<entity>
+    <id>12</id>
+    <position>-30 0 -30</position>
+    <rotation>0 0 0</rotation>
+    <scale>.07</scale>
+    <type>2</type>
+    <resources>30</resources>
+    <targets>6</targets>
+</entity>
+<!-- Doe -->
+<entity>
+    <id>12</id>
+    <position>-30 0 -30</position>
+    <rotation>0 0 0</rotation>
+    <scale>.07</scale>
+    <type>2</type>
+    <resources>30</resources>
+    <targets>6</targets>
+</entity>
+<!-- Doe -->
+<entity>
+    <id>12</id>
+    <position>-30 0 -30</position>
+    <rotation>0 0 0</rotation>
+    <scale>.07</scale>
+    <type>2</type>
+    <resources>30</resources>
+    <targets>6</targets>
+</entity>
+<!-- Doe -->
+<entity>
+    <id>12</id>
+    <position>-30 0 -30</position>
+    <rotation>0 0 0</rotation>
+    <scale>.07</scale>
+    <type>2</type>
+    <resources>30</resources>
+    <targets>6</targets>
+</entity>
+<!-- Doe -->
+<entity>
+    <id>12</id>
+    <position>-30 0 -30</position>
+    <rotation>0 0 0</rotation>
     <scale>.07</scale>
     <type>2</type>
     <resources>30</resources>
@@ -116,7 +176,7 @@
 <!-- Wolf -->
 <entity>
     <id>10</id>
-    <position>-10 0 -10</position>
+    <position>0 0 -10</position>
     <rotation>0 245 0</rotation>
     <scale>.1</scale>
     <type>3</type>

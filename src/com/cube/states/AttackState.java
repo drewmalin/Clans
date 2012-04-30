@@ -19,17 +19,26 @@ public class AttackState extends State {
 	public void execute(Entity e) {
 		
 		if (Physics.distSquared(e.position, e.focusEntity.position) < 5) {			//If you've reached your destination, attack
-			e.focusEntity.curHealth--;
-			if (debugMessages) System.out.println("Entity " + e.focusEntity.toString() + " is now at " + e.focusEntity.curHealth + " health!");
-			if (e.focusEntity.curHealth <= 0) {
-				e.focusEntity.underAttack = false;
-				e.focusEntity.changeState( DeadState.getState() );
-				e.changeState(GatherState.getState());
+			
+			if (e.pause(10)) {
+				e.focusEntity.curHealth--;
+				if (debugMessages) System.out.println("Entity " + e.focusEntity.toString() + " is now at " + e.focusEntity.curHealth + " health!");
+				if (e.focusEntity.curHealth <= 0) {
+					e.focusEntity.underAttack = false;
+					e.focusEntity.changeState( DeadState.getState() );
+					
+					e.changeState(GatherState.getState());
+					return;
+				}
 			}
+			e.setDestination(e.focusEntity.position);
+			tempVect = Physics.arrive(e);
+			e.force.set(tempVect.x * Physics.SPEED.FAST.value(), tempVect.y * Physics.SPEED.FAST.value());
 		}
-		else { 																//run towards the target
-			tempVect = Physics.pursueFocusEntity(e);
-			e.force.set(tempVect.x * Physics.FAST, tempVect.y * Physics.FAST);
+		else { 		//run towards the target
+			e.setDestination(e.focusEntity.position);
+			tempVect = Physics.seekDestination(e);
+			e.force.set(tempVect.x * Physics.SPEED.FAST.value(), tempVect.y * Physics.SPEED.FAST.value());
 		}
 	}
 	

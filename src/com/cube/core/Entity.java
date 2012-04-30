@@ -229,7 +229,7 @@ public class Entity {
 
 	public void retire() {
 		focusEntity.type = Entity.NEUTRAL;
-		//focusEntity = null;		
+		focusEntity = null;		
 	}
 
 	public void setDestination(float[] target) {

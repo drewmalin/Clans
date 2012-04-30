@@ -17,7 +17,7 @@ public class FleeState extends State {
 	@Override
 	public void execute(Entity e) {
 		tempVect = Physics.fleeFocusEntity(e);
-		e.force.set(tempVect.x * Physics.FAST, tempVect.y * Physics.FAST);
+		e.force.set(tempVect.x * Physics.SPEED.FAST.value(), tempVect.y * Physics.SPEED.FAST.value());
 	}
 
 	@Override

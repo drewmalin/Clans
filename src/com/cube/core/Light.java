@@ -53,7 +53,7 @@ public class Light {
 
 	public void progressDayNight() {
 		
-		if ((System.nanoTime() - lastCheck) >= 62500000) { //Every 1/8 second, move sun .1 degree
+		if ((System.nanoTime() - lastCheck) >= 62500000) { //Every 1/16 second, move sun 1/20 degree
 			lastCheck = System.nanoTime();
 			Physics.rotateVector3d(worldPosition, 0, 0, .05f);
 			position.put((float) worldPosition.x).put((float) worldPosition.y).put((float) worldPosition.z).put(0f).flip();

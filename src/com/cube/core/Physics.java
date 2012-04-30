@@ -11,9 +11,22 @@ import com.cube.util.FileLogger;
 
 public class Physics {
 	public static ArrayList<Effect> effects;
+	public enum SPEED {
+		FAST(2), MEDIUM(0.3), SLOW(0.1);
+		
+		private double val;
+		private SPEED(double v) {
+			this.val = v;
+		}
+		public double value() {
+			return val;
+		}
+	};
+	/*
 	public static final double FAST 	= .5;
 	public static final double MEDIUM 	= .3;
 	public static final double SLOW 	= .1;
+	*/
 
 	public static void initialize() {
 		generator = new Random(System.currentTimeMillis());
@@ -252,11 +265,11 @@ public class Physics {
 					double radius = 1;
 					if (distSquared < (radius * radius)) {
 						
-						double brakingWeight = 0.1;
+						double brakingWeight = 0.2;
 						push.y = ((radius - globalEntPos.y) * brakingWeight);
 						
 						double multiplier = 1.0 + (20 + globalEntPos.y) / 20;
-						push.x = (radius - globalEntPos.x) * multiplier * .5;
+						push.x = (radius - globalEntPos.x) * multiplier * .25;
 						
 						rotateVector2d(push, e.rotation[1]);
 						
@@ -301,6 +314,27 @@ public class Physics {
 		e.force.y = 0;
 	}
 
+	public static Vector2d arrive(Entity e) {
+		Vector2d velocityFix = new Vector2d(0, 0);
+		
+		double dist = distSquared(e.position, e.destination);
+		double deceleration = SPEED.MEDIUM.value();
+		double speed;
+		
+		if (dist > 0) {
+			speed = dist / deceleration;
+			speed = Math.min(speed, e.max_v);
+			
+			velocityFix.x = e.position.x - e.destination.x;
+			velocityFix.y = e.position.z - e.destination.z;
+			
+			velocityFix.normalize();
+			velocityFix.scale(speed/dist);
+		}
+		
+		return velocityFix;
+	}
+	
 	public static Vector2d fleeFocusEntity(Entity e) {
 		Vector2d velocityFix = new Vector2d();
 		Vector2d obstacleAvoid = new Vector2d();
@@ -339,4 +373,5 @@ public class Physics {
 		velocityFix.add(obstacleAvoid);
 		return velocityFix;
 	}
+	
 }

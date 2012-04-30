@@ -10,6 +10,8 @@ public class DeadState extends State {
 		if (debugMessages) System.out.println("Entity " + e + " is now dead!");		
 		Physics.haltEntity(e);
 		e.type = Entity.NEUTRAL;
+		e.rotation[0] += 180;
+		e.position.y += 2;
 	}
 
 	@Override
@@ -19,7 +21,7 @@ public class DeadState extends State {
 
 	@Override
 	public void exit(Entity e) {
-		if (debugMessages) System.out.println("Entity " + e + " is no longer dead (?).");
+		if (debugMessages) System.out.println("Entity " + e + " is no longer dead (???).");
 	}
 
 	//-------------------------------------------------------------------------//

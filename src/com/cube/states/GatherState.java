@@ -4,6 +4,7 @@ import javax.vecmath.Vector2d;
 
 import com.cube.core.Clan;
 import com.cube.core.Entity;
+import com.cube.core.Physics;
 
 public class GatherState extends State {
 
