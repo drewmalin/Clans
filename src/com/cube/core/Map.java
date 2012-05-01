@@ -6,10 +6,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.cube.util.BMPparser;
-import com.cube.util.Quad;
 import com.cube.util.ShaderManager;
 import com.cube.util.Vertex;
-//import com.cube.util.ShaderManager.ShaderType;
 
 public class Map extends Drawable {
 
@@ -22,7 +20,6 @@ public class Map extends Drawable {
 	public static boolean showNormals = false;
 	
 	public float[][] heightMap;
-	public Quad[][][] planeEq;
 	public String filename;
 	public int pixels[][][], width, height;
 	public Vertex vertexNormals[][];
@@ -48,7 +45,7 @@ public class Map extends Drawable {
 	
 	public void initialize() {
 		load(file);
-	}
+	}	
 	
 	public void load(String filename) {
 		try {
@@ -67,9 +64,6 @@ public class Map extends Drawable {
 	
 	public void calculateNormals() {
 		vertexNormals = new Vertex[width][height];
-		planeEq = new Quad[width][height][2];
-
-		calculatePlanarNormals();
 		calculateVertexNormals();
 	}
 	
@@ -129,82 +123,34 @@ public class Map extends Drawable {
 		}
 	}
 	
-	public void calculatePlanarNormals() {
-		float a1, a2, b1, b2, c1, c2, d1, d2;
-		
-		Vector3f east;	//Relative to the top-left vector
-		Vector3f south; //Relative to the top-left vector
-		Vector3f north; //Relative to the bottom-right vector
-		Vector3f west;  //Relative to the bottom-right vector
-		Vector3f out;
-		
-		for (int j = 1; j < height; j++) {
-			for (int i = 0; i < width - 1; i++) {
-				
-				//Top-left triangle
-				out = new Vector3f(0f, 0f, 0f);
-				east = new Vector3f(1f, (Math.abs(pixels[i+1][j][0]) * heightModifier)-(Math.abs(pixels[i][j][0]) * heightModifier), 0f);
-				south = new Vector3f(0f, (Math.abs(pixels[i][j-1][0]) * heightModifier)-(Math.abs(pixels[i][j][0]) * heightModifier), -1f);
-				
-				Vector3f.cross(south, east, out);
-				a1 = out.x;
-				b1 = out.y;
-				c1 = out.z;
-				d1 = -(a1*i + b1*(Math.abs(pixels[i][j][0]) * heightModifier) + c1*j);
-				
-				planeEq[i][j][0] = new Quad(a1, b1, c1, d1);
-				
-				//Bottom-right triangle
-				out = new Vector3f(0f, 0f, 0f);
-				north = new Vector3f(0f, (Math.abs(pixels[i+1][j][0]) * heightModifier)-(Math.abs(pixels[i+1][j-1][0]) * heightModifier), 1f);
-				west = new Vector3f(-1f, (Math.abs(pixels[i][j-1][0]) * heightModifier)-(Math.abs(pixels[i+1][j-1][0]) * heightModifier), 0f);
-				
-				Vector3f.cross(north, west, out);
-				a2 = out.x;
-				b2 = out.y;
-				c2 = out.z;
-				d2 = -(a2*(i+1) + b2*(Math.abs(pixels[i+1][j-1][0]) * heightModifier) + c2*(j-1));
-				
-				planeEq[i][j][1] = new Quad(a2, b2, c2, d2);
-			}
-		}
-	}
-	
 	public float getHeight(float x, float z) {
 
 		x += Resources.map.width/2;
 		z += Resources.map.width/2;
 		
-		float val, tX, tZ, charHeight;
-		int aX, aZ, bX, bZ;
-		int choice;
+		int baseX = (int)x;
+		int baseZ = (int)z;
+		float heightA = pixels[baseX][baseZ][0];
+		float heightB = pixels[baseX+1][baseZ][0];
+		float heightC = pixels[baseX][baseZ+1][0];
+		float heightD = pixels[baseX+1][baseZ+1][0];
+		float fHeight;
+		float perX = x - baseX;
+		float perZ = z - baseZ;
 		
-		x *= scale;
-		z *= scale;
+		if ((perX + perZ) < 1) {
+			fHeight = heightA;
+			fHeight += (heightB - heightA) * perX;
+			fHeight += (heightC - heightA) * perZ;
+		}
+		else {
+			fHeight = heightD;
+			fHeight += (heightB - heightD) * (1f - perZ);
+			fHeight += (heightC - heightD) * (1f - perX);
+		}
 		
-		//Determine which triangle we need
-		//(Bx - Ax) * (Cz - Az) - (Bz - Az) * (Cx - Ax)
-		//A = top right, B = bottom left, C = current point
-		
-		aX = (int) (x + 1);
-		aZ = (int) z;
-		bX = (int) x; 
-		bZ = (int) (z + 1);
-		val = (bX - aX) * (z - aZ) - (bZ - aZ) * (x - aX);
-		choice = val >= 0 ? 1 : 0; 							//0 is the top-left triangle, 1 is the bottom-right
+		return heightModifier * scale * fHeight;
 
-		tX = x;
-		tZ = z;
-		
-		
-		if (tX < 0 || tZ < 1 || tX > width-1 || tZ > height-1) return 0; 
-			
-		charHeight = - (planeEq[(int)tX][(int)tZ][choice].d 
-					 + (planeEq[(int)tX][(int)tZ][choice].a * x)
-					 + (planeEq[(int)tX][(int)tZ][choice].c * z))
-					 / planeEq[(int)tX][(int)tZ][choice].b;
-		
-		return Math.abs(charHeight * scale);
 	}
 	
 	public void drawMap() {

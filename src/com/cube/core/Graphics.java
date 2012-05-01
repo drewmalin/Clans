@@ -49,7 +49,7 @@ public class Graphics {
 		camera.setRadius(30f);
 		camera.setThetaX(46.9f);
 		camera.setThetaY(-22.3f);
-		camera.updatePosition();
+		//camera.updatePosition();
 	}
 	
 	private static void setupLighting() {
