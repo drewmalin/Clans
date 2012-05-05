@@ -51,9 +51,9 @@ public class Effect {
 		for (int i = 0; i < particleCount; i++) {
 			Particle p = new Particle();
 			
-			p.maximum[0] = randGenerator.nextFloat() * 1;
-			p.maximum[1] = randGenerator.nextFloat() * 6;
-			p.maximum[2] = randGenerator.nextFloat() * 1;
+			p.maximum[0] = randGenerator.nextFloat() * .5f;
+			p.maximum[1] = randGenerator.nextFloat() * 4;
+			p.maximum[2] = randGenerator.nextFloat() * .5f;
 			
 			p.position[0] = position[0];
 			p.position[1] = position[1];

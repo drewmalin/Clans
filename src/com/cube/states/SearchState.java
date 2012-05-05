@@ -6,8 +6,9 @@ import com.cube.core.Clan;
 import com.cube.core.Entity;
 import com.cube.core.Physics;
 import com.cube.core.Resources;
+import com.cube.util.Utilities;
 
-public class HuntState extends State {
+public class SearchState extends State {
 
 	Vector2d tempVect;
 	
@@ -34,27 +35,27 @@ public class HuntState extends State {
 	@Override
 	public void execute(Entity e) {
 		boolean print = false;
-		if (e.type == Clan.HUNTER) print = true;
+		if (e.types.contains(Clan.HUNTER)) print = true;
 		// Look for resources
 		for (Entity x : Resources.entities) {
-			if (e.targets.contains(x.type)) {
+			if (Physics.distSquared(x.position, e.position) < 400) {		//Entity spotted a resource
 
-				if (Physics.distSquared(x.position, e.position) < 400) {	//Entity spotted a resource
+				if (Utilities.containsAny(e.targets, x.types)) {			//Entity can interact with resource
 
-					if (print) System.out.println("Type: " + x.type);
+					if (print) System.out.println("Type: " + Utilities.printArrayList(x.types));
 
-					e.focusEntity = x;
+					e.focusEntity = x;										
 					e.setDestination(e.focusEntity.position);
 					
-					if (x.type == Entity.EDIBLE)
+					if (x.types.contains(Entity.EDIBLE))					//Resource type is immediately edible, travel to it
 						e.changeState( TravelState.getState() );
-					else {
+					else {													//Resource must be mined/chopped/attacked
 						e.changeState( AttackState.getState() );
 						x.focusEntity = e;
 
-						if (e.focusEntity.type == Entity.PASSIVE)				// If the focus is passive, it runs away
+						if (e.focusEntity.types.contains(Entity.PASSIVE))	// If the focus is passive, it should flee
 							e.focusEntity.changeState( FleeState.getState() );
-						else													// If the focus is not passive, it counter attacks
+						else												// If the focus is not passive, it counter attacks
 							e.focusEntity.changeState( AttackState.getState() );
 					}
 					return;
@@ -65,12 +66,14 @@ public class HuntState extends State {
 		// Didn't see anything and arrived at destination, set a new destination
 		if (Physics.distSquared(e.position, e.destination) < 10) {
 			Physics.updateDestination(e, 25);
-			e.force.set(e.destination.x * Physics.SPEED.SLOW.value(), e.destination.z * Physics.SPEED.SLOW.value());
+			e.force.set(e.destination.x * Physics.SPEED.SLOW.value(), 
+					    e.destination.z * Physics.SPEED.SLOW.value());
 		}
 		
 		// Didn't see anything and has not arrived at destination, keep moving
 		tempVect = Physics.seekDestination(e);
-		e.force.set(tempVect.x * Physics.SPEED.SLOW.value(), tempVect.y * Physics.SPEED.SLOW.value());
+		e.force.set(tempVect.x * Physics.SPEED.SLOW.value(), 
+				    tempVect.y * Physics.SPEED.SLOW.value());
 
 	}
 
@@ -98,7 +101,7 @@ public class HuntState extends State {
 	// Return the instance of this singleton state
 	public static synchronized State getState() {
 		if (ref == null) {
-			ref = new HuntState();
+			ref = new SearchState();
 		}
 		return ref;
 	}

@@ -19,7 +19,7 @@ public class DepositState extends State {
 			
 			if (e.inventory.isEmpty()) { 											//Done depositing
 				if (e.focusEntity == null || e.focusEntity.inventory.isEmpty()) { 	//Last target is empty
-					e.changeState( HuntState.getState() );
+					e.changeState( SearchState.getState() );
 				}
 				else { 																//Last target still has resources
 					e.setDestination(e.focusEntity.position);

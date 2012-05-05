@@ -16,6 +16,7 @@ import com.cube.gui.Menu;
 import com.cube.gui.Window;
 import com.cube.states.TravelState;
 import com.cube.util.FileLogger;
+import com.cube.util.Utilities;
 
 
 public class Input {
@@ -78,7 +79,10 @@ public class Input {
 						if (selectedEntity != null) {
 							pos = getMousePosition(Mouse.getX(), Mouse.getY());
 							pos[1] = 0;
+							System.out.println(Utilities.printArray(pos));
+							System.out.println(Utilities.printVector(selectedEntity.position));
 							selectedEntity.setDestination(pos);
+							selectedEntity.userControlled = true;
 							selectedEntity.changeState( TravelState.getState() );
 						}
 						break;

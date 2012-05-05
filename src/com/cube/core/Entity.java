@@ -29,6 +29,7 @@ public class Entity {
 	public final static int GATHERABLE 		= 4;
 	public final static int MINEABLE 		= 5;
 	public final static int EDIBLE			= 6;
+	public final static int DEAD			= 7;
 	
 	protected int selectionRingRotation;
 	
@@ -41,9 +42,15 @@ public class Entity {
 	public float[] rotation;
 	public float scale;
 	public boolean show;
-	public int type;
-
+	
 	public State currentState;
+	public State previousState;
+	
+	public boolean userControlled;
+	
+	public long waitMillis;
+	public long waitDelta;
+	
 	public Entity focusEntity;
 	
 	public Vector2d force;
@@ -58,14 +65,19 @@ public class Entity {
 	private int pause;
 	public Clan clanRef;
 	public int timedump;
+	public float proximityRadius;
 	
 	public ArrayList<Integer> targets;
+	public ArrayList<Integer> types;
+	
 	public boolean underAttack;
 	
 	public int maxHealth;
 	public int curHealth;
 	
 	public Entity() {
+		
+		proximityRadius = 1.5f;
 		
 		maxHealth = curHealth = 5;
 		
@@ -85,7 +97,7 @@ public class Entity {
 		color[0] 	= color[1] 		= color[2] 		= 1f;
 		rotation[0] = rotation[1]	 = rotation[2] 	= 0f;
 		
-		scale 		= .1f;
+		scale 		= .05f;
 		show 		= true;
 		objectID 	= -1;
 		
@@ -106,11 +118,13 @@ public class Entity {
 		Resources.pickingHashMap.put(Resources.colorIDToStringKey(colorID), this);
 
 		targets = new ArrayList<Integer>();
+		types = new ArrayList<Integer>();
+		
 		underAttack = false;
 	}
 	
 	public void setType(int _type) {
-		type = _type;
+		types.add(_type);
 	}
 	
 	public void setMaxVelocity(float v) {
@@ -198,7 +212,7 @@ public class Entity {
 	}
 	
 	public void changeState(State newState) {
-		if (currentState != null && newState != null) {
+		if (currentState != null && newState != null && !currentState.equals(newState)) {
 			currentState.exit(this);
 			currentState = newState;
 			currentState.enter(this);
@@ -228,7 +242,8 @@ public class Entity {
 	}
 
 	public void retire() {
-		focusEntity.type = Entity.NEUTRAL;
+		focusEntity.types.clear();
+		focusEntity.types.add(Entity.NEUTRAL);
 		focusEntity = null;		
 	}
 

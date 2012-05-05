@@ -22,11 +22,6 @@ public class Physics {
 			return val;
 		}
 	};
-	/*
-	public static final double FAST 	= .5;
-	public static final double MEDIUM 	= .3;
-	public static final double SLOW 	= .1;
-	*/
 
 	public static void initialize() {
 		generator = new Random(System.currentTimeMillis());
@@ -77,28 +72,6 @@ public class Physics {
 		c = (point1.z - point2.z) * (point1.z - point2.z);
 
 		return a + b + c;
-	}
-	
-	// *** Temporary location *** //
-	/*
-	 * Method to neatly print the contents of a float array.
-	 */
-	public static String printArray(float[] array) {
-		String ret = "(";
-		
-		for (float a : array) {
-			ret += (a + ", ");
-		}
-		
-		ret = ret.substring(0, ret.lastIndexOf(","));
-		return ret + ")";
-	}
-	
-	/*
-	 * Method to neatly print the contents of a Vector3d.
-	 */
-	public static String printVector(Vector3d position) {
-		return "(" + position.x + ", " + position.y + ", " + position.z + ")";
 	}
 	
 	/*
@@ -245,7 +218,7 @@ public class Physics {
 					rotateVector2d(globalEntPos, -e.rotation[1]);
 
 					//From here on, disregard the rotation of e
-					double top 		= -20;
+					double top 		= -30;
 					double bottom 	= 0;
 					double left 	= -1;
 					double right 	= 1;
@@ -318,10 +291,10 @@ public class Physics {
 		Vector2d velocityFix = new Vector2d(0, 0);
 		
 		double dist = distSquared(e.position, e.destination);
-		double deceleration = SPEED.MEDIUM.value();
+		double deceleration = SPEED.FAST.value();
 		double speed;
 		
-		if (dist > 0) {
+		if (dist < 8) {
 			speed = dist / deceleration;
 			speed = Math.min(speed, e.max_v);
 			
@@ -329,7 +302,7 @@ public class Physics {
 			velocityFix.y = e.position.z - e.destination.z;
 			
 			velocityFix.normalize();
-			velocityFix.scale(speed/dist);
+			velocityFix.scale(speed);
 		}
 		
 		return velocityFix;
@@ -374,4 +347,14 @@ public class Physics {
 		return velocityFix;
 	}
 	
+	public static boolean proximityCollision(Entity e1, Entity e2) {
+		
+		double euclidDist = distSquared(e1.position, e2.position);
+		double collisionDist = (e1.proximityRadius + e2.proximityRadius) * (e1.proximityRadius + e2.proximityRadius);
+		
+		if (euclidDist < collisionDist)
+			return true;
+		else
+			return false;
+	}
 }

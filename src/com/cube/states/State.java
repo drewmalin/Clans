@@ -17,5 +17,10 @@ public abstract class State {
 	
 	// Ensure access to constructor is blocked.
 	protected State() {}
+
+	public State getAbstractState() {
+		// TODO Auto-generated method stub
+		return this;
+	}
 	
 }

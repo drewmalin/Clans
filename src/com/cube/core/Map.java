@@ -128,6 +128,9 @@ public class Map extends Drawable {
 		x += Resources.map.width/2;
 		z += Resources.map.width/2;
 		
+		if (x < 0 || z < 0 || 
+				x >= Resources.map.width - 1 || z >= Resources.map.height - 1) return 0;
+		
 		int baseX = (int)x;
 		int baseZ = (int)z;
 		float heightA = pixels[baseX][baseZ][0];

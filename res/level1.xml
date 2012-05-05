@@ -53,6 +53,10 @@
     <id>12</id>
     <file>res/obj/DoeDeer.obj</file>
 </lib>
+<lib>
+	<id>13</id>
+	<file>res/obj/barman.obj</file>
+</lib>
 <!-- Clan information includes the id of the clan (to uniquely identify
      it against other clans in the world) and the current level of 
      resources and units. -->
@@ -61,7 +65,7 @@
 	<meat>0</meat>
 	<berry>0</berry>
 	<farmer>0</farmer>
-	<hunter>0</hunter>
+	<hunter>2</hunter>
 	<warrior>0</warrior>
 	<builder>0</builder>
 	<position>-34.02 0 -70.96</position>
@@ -69,7 +73,7 @@
 </clan>
 <effect>
 	<position>-39.02 0.67 -75.96</position>
-	<scale>.15 .15 .15</scale>
+	<scale>.075 .075 .075</scale>
     <color>1 0 0</color>
 	<count>500</count>
 </effect>
@@ -90,7 +94,7 @@
 <entity>
     <id>0</id>
     <position>-39.02 0.67 -75.96</position>
-    <scale>.1</scale>
+    <scale>.05</scale>
     <type>0</type>
 </entity>
 
@@ -99,16 +103,16 @@
     <id>9</id>
     <position>-3 1.5 -10.5</position>
     <rotation>0 45 135</rotation>
-    <scale>.1</scale>
+    <scale>.05</scale>
     <type>0</type>
 </entity>
 
 <!-- Doe -->
 <entity>
     <id>12</id>
-    <position>-30 0 -30</position>
+    <position>-100 0 -100</position>
     <rotation>0 0 0</rotation>
-    <scale>.07</scale>
+    <scale>.035</scale>
     <type>2</type>
     <resources>30</resources>
     <targets>6</targets>
@@ -116,9 +120,9 @@
 <!-- Doe -->
 <entity>
     <id>12</id>
-    <position>-30 0 -30</position>
+    <position>-80 0 -80</position>
     <rotation>0 0 0</rotation>
-    <scale>.07</scale>
+    <scale>.035</scale>
     <type>2</type>
     <resources>30</resources>
     <targets>6</targets>
@@ -126,9 +130,9 @@
 <!-- Doe -->
 <entity>
     <id>12</id>
-    <position>-30 0 -30</position>
+    <position>-60 0 -60</position>
     <rotation>0 0 0</rotation>
-    <scale>.07</scale>
+    <scale>.035</scale>
     <type>2</type>
     <resources>30</resources>
     <targets>6</targets>
@@ -136,9 +140,9 @@
 <!-- Doe -->
 <entity>
     <id>12</id>
-    <position>-30 0 -30</position>
+    <position>-40 0 -40</position>
     <rotation>0 0 0</rotation>
-    <scale>.07</scale>
+    <scale>.035</scale>
     <type>2</type>
     <resources>30</resources>
     <targets>6</targets>
@@ -146,9 +150,9 @@
 <!-- Doe -->
 <entity>
     <id>12</id>
-    <position>-30 0 -30</position>
+    <position>-20 0 -20</position>
     <rotation>0 0 0</rotation>
-    <scale>.07</scale>
+    <scale>.035</scale>
     <type>2</type>
     <resources>30</resources>
     <targets>6</targets>
@@ -156,9 +160,9 @@
 <!-- Doe -->
 <entity>
     <id>12</id>
-    <position>-30 0 -30</position>
+    <position>0 0 0</position>
     <rotation>0 0 0</rotation>
-    <scale>.07</scale>
+    <scale>.035</scale>
     <type>2</type>
     <resources>30</resources>
     <targets>6</targets>
@@ -166,9 +170,9 @@
 <!-- Doe -->
 <entity>
     <id>12</id>
-    <position>-30 0 -30</position>
+    <position>20 0 20</position>
     <rotation>0 0 0</rotation>
-    <scale>.07</scale>
+    <scale>.035</scale>
     <type>2</type>
     <resources>30</resources>
     <targets>6</targets>
@@ -178,7 +182,7 @@
     <id>10</id>
     <position>0 0 -10</position>
     <rotation>0 245 0</rotation>
-    <scale>.1</scale>
+    <scale>.05</scale>
     <type>3</type>
     <resources>30</resources>
     <targets>2</targets>
@@ -190,7 +194,7 @@
     <id>7</id>
     <position>0 0 -15</position>
     <rotation>0 0 0</rotation>
-    <scale>.1</scale>
+    <scale>.05</scale>
     <type>0</type>
 </entity>
 <!--
@@ -208,7 +212,9 @@
 <texture>
 	<file>FooMan6.png</file>
 </texture>
-
 <texture>
 	<file>brookstoneFTW.png</file>
- </texture>
+</texture>
+<texture>
+	<file>manStoneAge1.png</file>
+</texture>

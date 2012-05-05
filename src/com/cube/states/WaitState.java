@@ -3,27 +3,29 @@ package com.cube.states;
 import com.cube.core.Entity;
 import com.cube.core.Physics;
 
-public class DeadState extends State {
+public class WaitState extends State {
 	
 	@Override
 	public void enter(Entity e) {
-		if (debugMessages) System.out.println("Entity " + e + " is now dead!");		
+		if (debugMessages) System.out.println("Entity " + e + " is now waiting!");
+		e.waitDelta = System.currentTimeMillis();
 		Physics.haltEntity(e);
-		e.types.clear();
-		e.types.add(Entity.NEUTRAL);
-		e.types.add(Entity.DEAD);
-		e.rotation[0] += 180;
-		e.position.y += 2;
 	}
 
 	@Override
 	public void execute(Entity e) {
-		//Only the black void...
+		if ((System.currentTimeMillis() - e.waitDelta) > e.waitMillis) {
+			if (e.previousState != null)
+				e.changeState(e.previousState.getAbstractState());
+			else
+				e.changeState(NeutralState.getState());
+		}
 	}
 
 	@Override
 	public void exit(Entity e) {
-		if (debugMessages) System.out.println("Entity " + e + " is no longer dead (???).");
+		e.waitDelta = e.waitMillis = 0;
+		if (debugMessages) System.out.println("Entity " + e + " is no longer waiting.");
 	}
 
 	//-------------------------------------------------------------------------//
@@ -42,7 +44,7 @@ public class DeadState extends State {
 	// Return the instance of this singleton state
 	public static synchronized State getState() {
 		if (ref == null) {
-			ref = new DeadState();
+			ref = new WaitState();
 		}
 		return ref;
 	}

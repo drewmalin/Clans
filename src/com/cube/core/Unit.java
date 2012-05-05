@@ -7,7 +7,7 @@ import com.cube.util.ShaderManager;
 public class Unit extends Entity {
 			
 	public Unit(int _type, int _id, Clan c, Texture tex) {
-		type = _type;
+		types.add(_type);
 		objectID = _id;
 		clanRef = c;
 		
@@ -20,6 +20,8 @@ public class Unit extends Entity {
 		position.z = c.position.z + 5;
 		
 		maxHealth = curHealth = 100;
+		
+		max_v = .2f;
 	}
 	
 	public void update(int timeElapsed) {

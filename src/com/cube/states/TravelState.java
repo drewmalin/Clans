@@ -21,22 +21,30 @@ public class TravelState extends State {
 		if (Physics.distSquared(e.destination, e.position) < 5) {			//If you've reached your destination, stop
 			Physics.haltEntity(e);
 
-			if (e.focusEntity.type == Entity.EDIBLE) {						// Focus is edible: immediately gather
-				e.changeState( GatherState.getState() );
-			}
-			else if (e.focusEntity.type == Entity.AGGRESSIVE ||
-					 e.focusEntity.type == Entity.PASSIVE) {				// Focus is aggressive/passive: attack
-				e.changeState( AttackState.getState() );
+			if (e.focusEntity == null && e.userControlled == true) {
+				e.userControlled = false;
+				e.waitMillis = 5000;
+				e.changeState( WaitState.getState() );
 			}
 			else if (e.clanRef != null && 
 					 e.destination.equals(e.clanRef.position)) {			// Focus is clan: deposit
 				e.changeState( DepositState.getState() );
 			}
+			else if (e.focusEntity.types.contains(Entity.DEAD) ||			// Focus is edible/dead: immediately gather
+					 e.focusEntity.types.contains(Entity.EDIBLE)){ 
+				e.changeState( GatherState.getState() );
+
+			}
+			else if (e.focusEntity.types.contains(Entity.AGGRESSIVE) ||
+					 e.focusEntity.types.contains(Entity.PASSIVE)) {		// Focus is aggressive/passive: attack
+				e.changeState( AttackState.getState() );
+			}
 		}
 		//If you haven't reached your destination yet, keep going
 		else {
 			tempVect = Physics.seekDestination(e);
-			e.force.set(tempVect.x * Physics.SPEED.MEDIUM.value(), Physics.SPEED.MEDIUM.value());
+			e.force.set(tempVect.x * Physics.SPEED.MEDIUM.value(),
+					    tempVect.y * Physics.SPEED.MEDIUM.value());
 		}
 	}
 

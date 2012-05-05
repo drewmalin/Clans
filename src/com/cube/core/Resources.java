@@ -185,7 +185,7 @@ public class Resources {
 						entity.rotation = parseFloatArray(readElementValue(strLine));
 					}
 					if (readElementName(strLine).equals("type")) {
-						entity.type = Integer.parseInt(readElementValue(strLine));
+						entity.types.add(Integer.parseInt(readElementValue(strLine)));
 					}
 					if (readElementName(strLine).equals("targets")) {
 						parseList(entity, readElementValue(strLine));
@@ -341,9 +341,9 @@ public class Resources {
 	}
 	
 	public static void generateWorld() {
-		int pineTreeCount = 0;//Physics.generator.nextInt() % map.height/4;
+		int pineTreeCount = 50;//Physics.generator.nextInt() % map.height/4;
 		int lollyTreeCount = 0;//Physics.generator.nextInt() % map.height/4;
-		int berryBushCount = 0;//Physics.generator.nextInt() % map.height/4;
+		int berryBushCount = 50;//Physics.generator.nextInt() % map.height/4;
 		
 		if (pineTreeCount < 0) pineTreeCount *= -1;
 		if (lollyTreeCount < 0) lollyTreeCount *= -1;
@@ -358,7 +358,7 @@ public class Resources {
 			entity.objectID = 8;
 			entity.position = new Vector3d(((Physics.generator.nextDouble() * 2) - 1) * (map.width/2), 0, ((Physics.generator.nextDouble() * 2) - 1) * (map.height/2));
 			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
-			entity.type = Entity.GATHERABLE;
+			entity.types.add(Entity.GATHERABLE);
 			entity.scale = (Physics.generator.nextFloat() + .25f) * .1f;
 			entities.add(entity);
 		}
@@ -368,7 +368,7 @@ public class Resources {
 			entity.objectID = 6;
 			entity.position = new Vector3d(((Physics.generator.nextDouble() * 2) - 1) * (map.width/2), 0, ((Physics.generator.nextDouble() * 2) - 1) * (map.height/2));
 			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
-			entity.type = Entity.GATHERABLE;
+			entity.types.add(Entity.GATHERABLE);
 			entity.scale = (Physics.generator.nextFloat() + .25f) * .1f;
 			entities.add(entity);
 		}
@@ -378,8 +378,8 @@ public class Resources {
 			entity.objectID = 11;
 			entity.position = new Vector3d(((Physics.generator.nextDouble() * 2) - 1) * (map.width/2), 0, ((Physics.generator.nextDouble() * 2) - 1) * (map.height/2));
 			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
-			entity.type = Entity.EDIBLE;
-			entity.scale = (Physics.generator.nextFloat() + .25f) * .1f;
+			entity.types.add(Entity.EDIBLE);
+			entity.scale = (Physics.generator.nextFloat() + .25f) * .05f;
 			entities.add(entity);
 		}
 	}

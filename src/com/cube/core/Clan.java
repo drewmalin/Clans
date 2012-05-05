@@ -75,7 +75,7 @@ public class Clan {
 	
 	public void createUnit(int type, int inv) {
 		Unit u;
-		u = new Unit(type, 1, this, Resources.textures.get(0));
+		u = new Unit(type, 13, this, Resources.textures.get(2));
 		u.inventory.setCap(inv);
 		u.currentState = NeutralState.getState();
 		u.startState();

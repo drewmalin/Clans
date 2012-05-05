@@ -17,6 +17,7 @@ public class GatherState extends State {
 	@Override
 	public void enter(Entity e) {
 		if (debugMessages) System.out.println("Entity " + e + " is now gathering!");
+		Physics.haltEntity(e);
 	}
 
 	/* 
@@ -29,7 +30,7 @@ public class GatherState extends State {
 		
 		if (e.pause(10)) {
 			
-			if (e.type == Clan.HUNTER) {								// If the entity is a hunter, gather
+			if (e.types.contains(Clan.HUNTER)) {								// If the entity is a hunter, gather
 				e.inventory.addItem();
 				e.focusEntity.inventory.removeItem();
 	
@@ -47,7 +48,7 @@ public class GatherState extends State {
 				e.focusEntity.inventory.removeItem();
 				
 				if (e.inventory.isFull() || e.focusEntity.inventory.isEmpty()) {
-					e.changeState( HuntState.getState() );
+					e.changeState( SearchState.getState() );
 					if (e.focusEntity.inventory.isEmpty()) {
 						e.retire();
 					}

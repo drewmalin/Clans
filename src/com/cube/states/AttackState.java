@@ -18,7 +18,7 @@ public class AttackState extends State {
 	@Override
 	public void execute(Entity e) {
 		
-		if (Physics.distSquared(e.position, e.focusEntity.position) < 5) {			//If you've reached your destination, attack
+		if (Physics.proximityCollision(e, e.focusEntity)) {			//If you've reached your destination, attack
 			
 			if (e.pause(10)) {
 				e.focusEntity.curHealth--;
@@ -33,12 +33,15 @@ public class AttackState extends State {
 			}
 			e.setDestination(e.focusEntity.position);
 			tempVect = Physics.arrive(e);
-			e.force.set(tempVect.x * Physics.SPEED.FAST.value(), tempVect.y * Physics.SPEED.FAST.value());
+			//tempVect = Physics.seekDestination(e);
+			e.force.set(tempVect.x * Physics.SPEED.FAST.value(), 
+					    tempVect.y * Physics.SPEED.FAST.value());
 		}
 		else { 		//run towards the target
 			e.setDestination(e.focusEntity.position);
 			tempVect = Physics.seekDestination(e);
-			e.force.set(tempVect.x * Physics.SPEED.FAST.value(), tempVect.y * Physics.SPEED.FAST.value());
+			e.force.set(tempVect.x * Physics.SPEED.FAST.value(), 
+					    tempVect.y * Physics.SPEED.FAST.value());
 		}
 	}
 	
