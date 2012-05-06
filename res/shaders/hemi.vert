@@ -9,7 +9,6 @@ void main()
     
   }
   
-  vec3 LightPosition =  vec3(gl_LightSource[0].position);
 	vec3 LightPosition = vec3(gl_LightSource[0].position);
 	vec3 ecPosition = vec3(gl_ModelViewMatrix * gl_Vertex);
 	vec3 tnorm = normalize(gl_NormalMatrix * gl_Normal);
