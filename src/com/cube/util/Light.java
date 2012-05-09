@@ -5,6 +5,17 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector4f;
 import javax.vecmath.Vector4d;
 
+/**
+ * Light Class:
+ * This abstract class unifies the StaticLight and DynamicLight classes since they will both share similar components.
+ * StaticLights will stay the same regardless of what happens in the environment (aside from creation and destruction).
+ * DynamicLights will have a component that changes periodically and will require a recalculation of some sort at every
+ * cycle.
+ * 
+ * @author jackramey
+ *
+ */
+
 public abstract class Light {
 
 	protected Vector3f position; //Position of the light
@@ -12,6 +23,7 @@ public abstract class Light {
 	protected Vector4f diffuse; //Diffuse component color
 	protected Vector4f specular; //Specular component color
 	
+	//CONSTRUCTORS
 	public Light() {
 		//Default position is at the Origin
 		position = new Vector3f(0.0f, 0.0f, 0.0f);
@@ -20,11 +32,7 @@ public abstract class Light {
 		diffuse = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 		specular = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
-	
-	//Generic function for lights to 
-	public abstract void doLogic();
-	
-	
+		
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
 //---------------------------GETTERS AND SETTERS----------------------------------

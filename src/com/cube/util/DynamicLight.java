@@ -2,10 +2,8 @@ package com.cube.util;
 
 public class DynamicLight extends Light {
 
-	@Override
+	//This is where the magic happens...
 	public void doLogic() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
