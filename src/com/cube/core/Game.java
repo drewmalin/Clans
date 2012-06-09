@@ -5,13 +5,16 @@ import java.util.logging.Level;
 import com.cube.gui.Menu;
 import com.cube.util.FileLogger;
 import com.cube.util.Timer;
+import com.cube.util.Utilities;
 
 public class Game {
 
+	public static Entity selectedEntity;
+	public static Building buildingToBeBuilt;
+	public static Clan playerClan;
 	
 	public static void initialize() {
 		FileLogger.logger.log(Level.INFO, "Game initialized");
-		//This is a comment HerpaDerpin
 	}
 
 	public static void update() {
@@ -20,6 +23,8 @@ public class Game {
 		
 		if (!Menu.windows.get(Menu.PAUSE).stealContext)
 			updateScene();
+		
+		Utilities.updateFrameRate();
 		
 	}
 	

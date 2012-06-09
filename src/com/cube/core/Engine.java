@@ -12,6 +12,8 @@ import com.cube.util.Timer;
 
 public class Engine {
 	
+	public 	static boolean 	VBO = true;
+
 	public	static int		WIDTH 	= 1024;
 	public	static int		HEIGHT 	= 640;
 	public 	static boolean	vSync 	= false;
@@ -36,7 +38,11 @@ public class Engine {
 		Timer.initialize();
 		Menu.initialize();
 		
+		Resources.loadItems("res/items.xml");
+		Resources.loadBuildings("res/buildings.xml");
 		Resources.loadLevel("res/level1.xml");
+		
+		Menu.create();
 		
 		try {
 			enterGameLoop();

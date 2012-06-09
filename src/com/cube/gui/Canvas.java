@@ -35,7 +35,7 @@ public class Canvas {
 	}
 	public void drawMessages() {
 		for (MessageBox mb : messageBoxes) {
-			mb.prettyPrint();
+			mb.prettyPrint(false);
 		}
 	}
 	

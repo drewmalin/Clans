@@ -28,14 +28,22 @@ public class Resources {
 	private static BufferedReader br;
 	private static float[] lastColorID;
 	public static Map map;
+	
+	/* Unique instance data structures - each unique instance of these
+	 * classes is individually instantiated.
+	 */
 	public static ArrayList<Light> lights;
 	public static ArrayList<Clan> clans;
 	public static ArrayList<Entity> entities;
 	public static ArrayList<Texture> textures;
 	
+	/* Library instance data structures - only one instance of these classes
+	 * is persisted (for lookup later)
+	 */
 	public static ArrayList<Object> objectLibrary;
 	public static HashMap<String, Item> itemLibrary;
-
+	public static HashMap<String, Building> buildingLibrary;
+	
 	public static TextureLoader texLoader;
 	public static HashMap<String, Entity> pickingHashMap;
 	
@@ -43,38 +51,39 @@ public class Resources {
 
 	public static void initialize() {
 		
-		entities = new ArrayList<Entity>();
-		lights = new ArrayList<Light>();
-		clans = new ArrayList<Clan>();
-		textures = new ArrayList<Texture>();
-		texLoader = new TextureLoader();
+		entities 	= new ArrayList<Entity>();
+		lights 		= new ArrayList<Light>();
+		clans 		= new ArrayList<Clan>();
+		textures 	= new ArrayList<Texture>();
+		texLoader 	= new TextureLoader();
 		
-		pickingHashMap = new HashMap<String, Entity>();
-
+		pickingHashMap 	= new HashMap<String, Entity>();
+		objectLibrary 	= new ArrayList<Object>();
+		itemLibrary 	= new HashMap<String, Item>();
+		buildingLibrary = new HashMap<String, Building>();
+		
 		map = new Map(100);
-
 		FileLogger.logger.log(Level.INFO, "Resources initialized");
-		objectLibrary = new ArrayList<Object>();
 	}
 	
 	public static void loadLevel(String file) {
-		////////////////////***<temporary location>***/////////////////////
+		
 		try {
+			
+			////////////////////***<temporary location>***/////////////////////
 			selectionRing = texLoader.getTexture("ring.png");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		////////////////////**</temporary location>***////////////////////
-
-		try {
+			////////////////////**</temporary location>***////////////////////
+			
 			//sound = new Sound();
 			fstream = new FileInputStream(file);
 			in = new DataInputStream(fstream);
 			br = new BufferedReader(new InputStreamReader(in));
-			parse(br);
+			parseLevel(br);
 			for (Clan c : clans) {
 				c.process();
 			}
+			
+			Game.playerClan = clans.get(0);
 			generateWorld();
 			in.close();
 			//if (sound.soundCount() > 0) sound.create();
@@ -85,7 +94,7 @@ public class Resources {
 		//Graphics.loadCamera();
 	}
 	
-	public static void parse(BufferedReader br) throws IOException {
+	public static void parseLevel(BufferedReader br) throws IOException {
 		String strLine;
 		
 		while ((strLine = br.readLine()) != null) {
@@ -109,10 +118,10 @@ public class Resources {
 						clan.id = Integer.parseInt(readElementValue(strLine));
 					}
 					if (readElementName(strLine).equals("meat")) {
-						clan.meatCount = Integer.parseInt(readElementValue(strLine));
+						clan.clanStockpile.addItems(itemLibrary.get("MEAT"), Integer.parseInt(readElementValue(strLine)));
 					}
 					if (readElementName(strLine).equals("berry")) {
-						clan.berryCount = Integer.parseInt(readElementValue(strLine));
+						clan.clanStockpile.addItems(itemLibrary.get("BERRY"), Integer.parseInt(readElementValue(strLine)));
 					}
 					if (readElementName(strLine).equals("farmer")) {
 						clan.farmerCount = Integer.parseInt(readElementValue(strLine));
@@ -194,8 +203,21 @@ public class Resources {
 						entity.max_v = Float.parseFloat(readElementValue(strLine));
 					}
 					if (readElementName(strLine).equals("resources")) {
-						entity.inventory.setCap(Integer.parseInt(readElementValue(strLine)));
-						entity.inventory.fill();
+						entity.inventory.maxWeight = Integer.parseInt(readElementValue(strLine));
+					}
+					if (readElementName(strLine).equals("inventoryItem")) {
+						String name = "";
+						int count = 0;
+						
+						while (!(strLine = br.readLine().trim()).equals("</inventoryItem>")) {
+							if (readElementName(strLine).equals("name")) {
+								name = readElementValue(strLine);
+							}
+							if (readElementName(strLine).equals("count")) {
+								count = Integer.parseInt(readElementValue(strLine));
+							}
+							entity.inventory.addItems(itemLibrary.get(name), count);
+						}
 					}
 				}
 				entity.currentState = NeutralState.getState();
@@ -227,6 +249,138 @@ public class Resources {
 		}
 	}
 	
+	public static void loadBuildings(String file) {
+		try {
+			fstream = new FileInputStream(file);
+			in = new DataInputStream(fstream);
+			br = new BufferedReader(new InputStreamReader(in));
+			parseBuildings(br);
+			in.close();
+		} catch (Exception e) {
+			System.err.println("Error loading level: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	private static void parseBuildings(BufferedReader br) throws IOException {
+		String strLine;
+
+		while ((strLine = br.readLine()) != null) {
+			
+			// Check for comments
+			if (strLine.contains("<!--")) {
+				while (!strLine.contains("-->")) {
+					strLine = br.readLine();
+				}
+				continue;
+			}
+			// Check for blank lines
+			if (strLine.isEmpty()) {
+				continue;
+			}
+
+			if (strLine.equals("<building>")) {
+				Building building = new Building();
+				while (!(strLine = br.readLine().trim()).equals("</building>")) {
+					if (readElementName(strLine).equals("name")) {
+						if (buildingLibrary.containsKey(readElementValue(strLine))) {
+							building = buildingLibrary.get(readElementValue(strLine));
+						}
+						building.name = readElementValue(strLine);
+					}
+					if (readElementName(strLine).equals("width")) {
+						building.width = Integer.parseInt(readElementValue(strLine));
+					}
+					if (readElementName(strLine).equals("height")) {
+						building.height = Integer.parseInt(readElementValue(strLine));
+					}
+					if (readElementName(strLine).equals("itemPrereq")) {
+						String name = "";
+						int count = 0;
+						
+						while (!(strLine = br.readLine().trim()).equals("</itemPrereq>")) {
+							if (readElementName(strLine).equals("name")) {
+								name = readElementValue(strLine);
+							}
+							if (readElementName(strLine).equals("count")) {
+								count = Integer.parseInt(readElementValue(strLine));
+							}
+							building.itemPrereqs.put(itemLibrary.get(name), count);
+						}
+					}
+					if (readElementName(strLine).equals("buildingPrereq")) {
+						String name = "";
+
+						while (!(strLine = br.readLine().trim()).equals("</buildingPrereq>")) {
+							if (readElementName(strLine).equals("name")) {
+								name = readElementValue(strLine);
+								if (buildingLibrary.containsKey(name)) {
+									building.buildingPrereqs.add(buildingLibrary.get(name));
+								}
+								else {
+									buildingLibrary.put(name, new Building());
+								}
+							}
+						}
+					}
+				}
+				buildingLibrary.put(building.name, building);
+			}
+		}
+	}
+	
+	public static void loadItems(String file) {
+		
+		try {
+			fstream = new FileInputStream(file);
+			in = new DataInputStream(fstream);
+			br = new BufferedReader(new InputStreamReader(in));
+			parseItems(br);
+			in.close();
+		} catch (Exception e) {
+			System.err.println("Error loading level: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	private static void parseItems(BufferedReader br) throws IOException {
+		String strLine;
+
+		while ((strLine = br.readLine()) != null) {
+			
+			// Check for comments
+			if (strLine.contains("<!--")) {
+				while (!strLine.contains("-->")) {
+					strLine = br.readLine();
+				}
+				continue;
+			}
+			// Check for blank lines
+			if (strLine.isEmpty()) {
+				continue;
+			}
+			
+			if (strLine.equals("<item>")) {
+				Item item = new Item();
+				while (!(strLine = br.readLine().trim()).equals("</item>")) {
+					if (readElementName(strLine).equals("ID")) {
+						item.ID = Integer.parseInt(readElementValue(strLine));
+					}
+					if (readElementName(strLine).equals("name")) {
+						item.name = readElementValue(strLine);
+					}
+					if (readElementName(strLine).equals("weight")) {
+						item.weight = Float.parseFloat(readElementValue(strLine));
+					}
+					if (readElementName(strLine).equals("equipable")) {
+						item.equipable = Boolean.parseBoolean(readElementValue(strLine));
+					}
+				}
+				itemLibrary.put(item.name, item);
+			}
+		}
+	}
+	
 	private static void parseList(Entity entity, String line) {
 		String[] tokens = line.split("\\s");
 		
@@ -244,7 +398,9 @@ public class Resources {
 			for(GeometryGroup gg : parser.ggs) {
 				we.geoGroups.add(gg);
 			}
-
+			
+			if (Engine.VBO)
+				we.setupVBO();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -341,9 +497,9 @@ public class Resources {
 	}
 	
 	public static void generateWorld() {
-		int pineTreeCount = 50;//Physics.generator.nextInt() % map.height/4;
+		int pineTreeCount = 0;//Physics.generator.nextInt() % map.height/4;
 		int lollyTreeCount = 0;//Physics.generator.nextInt() % map.height/4;
-		int berryBushCount = 50;//Physics.generator.nextInt() % map.height/4;
+		int berryBushCount = 0;//Physics.generator.nextInt() % map.height/4;
 		
 		if (pineTreeCount < 0) pineTreeCount *= -1;
 		if (lollyTreeCount < 0) lollyTreeCount *= -1;
@@ -360,6 +516,8 @@ public class Resources {
 			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
 			entity.types.add(Entity.GATHERABLE);
 			entity.scale = (Physics.generator.nextFloat() + .25f) * .1f;
+			entity.inventory.maxWeight = 100;
+			entity.inventory.addItems(itemLibrary.get("WOOD"), 100);
 			entities.add(entity);
 		}
 		
@@ -370,6 +528,8 @@ public class Resources {
 			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
 			entity.types.add(Entity.GATHERABLE);
 			entity.scale = (Physics.generator.nextFloat() + .25f) * .1f;
+			entity.inventory.maxWeight = 100;
+			entity.inventory.addItems(itemLibrary.get("WOOD"), 100);
 			entities.add(entity);
 		}
 		
@@ -380,6 +540,8 @@ public class Resources {
 			entity.rotation = new float[] {0, Physics.generator.nextFloat() * 360, 0};
 			entity.types.add(Entity.EDIBLE);
 			entity.scale = (Physics.generator.nextFloat() + .25f) * .05f;
+			entity.inventory.maxWeight = 30;
+			entity.inventory.addItems(itemLibrary.get("BERRY"), 30);
 			entities.add(entity);
 		}
 	}

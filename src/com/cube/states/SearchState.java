@@ -46,18 +46,7 @@ public class SearchState extends State {
 
 					e.focusEntity = x;										
 					e.setDestination(e.focusEntity.position);
-					
-					if (x.types.contains(Entity.EDIBLE))					//Resource type is immediately edible, travel to it
-						e.changeState( TravelState.getState() );
-					else {													//Resource must be mined/chopped/attacked
-						e.changeState( AttackState.getState() );
-						x.focusEntity = e;
-
-						if (e.focusEntity.types.contains(Entity.PASSIVE))	// If the focus is passive, it should flee
-							e.focusEntity.changeState( FleeState.getState() );
-						else												// If the focus is not passive, it counter attacks
-							e.focusEntity.changeState( AttackState.getState() );
-					}
+					e.interactWithFocusEntity();
 					return;
 				}
 			}

@@ -4,7 +4,7 @@ import com.cube.core.Entity;
 
 public abstract class State {
 	
-	boolean debugMessages = true;
+	boolean debugMessages = false;
 	
 	// Executes when a state is entered
 	abstract public void enter(Entity e);

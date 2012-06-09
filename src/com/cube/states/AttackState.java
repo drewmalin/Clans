@@ -4,6 +4,7 @@ import javax.vecmath.Vector2d;
 
 import com.cube.core.Entity;
 import com.cube.core.Physics;
+import com.cube.gui.Menu;
 
 public class AttackState extends State {
 
@@ -20,17 +21,23 @@ public class AttackState extends State {
 		
 		if (Physics.proximityCollision(e, e.focusEntity)) {			//If you've reached your destination, attack
 			
-			if (e.pause(10)) {
-				e.focusEntity.curHealth--;
-				if (debugMessages) System.out.println("Entity " + e.focusEntity.toString() + " is now at " + e.focusEntity.curHealth + " health!");
-				if (e.focusEntity.curHealth <= 0) {
-					e.focusEntity.underAttack = false;
-					e.focusEntity.changeState( DeadState.getState() );
-					
-					e.changeState(GatherState.getState());
-					return;
-				}
+			e.focusEntity.curHealth--;
+			if (debugMessages) System.out.println("Entity " + e.focusEntity.toString() + " is now at " + e.focusEntity.curHealth + " health!");
+			// If the focus entity died, start gathering
+			if (e.focusEntity.curHealth <= 0) {				
+				e.focusEntity.changeState( DeadState.getState() );
+				e.previousState = null;
+				e.changeState(GatherState.getState());
+				return;
 			}
+			// If the focus entity is still alive, wait for 1 second (so the entity doesn't insta-kill its
+			// target) and then continue;
+			else {
+				e.previousState = this;
+				e.waitMillis = 1000;
+				e.changeState( WaitState.getState() );
+			}
+			
 			e.setDestination(e.focusEntity.position);
 			tempVect = Physics.arrive(e);
 			//tempVect = Physics.seekDestination(e);

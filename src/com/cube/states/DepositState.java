@@ -1,6 +1,8 @@
 package com.cube.states;
 
 import com.cube.core.Entity;
+import com.cube.core.Resources;
+import com.cube.gui.Menu;
 
 public class DepositState extends State {
 	
@@ -14,8 +16,22 @@ public class DepositState extends State {
 		
 		if (e.pause(10)) {
 
-			e.inventory.removeItem();
-			e.clanRef.meatCount++;
+			if (e.inventory.contains("MEAT")) {
+				e.inventory.removeItem(Resources.itemLibrary.get("MEAT"));
+				e.clanRef.clanStockpile.addItem(Resources.itemLibrary.get("MEAT"));
+			}
+			else if (e.inventory.contains("BERRY")) {
+				e.inventory.removeItem(Resources.itemLibrary.get("BERRY"));
+				e.clanRef.clanStockpile.addItem(Resources.itemLibrary.get("BERRY"));
+			}
+			else if (e.inventory.contains("WOOD")) {
+				e.inventory.removeItem(Resources.itemLibrary.get("WOOD"));
+				e.clanRef.clanStockpile.addItem(Resources.itemLibrary.get("WOOD"));
+			}
+			else if (e.inventory.contains("LEATHER")) {
+				e.inventory.removeItem(Resources.itemLibrary.get("LEATHER"));
+				e.clanRef.clanStockpile.addItem(Resources.itemLibrary.get("LEATHER"));
+			}
 			
 			if (e.inventory.isEmpty()) { 											//Done depositing
 				if (e.focusEntity == null || e.focusEntity.inventory.isEmpty()) { 	//Last target is empty

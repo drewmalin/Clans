@@ -4,7 +4,9 @@ import javax.vecmath.Vector2d;
 
 import com.cube.core.Clan;
 import com.cube.core.Entity;
+import com.cube.core.Item;
 import com.cube.core.Physics;
+import com.cube.core.Resources;
 
 public class GatherState extends State {
 
@@ -30,10 +32,13 @@ public class GatherState extends State {
 		
 		if (e.pause(10)) {
 			
-			if (e.types.contains(Clan.HUNTER)) {								// If the entity is a hunter, gather
-				e.inventory.addItem();
-				e.focusEntity.inventory.removeItem();
-	
+			if (e.clanRef != null) {								// If the entity is a unit, gather
+				
+				if (!e.focusEntity.inventory.isEmpty()) {
+					Item i = e.focusEntity.inventory.removeItem();
+					e.inventory.addItem(i);
+				}
+				
 				if (e.inventory.isFull() || e.focusEntity.inventory.isEmpty()) {
 					e.setDestination(e.clanRef.position);
 					e.changeState( TravelState.getState() );
@@ -44,10 +49,12 @@ public class GatherState extends State {
 				}
 			}
 			
-			else {														// If the entity is not a hunter, eat
-				e.focusEntity.inventory.removeItem();
-				
-				if (e.inventory.isFull() || e.focusEntity.inventory.isEmpty()) {
+			else {																// If the entity is not a unit, eat
+				if (e.focusEntity.inventory.contains("BERRY"))
+					e.focusEntity.inventory.removeItem(Resources.itemLibrary.get("BERRY"));
+				else if (e.focusEntity.inventory.contains("MEAT"))
+					e.focusEntity.inventory.removeItem(Resources.itemLibrary.get("MEAT"));
+				else {															// Edible resources consumed, back to hunting
 					e.changeState( SearchState.getState() );
 					if (e.focusEntity.inventory.isEmpty()) {
 						e.retire();

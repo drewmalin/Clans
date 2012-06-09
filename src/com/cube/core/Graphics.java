@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.util.logging.Level;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -15,6 +16,7 @@ import com.cube.core.Engine;
 import com.cube.gui.Menu;
 import com.cube.util.FileLogger;
 import com.cube.util.ShaderManager;
+import com.cube.util.Utilities;
 
 
 public class Graphics {
@@ -25,8 +27,11 @@ public class Graphics {
 
 	private static FloatBuffer matSpecular;
 	private static FloatBuffer lModelAmbient;
+	public static int frameCount;
 	
 	public static void initialize() {
+		
+		frameCount = 0;
 		
 		setupCamera();
 		createDisplay();
@@ -49,7 +54,6 @@ public class Graphics {
 		camera.setRadius(30f);
 		camera.setThetaX(46.9f);
 		camera.setThetaY(-22.3f);
-		//camera.updatePosition();
 	}
 	
 	private static void setupLighting() {
@@ -127,6 +131,11 @@ public class Graphics {
 		GL11.glLoadIdentity();
 	}
 
+	/* 
+	 * The general point of entry for the visual rendering of the scene. Recreates the viewing
+	 * frustum using the current position of the camera, performs OpenGL housekeeping, and 
+	 * proceeds to draw the various entities, lights, and menus of the scene.
+	 */
 	public static void update() {
 		
 		updateCamera();
@@ -141,14 +150,24 @@ public class Graphics {
 			drawObjects();
 			updatePhysics();
 			Resources.map.draw();
+			drawSelection();
 			drawGUI();
 		GL11.glPopMatrix();
 		
 		Display.update();
 		Display.sync(Engine.framerate);
 		
+		frameCount++;
+		
 	}
 	
+	/*
+	 * The non-visual rendering method meant for use in selecting objects with the mouse cursor.
+	 * Each entity capable of being selected is drawn (but Display is never updated, so the buffer
+	 * they are drawn to is never printed to the screen) using a specific color value. This value
+	 * uniquely identifies the object, and can be read directly from the pixel the mouse cursor
+	 * selects.
+	 */
 	public static void colorPickingMode() {
 		
 		colorPicking = true;
@@ -191,6 +210,11 @@ public class Graphics {
 			light.draw();
 	}
 	
+	/*
+	 * Since we move the camera about a static scene instead of moving the world around a 
+	 * static camera, we need to update the viewing frustum according to the current position
+	 * of the camera.
+	 */
 	private static void updateCamera() {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
@@ -211,6 +235,10 @@ public class Graphics {
 
 	}
 	
+	/*
+	 * Method to switch OpenGL back into 3D rendering mode. This is meant for use after all necessary
+	 * menus have been drawn to the screen (which require a different viewing mode to see).
+	 */
 	public static void enable3D() {
 		GL11.glDepthMask(true);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -251,6 +279,7 @@ public class Graphics {
 
 		GL11.glPushMatrix();	
 		Menu.draw();	
+		Menu.update();
 		GL11.glPopMatrix();
 		
 		GL11.glEnable(GL11.GL_LIGHTING);											
@@ -290,5 +319,37 @@ public class Graphics {
 			GL11.glVertex3f(0f, 1f, -1f);
 			GL11.glVertex3f(0f, 1f, 0f);
 		GL11.glEnd();
+	}
+	
+	/*
+	 * Method to draw the foundation of the currently selected building. The selection is meant to move
+	 * as the mouse cursor moves, and is currently very temporary. This may be expanded in the future to
+	 * apply to other world objects.
+	 */
+	public static void drawSelection() {
+
+		if (Game.buildingToBeBuilt != null && !Game.buildingToBeBuilt.complete) {
+			int width = Game.buildingToBeBuilt.width;
+			int height = Game.buildingToBeBuilt.height;
+
+			float[] point = new float[3];
+			
+			point = Input.getMousePosition(Mouse.getX(), Mouse.getY());
+
+			GL11.glPushMatrix();
+			GL11.glLoadIdentity();
+			GL11.glColor3f(1f, 0f, 0f);
+			
+			GL11.glBegin(GL11.GL_POINTS);
+			
+			for (int j = (int)point[2] - (height/2); j < (int)point[2] + (height/2); j++) {
+				for (int i = (int)point[0] - (width/2); i < (int)point[0] + (width/2); i++) {
+					GL11.glVertex3f(i, Resources.map.getHeight(i, j) + 0.5f, j);
+				}
+			}
+			
+			GL11.glEnd();
+			GL11.glPopMatrix();
+		}
 	}
 }

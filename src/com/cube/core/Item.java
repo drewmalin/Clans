@@ -11,4 +11,11 @@ public class Item {
 		name = n;
 		weight = w;
 	}
+
+	public Item() {
+		ID = -1;
+		weight = -1;
+		name = "";
+		equipable = false;
+	}
 }

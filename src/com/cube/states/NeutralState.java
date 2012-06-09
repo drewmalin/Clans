@@ -19,12 +19,17 @@ public class NeutralState extends State {
 		ArrayList<Integer> test = new ArrayList<Integer>();
 		
 		test.add(Clan.HUNTER);
+		test.add(Clan.BUILDER);
 		test.add(Entity.AGGRESSIVE);
 		test.add(Entity.PASSIVE);
 		
-		if (e.pause(10) && Utilities.containsAny(e.types, test)) {
+		if (e.focusEntity != null) {
+			e.interactWithFocusEntity();
+		}
+		else if (Utilities.containsAny(e.types, test)) {
 			e.changeState( SearchState.getState() );
 		}
+		
 	}
 
 	@Override

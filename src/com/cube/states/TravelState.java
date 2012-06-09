@@ -2,8 +2,11 @@ package com.cube.states;
 
 import javax.vecmath.Vector2d;
 
+import com.cube.core.Building;
+import com.cube.core.Clan;
 import com.cube.core.Entity;
 import com.cube.core.Physics;
+import com.cube.core.Unit;
 
 public class TravelState extends State {
 
@@ -21,23 +24,35 @@ public class TravelState extends State {
 		if (Physics.distSquared(e.destination, e.position) < 5) {			//If you've reached your destination, stop
 			Physics.haltEntity(e);
 
-			if (e.focusEntity == null && e.userControlled == true) {
+			if (e.focusEntity == null && e.userControlled == true) {		//If you were directed to this position by the user, wait
 				e.userControlled = false;
 				e.waitMillis = 5000;
 				e.changeState( WaitState.getState() );
 			}
-			else if (e.clanRef != null && 
-					 e.destination.equals(e.clanRef.position)) {			// Focus is clan: deposit
+			else if (e.getClass().equals(Unit.class) && 
+					 e.destination.equals(e.clanRef.position)) {			// Entity is a unit and focus is its clan: deposit
+																			
 				e.changeState( DepositState.getState() );
 			}
-			else if (e.focusEntity.types.contains(Entity.DEAD) ||			// Focus is edible/dead: immediately gather
-					 e.focusEntity.types.contains(Entity.EDIBLE)){ 
+			else if (e.focusEntity.types.contains(Entity.DEAD) ||			// Focus is edible/gatherable/dead: immediately gather
+					 e.focusEntity.types.contains(Entity.EDIBLE) ||
+					 e.focusEntity.types.contains(Entity.GATHERABLE)){ 
 				e.changeState( GatherState.getState() );
 
 			}
 			else if (e.focusEntity.types.contains(Entity.AGGRESSIVE) ||
 					 e.focusEntity.types.contains(Entity.PASSIVE)) {		// Focus is aggressive/passive: attack
 				e.changeState( AttackState.getState() );
+			}
+			else if (e.focusEntity.getClass().equals(Building.class)) {		// Focus is building: interact
+				// Building is incomplete and entity is a builder. Build.
+				if (e.types.contains(Clan.BUILDER) && !((Building) (e.focusEntity)).complete) {
+					e.changeState( BuildState.getState() );
+				}
+				//Entity is merely interacting with a building. Interact.
+				else {
+					//e.changeState( SomeBuildingSpecificState.getState() );      
+				}
 			}
 		}
 		//If you haven't reached your destination yet, keep going

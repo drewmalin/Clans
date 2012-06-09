@@ -59,7 +59,7 @@ public class Unit extends Entity {
 				
 				inventory.draw(this);
 				
-				if (this == Input.selectedEntity)
+				if (this == Game.selectedEntity)
 					drawSelectionRing();
 			}
 		GL11.glPopMatrix();

@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
 import org.lwjgl.opengl.GL11;
+
+import com.cube.states.AttackState;
+import com.cube.states.FleeState;
 import com.cube.states.State;
+import com.cube.states.TravelState;
 import com.cube.util.Texture;
+import com.cube.util.Utilities;
 
 public class Entity {
 	
@@ -31,37 +36,37 @@ public class Entity {
 	public final static int EDIBLE			= 6;
 	public final static int DEAD			= 7;
 	
+	//--- TEMPORARY LOCATION ---//
 	protected int selectionRingRotation;
+	public long waitMillis;
+	public long waitDelta;
 	
+	//---------- Movement/Rendering attributes ---------//
 	public int objectID;
 	public Vector3d position;
 	public Vector3d destination;
 	public Vector3d direction;
-	public float[] color;
-	public float[] colorID;
-	public float[] rotation;
-	public float scale;
-	public boolean show;
-	
-	public State currentState;
-	public State previousState;
-	
-	public boolean userControlled;
-	
-	public long waitMillis;
-	public long waitDelta;
-	
-	public Entity focusEntity;
-	
 	public Vector2d force;
 	public Vector2d acceleration;
 	public Vector2d velocity;
 	public double mass;
 	public double max_v;
-	
-	public Inventory inventory;
-	
+	public float[] color;
+	public float[] colorID;
+	public float[] rotation;
+	public float scale;
+	public boolean show;	
 	public Texture tex;
+	//--------------------------------------------------//
+	
+	//----------- Unique Entity attributes -------------//
+	public State currentState;
+	public State previousState;
+	
+	public boolean userControlled;	
+	
+	public Entity focusEntity;	
+	public Inventory inventory;
 	private int pause;
 	public Clan clanRef;
 	public int timedump;
@@ -74,6 +79,8 @@ public class Entity {
 	
 	public int maxHealth;
 	public int curHealth;
+	//----------------------------------------------------//
+	
 	
 	public Entity() {
 		
@@ -155,7 +162,7 @@ public class Entity {
 				}
 			}
 			
-			if (this == Input.selectedEntity)
+			if (this == Game.selectedEntity)
 				drawSelectionRing();
 			
 		GL11.glPopMatrix();
@@ -208,6 +215,59 @@ public class Entity {
 	public void startState() {
 		if (currentState != null) {
 			currentState.enter(this);
+		}
+	}
+		
+	/*
+	 * Separated from testInteraction solely for the purposes of tidying up code. Method tests
+	 * the types of the focus entity and switches the states of this entity and its focus entity
+	 * accordingly.
+	 * 
+	 * N.B.: This does not assume the entity is in close proximity to its focus.
+	 */
+	public void interactWithFocusEntity() {
+		//Focus entity is immediately edible/gatherable, travel to it
+		if (focusEntity.types.contains(Entity.EDIBLE) || focusEntity.types.contains(Entity.GATHERABLE))
+			changeState( TravelState.getState() );
+		//Focus entity is a building
+		else if (focusEntity.getClass().equals(Building.class)) {
+			changeState( TravelState.getState() );
+		}
+		//Focus entity must be attacked
+		else {
+			changeState( AttackState.getState() );
+			focusEntity.focusEntity = this;
+
+			// If the focus is passive, it should flee
+			if (focusEntity.types.contains(Entity.PASSIVE))	
+				focusEntity.changeState( FleeState.getState() );
+			// If the focus is not passive, it counter attacks
+			else
+				focusEntity.changeState( AttackState.getState() );
+		}
+	}
+	
+	/*
+	 * Method to change the state of the selected entity in order to interact properly with the
+	 * target entity. 
+	 */
+	public void testInteraction(Entity targetEntity) {
+		//User has selected the target this unit is already focusing on. Ignore and return
+		if (focusEntity != null && focusEntity.equals(targetEntity)) {
+			return;
+		}
+		else {
+			//The entity is not already focused on this new target, if the entity is
+			//able to interact with the new target, redirect
+			if (Utilities.containsAny(targets, targetEntity.types)) {
+				focusEntity = targetEntity;
+				interactWithFocusEntity();
+			}
+			//The entity is not currently focused on the new target, but it also cannot
+			//interact with it. Ignore and return.
+			else {
+				return;
+			}
 		}
 	}
 	

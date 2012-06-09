@@ -16,7 +16,7 @@ public class WaitState extends State {
 	public void execute(Entity e) {
 		if ((System.currentTimeMillis() - e.waitDelta) > e.waitMillis) {
 			if (e.previousState != null)
-				e.changeState(e.previousState.getAbstractState());
+				e.changeState(e.previousState);
 			else
 				e.changeState(NeutralState.getState());
 		}

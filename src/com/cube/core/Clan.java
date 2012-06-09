@@ -11,16 +11,18 @@ import com.cube.states.NeutralState;
 public class Clan {
 	
 	public static ArrayList<Unit> units;
+	public static ArrayList<Building> buildings;
+	
 	public int id;
 	public int farmerCount;
 	public int builderCount;
 	public int warriorCount;
 	public int hunterCount;
-	public int berryCount;
-	public int meatCount;
+
 	public float[] color;
 	public Vector3d position;
-
+	public Inventory clanStockpile;
+	
 	public static int FARMER 	= 100;
 	public static int BUILDER 	= 101;
 	public static int WARRIOR 	= 102;
@@ -30,13 +32,16 @@ public class Clan {
 	
 	public Clan() {
 		units = new ArrayList<Unit>();
+		buildings = new ArrayList<Building>();
+		
 		position = new Vector3d(0, 0, 0);
 		farmerCount 	= 0;
 		builderCount	= 0;
 		warriorCount 	= 0;
 		hunterCount 	= 0;
-		berryCount 		= 0;
-		meatCount 		= 0;
+
+		clanStockpile = new Inventory();
+		clanStockpile.maxWeight = Integer.MAX_VALUE;
 	}
 	
 	public void draw() {
@@ -45,8 +50,12 @@ public class Clan {
 				u.draw();
 			}
 		}
+		
+		for (Building b : buildings) {
+			b.draw();
+		}
 
-		drawMeatStockpile();
+		drawStockpile(clanStockpile.items.get("MEAT") == null ? 0 : clanStockpile.items.get("MEAT"));
 	}
 	
 	public void update(int timeElapsed) {
@@ -75,9 +84,10 @@ public class Clan {
 	
 	public void createUnit(int type, int inv) {
 		Unit u;
-		u = new Unit(type, 13, this, Resources.textures.get(2));
+		u = new Unit(type, 0, this, Resources.textures.get(2));
 		u.inventory.setCap(inv);
 		u.currentState = NeutralState.getState();
+		u.inventory.maxWeight = 10;
 		u.startState();
 		
 		if (type == HUNTER) {
@@ -85,26 +95,34 @@ public class Clan {
 			u.targets.add(Entity.PASSIVE);
 			u.targets.add(Entity.EDIBLE);
 		}
+		else if (type == BUILDER) {
+			u.targets.add(Entity.GATHERABLE);
+		}
 		
 		units.add(u);
 	}
 	
-	public void drawMeatStockpile() {
+	public void createBuilding(String name) {
+		buildings.add(Resources.buildingLibrary.get(name).copy());
+	}
+	
+	public void drawStockpile(int count) {
 		
 		float spacing = .5f;
-		int renderDimension = (int) Math.ceil(Math.pow(meatCount, 1.0/3.0));
+		int renderDimension = (int) Math.ceil(Math.pow(count, 1.0/3.0));
 		
 		
 		GL11.glPushMatrix();
 		
-			for (int i = 0; i < meatCount; i++) {
+			for (int i = 0; i < count; i++) {
 				
 				GL11.glLoadIdentity();
 				GL11.glColor3f(.4f, 1.0f, 1.0f);
-
+								
 				GL11.glTranslated(position.x + (spacing * (i % renderDimension)), 
-						position.y  + (spacing * (int) (i / (renderDimension * renderDimension))),
+						position.y  + Resources.map.getHeight((float)position.x, (float)position.z) + (spacing * (int) (i / (renderDimension * renderDimension))),
 						position.z  + (spacing * (((int)(i/renderDimension)) % renderDimension)));
+				
 				GL11.glRotatef(0, 1, 0, 0);
 				GL11.glRotatef(0, 0, 1, 0);
 				GL11.glRotatef(0, 0, 0, 1);
@@ -114,5 +132,11 @@ public class Clan {
 			}
 
 		GL11.glPopMatrix();
+	}
+
+	public void payBuildingReqs(Building buildingToBeBuilt) {
+		for (Item i : buildingToBeBuilt.itemPrereqs.keySet()) {
+			clanStockpile.removeItems(i, buildingToBeBuilt.itemPrereqs.get(i));
+		}
 	}
 }

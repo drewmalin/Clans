@@ -19,8 +19,11 @@ public class MessageBox {
 	private Color color;
 	private UnicodeFont unicodeFont;
 	public String message;
-	private int maxWidth;
-	private int offset;
+	public int lineCount;
+	public int maxWidth;
+	public int lineHeight;
+	public int lineWidth;
+	public boolean skipProcessing = false;
 	
 	/* Function to create a message box. The x and y coordinates are offsets from the top left of
 	 * the enclosing menu window (calculated in the menu window itself), w is the maximum number of
@@ -35,7 +38,7 @@ public class MessageBox {
 			fontName 	= _fontName;
 			fontSize 	= _fontSize;
 			color 		= _color;
-			offset 		= h;
+			lineHeight	= h;
 			
 			if (fontName.contains("resources/fonts/"))
 				unicodeFont = new UnicodeFont(fontName, fontSize, false, false);
@@ -78,33 +81,61 @@ public class MessageBox {
 	 * message. Once a substring is created that is less than maxWidth in length, print it and return.
 	 */
 	public void print() {
-		String msg = message;
+		unicodeFont.drawString(x, y, message);
+	}
+	
+	public void processMessage() {
 		int tempEnd;
-		int i = 0;
+		String temp;
+		lineCount = 0;
 
-		if (msg.length() <= maxWidth) {
-			unicodeFont.drawString(x, y, msg);
-		}
-		else {
-			for (; msg.length() > maxWidth; i++) {
-				tempEnd = msg.lastIndexOf(" ", maxWidth);
-				unicodeFont.drawString(x, y + (offset * i), msg.substring(0, tempEnd));
-				msg = msg.substring(tempEnd+1);
+		temp = message;
+		message = "";
+		lineWidth = temp.length();
+		
+		while (true) {
+			if (temp.length() <= maxWidth) {
+				message += temp;
+				lineCount++;
+				break;
 			}
-			unicodeFont.drawString(x, y + (offset * i), msg);
+			else {
+				tempEnd = temp.lastIndexOf(" ", maxWidth);
+				if (tempEnd == -1) tempEnd = temp.length() - 1;
+				
+				message += temp.substring(0, tempEnd) + "\n";
+				temp = temp.substring(tempEnd + 1);
+				lineCount++;
+				lineWidth = maxWidth;
+			}
 		}
 	}
 	
-	public void prettyPrint() {
+	public void prettyPrint(boolean background) {
 		
 		if (show) {
 			GL11.glPushMatrix();
 			GL11.glLoadIdentity();
+		
+			if (!skipProcessing) processMessage();
+			
+			if (background) {
+			
+				int charPixelWidth = 6; //temp arbitrary number
+				
+				GL11.glBegin(GL11.GL_QUADS);
+					GL11.glColor4f(.8f, .8f, .8f, 1f);
+					GL11.glVertex2f(x, y);
+					GL11.glVertex2f(x, y + (lineCount * lineHeight));
+					GL11.glVertex2f(x + (lineWidth * charPixelWidth), y + (lineCount * lineHeight));		
+					GL11.glVertex2f(x + (lineWidth * charPixelWidth), y);
+				GL11.glEnd();
+			}
+			
 			GL11.glEnable(GL11.GL_TEXTURE_2D);	
-	
-				print();
-
+			print();
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			
 			GL11.glPopMatrix();
 		}
 	}

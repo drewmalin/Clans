@@ -31,9 +31,8 @@ public class Input {
 	private static	FloatBuffer	modelview;
 	private static	FloatBuffer projection;
 	private static	FloatBuffer	positionNear;
-	
-	public static Entity selectedEntity;
-	
+
+
 	public static void initialize() {
 		
 		viewport	= BufferUtils.createIntBuffer(16);
@@ -45,13 +44,26 @@ public class Input {
 		FileLogger.logger.log(Level.INFO, "Input initialized");
 	}
 
+	/*
+	 * General method to poll the input from the user. If menu windows are currently displayed,
+	 * and the menu can take context away from the main game (e.g. 'Pause') then polling should
+	 * continue according to that window's specifications. Otherwise, check to see if any non-
+	 * context-stealing menus (e.g. 'Build Menu') have been interacted with, and continue to
+	 * poll for interaction with the main game.
+	 */
 	public static void poll() {
+		
 		for (Window w : Menu.windows) {
+			
 			if (w.stealContext) {
 				w.poll();
 				return;
 			}
+			else if (w.show) {
+				w.checkGuiClick();
+			}
 		}
+	
 		pollKeyboard();
 		pollMouse();
 	}
@@ -60,7 +72,6 @@ public class Input {
 		
 		int x = Mouse.getX();
 		int y = (Engine.HEIGHT - 1) - Mouse.getY();
-		float[] pos = new float[3];
 
 		deltaX = x - deltaX;
 		deltaY = y - deltaY;
@@ -69,29 +80,17 @@ public class Input {
 		while (Mouse.next()) {
 			if (Mouse.getEventButtonState()) {
 				switch (Mouse.getEventButton()) {
-					case 0:	//Left click
-						System.out.println("left click");
-						Graphics.colorPickingMode();
-						selectedEntity = processPick(Mouse.getX(), Mouse.getY());
+					case 0:
+						processLeftClick();
 						break;
-					case 1: //Right click
-						System.out.println("right click");
-						if (selectedEntity != null) {
-							pos = getMousePosition(Mouse.getX(), Mouse.getY());
-							pos[1] = 0;
-							System.out.println(Utilities.printArray(pos));
-							System.out.println(Utilities.printVector(selectedEntity.position));
-							selectedEntity.setDestination(pos);
-							selectedEntity.userControlled = true;
-							selectedEntity.changeState( TravelState.getState() );
-						}
+					case 1:
+						processRightClick();
 						break;
 				}
 			}
 		}		
 		
-		//Handle Scrollwheel
-		Graphics.camera.modifyRadius(-Mouse.getDWheel()/120 * scrollSpeed); //1 'unit' of scrolling is equal to 120
+		processScrollWheel();
 
 		//Handle Position
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
@@ -113,13 +112,66 @@ public class Input {
 		deltaY = y;
 	}
 
+	private static void processLeftClick() {
+		// If the user has selected a building to build from the Building menu,
+		// handle the special processing.
+		if (Game.buildingToBeBuilt != null) {
+			float[] pos = new float[3];
+			pos = getMousePosition(Mouse.getX(), Mouse.getY());
+			Building.layFoundation(pos, Game.buildingToBeBuilt);
+		}
+		// Undergo default left click processing
+		else {
+			Graphics.colorPickingMode();
+			Game.selectedEntity = processPick(Mouse.getX(), Mouse.getY());
+		}
+	}
+	
+	private static void processRightClick() {
+		// If the user has an entity selected, handle the special processing to
+		// redirect that entity.
+		if (Game.selectedEntity != null) {
+			Graphics.colorPickingMode();
+			Entity target = processPick(Mouse.getX(), Mouse.getY());
+			// If the user right clicked on an entity, attempt to redirect the selected
+			// entity to the target
+			if (target != null) {
+				Game.selectedEntity.testInteraction(target);
+			}
+			// If the user did not right click on an entity, move the selected entity
+			// to the position of the right click
+			else {
+				float[] pos = new float[3];
+				Graphics.update();
+				pos = getMousePosition(Mouse.getX(), Mouse.getY());
+				pos[1] = 0;
+				Game.selectedEntity.previousState = Game.selectedEntity.currentState;
+				Game.selectedEntity.setDestination(pos);
+				Game.selectedEntity.userControlled = true;
+				Game.selectedEntity.changeState( TravelState.getState() );
+			}
+		}
+	}
+	
+	private static void processScrollWheel() {
+		Graphics.camera.modifyRadius(-Mouse.getDWheel()/120 * scrollSpeed); //1 'unit' of scrolling is equal to 120
+	}
+	
 	private static void pollKeyboard() {
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {
 				switch (Keyboard.getEventKey()) {
-					//Quit the game
 					case Keyboard.KEY_ESCAPE:
+						Game.buildingToBeBuilt = null;
+						Menu.windows.get(Menu.CONSOLE).closeWindow();
+						Menu.windows.get(Menu.BUILDING).closeWindow();
 						Menu.pause();
+						break;
+					case Keyboard.KEY_0:
+						Menu.windows.get(Menu.CONSOLE).show = !Menu.windows.get(Menu.CONSOLE).show;
+						break;
+					case Keyboard.KEY_P:
+						Resources.map.massSmooth();
 						break;
 				}
 			}
@@ -189,6 +241,11 @@ public class Input {
 		pos[2] = positionNear.get(2);
 
 		return pos;
+	}
+
+	public static boolean isMouseButtonUp() {
+		boolean ret = Mouse.getEventButtonState() && Mouse.getEventButton()==0 && !Mouse.isButtonDown(0);
+		return ret;
 	}
 
 }

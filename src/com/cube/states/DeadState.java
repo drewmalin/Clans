@@ -9,6 +9,7 @@ public class DeadState extends State {
 	public void enter(Entity e) {
 		if (debugMessages) System.out.println("Entity " + e + " is now dead!");		
 		Physics.haltEntity(e);
+		e.underAttack = false;
 		e.types.clear();
 		e.types.add(Entity.NEUTRAL);
 		e.types.add(Entity.DEAD);

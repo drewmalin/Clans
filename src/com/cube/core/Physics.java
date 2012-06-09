@@ -7,6 +7,8 @@ import java.util.logging.Level;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
 
+import org.lwjgl.opengl.GL11;
+
 import com.cube.util.FileLogger;
 
 public class Physics {
@@ -32,7 +34,6 @@ public class Physics {
 	public static void drawEffects() {
 		for (Effect e : effects) {
 			e.updateParticles();
-
 			e.drawParticles();
 		}
 	}
@@ -356,5 +357,20 @@ public class Physics {
 			return true;
 		else
 			return false;
+	}
+
+	public static float calculateAverageHeight(Building building) {
+		float sum = 0, avg = 0;
+		int x = (int) (Resources.map.width/2 + building.position.x);
+		int z = (int) (Resources.map.height/2 + building.position.z);
+		
+		for (int j = z - (building.height/2); j < z + (building.height/2); j++) {
+			for (int i = x - (building.width/2); i < x + (building.width/2); i++) {
+				sum += Resources.map.pixels[i][j][0];
+			}
+		}
+		
+		avg = sum / (building.width * building.height);		
+		return avg;
 	}
 }
