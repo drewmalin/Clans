@@ -9,11 +9,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import javax.vecmath.*;
 
-import org.lwjgl.opengl.GL20;
-
-import com.cube.core.Graphics;
-import com.cube.core.Resources;
-
 public class Shader {
 	
 	//Handles on the shader program and shaders
@@ -50,15 +45,6 @@ public class Shader {
 	
 	public void bind() {
 		glUseProgram(shaderProgram);
-
-		int location0 = GL20.glGetUniformLocation(shaderProgram, "cameraPosX");
-		int location1 = GL20.glGetUniformLocation(shaderProgram, "cameraPosY");
-		int location2 = GL20.glGetUniformLocation(shaderProgram, "cameraPosZ");
-
-		GL20.glUniform1f(location0, Graphics.camera.getPosition(0) + Resources.map.width/2);
-		GL20.glUniform1f(location1, Graphics.camera.getPosition(1));
-		GL20.glUniform1f(location2, Graphics.camera.getPosition(2) + Resources.map.height/2);
-
 	}
 	
 	public void unbind() {
@@ -125,12 +111,24 @@ public class Shader {
 	    	FileLogger.logger.log(Level.SEVERE, "Fragment shader failed to compile!");
         }
 	}
+
+	
+//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+//-----------------------------VARIABLE PASSING FUNCTIONS---------------------------------------------
+//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 	
 	//Function for putting an integer into a shader
 	public void putInt(String varName, int x) {
+		//bind the shader program that we want to add the variable to
 		bind();
+		//Grab the location of the variable
 		int location = glGetUniformLocation(shaderProgram, varName);
+		//Pass the value to the variable location
 		glUniform1i(location, x);
+		//unbind the shader
+		unbind();
 	}
 	
 	//Functions for putting ALL THE FLOATS into the a shader	
@@ -141,6 +139,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform1f(location, x);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec2f(String varName, Vector2d vec) {
@@ -150,6 +150,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform2f(location, (float) vec.x, (float) vec.y);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec2f(String varName, Vector2f vec) {
@@ -159,6 +161,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform2f(location, vec.x, vec.y);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec2f(String varName, float x, float y) {
@@ -168,6 +172,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform2f(location, x, y);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec3f(String varName, Vector3d vec) {
@@ -177,6 +183,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform3f(location, (float) vec.x, (float) vec.y, (float) vec.z);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec3f(String varName, Vector3f vec) {
@@ -186,6 +194,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform3f(location, vec.x, vec.y, vec.z);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec3f(String varName, float x, float y, float z) {
@@ -195,6 +205,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform3f(location, x, y, z);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec4f(String varName, Vector4d vec) {
@@ -204,6 +216,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform4f(location, (float) vec.x, (float) vec.y, (float) vec.z, (float) vec.w);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec4f(String varName, Vector4f vec) {
@@ -213,6 +227,8 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+		//unbind the shader
+		unbind();
 	}
 	
 	public void putVec4f(String varName, float x, float y, float z, float w) {
@@ -222,8 +238,16 @@ public class Shader {
 		int location = glGetUniformLocation(shaderProgram, varName);
 		//Pass the value to the variable location
 		glUniform4f(location, x, y, z, w);
+		//unbind the shader
+		unbind();
 	}
 	
+//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+//----------------------------------GETTERS AND SETTERS-----------------------------------------------
+//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+	//Getters and Setters, pretty self explanatory
 	public String getVertexShaderSourceFile() {
 		return vertexShaderSourceFile;
 	}
