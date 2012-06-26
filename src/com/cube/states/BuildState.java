@@ -62,6 +62,7 @@ public class BuildState extends State {
 			//If no unfinished tile could be found, this building is complete
 			if (!unfinished) {
 				building.complete = true;
+				building.paused = false;
 				e.previousState = null;
 				e.changeState( NeutralState.getState() );
 			}
@@ -82,6 +83,7 @@ public class BuildState extends State {
 	@Override
 	public void exit(Entity e) {
 		if (debugMessages) System.out.println("Entity " + e + " is no longer building.");
+		if (!building.complete) building.paused = true;
 	}
 
 	//-------------------------------------------------------------------------//

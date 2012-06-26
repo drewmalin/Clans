@@ -81,7 +81,6 @@ public class BMPparser {
 			//--------------- Image parsing -----------------------//
 			
 			// pixels read from left to right, bottom to top
-			
 			int pixels[][][] = new int[width][height][3];
 			raf.seek((long)pixelAddr);
 
@@ -90,7 +89,10 @@ public class BMPparser {
 					for (int color = 0; color < 3; color++) {
 						pixels[i][j][color] = readInt(raf, 1);
 					}
+					System.out.print(pixels[i][j][0] + " ");
 				}
+				//System.out.println();
+				System.in.read();
 			}
 			
 			return pixels;

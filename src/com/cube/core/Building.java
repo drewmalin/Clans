@@ -14,6 +14,7 @@ public class Building extends Entity {
 	public String name;
 	public int ID;
 	public boolean complete;
+	public boolean paused;
 	public int objectID;
 	public float averageHeight;
 	
@@ -27,6 +28,7 @@ public class Building extends Entity {
 		name = "";
 		ID = -1;
 		complete = false;
+		paused = false;
 		
 		width = 0;
 		height = 0;
@@ -166,5 +168,7 @@ public class Building extends Entity {
 		Game.playerClan.buildings.add(Game.buildingToBeBuilt.copy());
 		Game.playerClan.payBuildingReqs(Game.buildingToBeBuilt);
 		Game.buildingToBeBuilt = null;
+		
+		//search for the closest builder, if none exists, set status to 'paused'
 	}
 }

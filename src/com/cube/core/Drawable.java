@@ -46,7 +46,7 @@ public abstract class Drawable {
 				geoGroups.add(gg);
 			}
 
-			//setupVBO();
+			// done in Resources -> setupVBO();
 		
 		} catch (Exception e) {
 			e.printStackTrace();
