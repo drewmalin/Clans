@@ -79,10 +79,11 @@ public class Resources {
 			in = new DataInputStream(fstream);
 			br = new BufferedReader(new InputStreamReader(in));
 			parseLevel(br);
+
 			for (Clan c : clans) {
 				c.process();
 			}
-			
+
 			Game.playerClan = clans.get(0);
 			generateWorld();
 			in.close();
@@ -98,7 +99,7 @@ public class Resources {
 		String strLine;
 		
 		while ((strLine = br.readLine()) != null) {
-			
+
 			// Check for comments
 			if (strLine.contains("<!--")) {
 				while (!strLine.contains("-->")) {
@@ -243,6 +244,7 @@ public class Resources {
 						object.file = readElementValue(strLine);
 					}
 				}
+
 				loadLocalFile(object.file, object);
 				objectLibrary.add(object);
 			}

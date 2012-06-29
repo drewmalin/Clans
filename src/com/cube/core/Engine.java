@@ -41,7 +41,7 @@ public class Engine {
 		Resources.loadItems("res/items.xml");
 		Resources.loadBuildings("res/buildings.xml");
 		Resources.loadLevel("res/level1.xml");
-		
+
 		Menu.create();
 		
 		try {

@@ -84,7 +84,7 @@ public class Clan {
 	
 	public void createUnit(int type, int inv) {
 		Unit u;
-		u = new Unit(type, 0, this, Resources.textures.get(2));
+		u = new Unit(type, 12, this, Resources.textures.get(2));
 		u.inventory.setCap(inv);
 		u.currentState = NeutralState.getState();
 		u.inventory.maxWeight = 10;

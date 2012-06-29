@@ -1,17 +1,14 @@
 <!-- Library section: the engine only needs to store each object
      once, so the library section designates each unique entry in
      the library. -->
-<!--
 <lib>
     <id>0</id>
     <file>res/obj/bonfireSans.obj</file>
 </lib>
--->
 <lib>
     <id>1</id>
     <file>res/obj/barman.obj</file>
 </lib>
-<!--
 <lib>
     <id>2</id>
     <file>res/obj/bearSans.obj</file>
@@ -30,15 +27,15 @@
 </lib>
 <lib>
     <id>6</id>
-    <file>res/obj/lollyTreeSans.obj</file>
+    <file>res/obj/barman.obj</file>
 </lib>
 <lib>
     <id>7</id>
-    <file>res/obj/mineSans.obj</file>
+    <file>res/obj/barman.obj</file>
 </lib>
 <lib>
     <id>8</id>
-    <file>res/obj/pineTreeSans.obj</file>
+    <file>res/obj/barman.obj</file>
 </lib>
 <lib>
     <id>9</id>
@@ -48,17 +45,14 @@
     <id>10</id>
     <file>res/obj/wolfSans.obj</file>
 </lib>
--->
 <lib>
     <id>11</id>
     <file>res/obj/berryBushSans.obj</file>
 </lib>
-<!--
 <lib>
 	<id>12</id>
 	<file>res/obj/barman.obj</file>
 </lib>
--->
 <!-- Clan information includes the id of the clan (to uniquely identify
      it against other clans in the world) and the current level of 
      resources and units. -->
@@ -93,16 +87,13 @@
   -->
   
 <!-- Bonfire -->
-<!--
 <entity>
     <id>0</id>
     <position>-39.02 0.67 -75.96</position>
     <scale>.05</scale>
     <type>0</type>
 </entity>
--->
 <!-- Shovel -->
-<!--
 <entity>
     <id>9</id>
     <position>-3 1.5 -10.5</position>
@@ -110,9 +101,7 @@
     <scale>.05</scale>
     <type>0</type>
 </entity>
--->
 <!-- Doe -->
-<!-- 
 <entity>
     <id>5</id>
     <position>-100 0 -100</position>
@@ -130,9 +119,7 @@
     </inventoryItem>
     <targets>6</targets>
 </entity>
--->
 <!-- Doe -->
-<!-- 
 <entity>
     <id>5</id>
     <position>-80 0 -80</position>
@@ -150,9 +137,7 @@
     </inventoryItem>
     <targets>6</targets>
 </entity>
--->
 <!-- Doe -->
-<!-- 
 <entity>
     <id>5</id>
     <position>-60 0 -60</position>
@@ -170,9 +155,7 @@
     </inventoryItem>
     <targets>6</targets>
 </entity>
--->
 <!-- Doe -->
-<!-- 
 <entity>
     <id>5</id>
     <position>-40 0 -40</position>
@@ -190,9 +173,7 @@
     </inventoryItem>
     <targets>6</targets>
 </entity>
--->
-<!-- Doe -->
-<!-- 
+<!-- Doe --> 
 <entity>
     <id>5</id>
     <position>-20 0 -20</position>
@@ -210,9 +191,7 @@
     </inventoryItem>
     <targets>6</targets>
 </entity>
--->
 <!-- Doe -->
-<!-- 
 <entity>
     <id>5</id>
     <position>0 0 0</position>
@@ -230,9 +209,7 @@
     </inventoryItem>
     <targets>6</targets>
 </entity>
--->
 <!-- Doe -->
-<!-- 
 <entity>
     <id>5</id>
     <position>20 0 20</position>
@@ -250,9 +227,7 @@
     </inventoryItem>
     <targets>6</targets>
 </entity>
--->
 <!-- Wolf -->
-<!--
 <entity>
     <id>10</id>
     <position>0 0 -10</position>
@@ -271,9 +246,7 @@
     <targets>2</targets>
     <maxvelocity>.2</maxvelocity>
 </entity>
--->
 <!-- Mine -->
-<!-- 
 <entity>
     <id>7</id>
     <position>0 0 -15</position>
@@ -281,7 +254,6 @@
     <scale>.05</scale>
     <type>0</type>
 </entity>
--->
 <map>
 	<file>res/heightmaps/terrain-heightmap.bmp</file>
 	<scale>1</scale>

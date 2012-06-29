@@ -77,12 +77,11 @@ public class Map extends Drawable {
 	
 	public void load(String filename) {
 		try {
-			
+
 			BMPparser parser = new BMPparser(filename);
 			width = parser.width;
 			height = parser.height;
 			pixels = parser.pixels;
-			
 			calculateNormals();
 						
 		} catch (Exception e) {

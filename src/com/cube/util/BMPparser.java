@@ -44,6 +44,7 @@ public class BMPparser {
 	}
 	
 	public int[][][] parse(RandomAccessFile raf) throws IOException {
+
 		byte cbuf[] = new byte[4];
 		int filesize, pixelAddr, header, junk, depth, compression;
 		
@@ -65,7 +66,7 @@ public class BMPparser {
 			height = 	readInt(raf, 4);	//Next 4 bytes: image height
 			junk = 		readInt(raf, 2);	//Next 2 bytes: junk
 			depth = 	readInt(raf, 4);	//Next 4 bytes: color depth;
-			
+
 			if (depth != 24) {
 				System.out.println("Error: Image depth is not 24.");
 				return null;
@@ -89,10 +90,7 @@ public class BMPparser {
 					for (int color = 0; color < 3; color++) {
 						pixels[i][j][color] = readInt(raf, 1);
 					}
-					System.out.print(pixels[i][j][0] + " ");
 				}
-				//System.out.println();
-				System.in.read();
 			}
 			
 			return pixels;
