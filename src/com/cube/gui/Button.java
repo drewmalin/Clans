@@ -1,9 +1,6 @@
 package com.cube.gui;
 
-import java.awt.Color;
-
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import com.cube.core.Engine;
 import com.cube.gui.Canvas;
@@ -11,6 +8,7 @@ import com.cube.gui.ClickListener;
 
 public class Button extends Canvas {
 
+	public String name;
 	public boolean hovering;
 	public boolean selected;
 	public float[] baseColor;
@@ -20,19 +18,12 @@ public class Button extends Canvas {
 	
 	private ClickListener clickListener;
 	
-	public Button(int _x, int _y, int w, int h, boolean _show) {
-		super(_x, _y, w, h, _show);
-		hovering = false;
-		selected = false;
-		baseColor = new float[3];
-		hoverColor = new float[3];
-		selectedColor = new float[3];
-		
-		hoverMessageBox = new MessageBox(0, 0, 40, 16, "Times New Roman", 14, Color.RED);
-		hoverMessageBox.message = "";
-		hoverMessageBox.show = false;
+	public Button() {
+		baseColor = new float[]{0, 0, 0};
+		hoverColor = new float[]{0, 0, 0};
+		selectedColor = new float[]{0, 0, 0};
 	}
-	
+
 	public void setColor(float r, float g, float b, float a) {
 		super.setColor(r, g, b, a);
 		baseColor[0] = color[0];
@@ -98,6 +89,9 @@ public class Button extends Canvas {
 	}
 	
 	public void onClick() {
-		clickListener.onClick();
+		if (clickListener != null)
+			clickListener.onClick();
+		else
+			System.out.println("button clicked!");
 	}
 }

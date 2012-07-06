@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Node  {
+	private int dimLimit = 16;
+	
 	public ArrayList<Node> children;
 	public String name;
 	public String data;
@@ -66,7 +68,7 @@ public class Node  {
 	 */
 	public int[] readIntArray() {
 		int idx = 0;
-		int ret[] = new int[3];
+		int ret[] = new int[dimLimit];
 		String[] tokens = data.split("\\s");
 		
 		for (String token : tokens) {
@@ -83,7 +85,7 @@ public class Node  {
 	 */
 	public float[] readFloatArray() {
 		int idx = 0;
-		float ret[] = new float[3];
+		float ret[] = new float[dimLimit];
 		String[] tokens = data.split("\\s");
 		
 		for (String token : tokens) {

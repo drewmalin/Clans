@@ -11,11 +11,13 @@ public class MessageBox {
 	//Coordinates, usually relative to top-left of the enclosing menu box
 	public int x;
 	public int y;
+	public int width;
+	public int height;
 	public boolean show = true;
 	
 	//Font attributes
-	private String fontName;
-	private int fontSize;
+	public String fontName;
+	public int fontSize;
 	private Color color;
 	private UnicodeFont unicodeFont;
 	public String message;
@@ -25,32 +27,26 @@ public class MessageBox {
 	public int lineWidth;
 	public boolean skipProcessing = false;
 	
-	/* Function to create a message box. The x and y coordinates are offsets from the top left of
-	 * the enclosing menu window (calculated in the menu window itself), w is the maximum number of
-	 * characters per line, h is the height of each line in pixels.
-	 */
+	public MessageBox() {
+		color = Color.WHITE;
+	}
+
 	@SuppressWarnings("unchecked")
-	public MessageBox(int _x, int _y, int w, int h, String _fontName, int _fontSize, Color _color) {
+	public void load() {
+		maxWidth = width; //TODO: TEMPORARY
 		try {
-			x 			= _x;
-			y 			= _y;
-			maxWidth 	= w;
-			fontName 	= _fontName;
-			fontSize 	= _fontSize;
-			color 		= _color;
-			lineHeight	= h;
 			
-			if (fontName.contains("resources/fonts/"))
+			if (fontName.contains("/res/fonts/"))
 				unicodeFont = new UnicodeFont(fontName, fontSize, false, false);
 			else {
 				java.awt.Font awtFont = new java.awt.Font(fontName, java.awt.Font.PLAIN, 300);
 				unicodeFont = new UnicodeFont(awtFont, fontSize, false, false);
 			}
-			
+		
 			unicodeFont.getEffects().add(new ColorEffect(color));
 			unicodeFont.addAsciiGlyphs();
 			unicodeFont.loadGlyphs();
-		} catch (SlickException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -72,6 +68,36 @@ public class MessageBox {
 		message = msg;
 	}
 	
+	public void setFontColor(String strColor) {
+		strColor = strColor.toLowerCase();
+		
+		if (strColor.equals("white"))
+			color = Color.WHITE;
+		else if (strColor.equals("white"))
+			color = Color.BLACK;
+		else if (strColor.equals("blue"))
+			color = Color.BLUE;
+		else if (strColor.equals("cyan"))
+			color = Color.CYAN;
+		else if (strColor.equals("dark_gray"))
+			color = Color.DARK_GRAY;
+		else if (strColor.equals("light_gray"))
+			color = Color.LIGHT_GRAY;
+		else if (strColor.equals("gray"))
+			color = Color.GRAY;
+		else if (strColor.equals("green"))
+			color = Color.GREEN;
+		else if (strColor.equals("magenta"))
+			color = Color.MAGENTA;
+		else if (strColor.equals("orange"))
+			color = Color.ORANGE;
+		else if (strColor.equals("pink"))
+			color = Color.PINK;
+		else if (strColor.equals("red"))
+			color = Color.RED;
+		else if (strColor.equals("yellow"))
+			color = Color.YELLOW;
+	}
 	/* Function to print a string to a message box. Given the maximum number of characters per line
 	 * (maxWidth), keep printing substrings of length < maxWidth until the entire string has printed.
 	 * 

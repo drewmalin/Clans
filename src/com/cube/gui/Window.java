@@ -1,6 +1,7 @@
 package com.cube.gui;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -10,34 +11,33 @@ import com.cube.core.Input;
 import com.cube.gui.MessageBox;
 
 public class Window extends Canvas {
-	public 	ArrayList<Button> 		buttons;
+	public HashMap<String, Button> buttons;
 	public Button clickedButton;
-	
-	public Window(int _x, int _y, int w, int h, boolean _show) {
-		super(_x, _y, w, h, _show);
-		buttons = new ArrayList<Button>();
-		stealContext = false;
-		clickedButton = null;
+	public String name;
+
+	public Window() {
+		buttons = new HashMap<String, Button>();
 	}
 
 	public void draw() {
-		if (show) {
-			super.draw();
-			drawButtons();
-		}
+		super.draw(); 	//Draw this window's canvas, includes all message boxes
+		drawButtons();
 	}
 
 	public void drawButtons() {
-		for (Button b : buttons) {
-			b.draw();
+		for (String b : buttons.keySet()) {
+			buttons.get(b).draw();
 		}
-		for (Button b : buttons) {
-			if (b.hovering)
-				b.openHoverMessageBox();
-			else
-				b.closeHoverMessageBox();
+		for (String b : buttons.keySet()) {
+			if (buttons.get(b).hoverMessageBox != null) {
+				if (buttons.get(b).hovering)
+					buttons.get(b).openHoverMessageBox();
+				else
+					buttons.get(b).closeHoverMessageBox();
+			}
 		}
 	}
+	
 	public void closeWindow() {
 		for (MessageBox mb : messageBoxes) {
 			mb.show = false;
@@ -65,13 +65,13 @@ public class Window extends Canvas {
 	}
 	
 	public void checkGuiClick() {
-		for (Button b : buttons) {
-			b.checkHover(Mouse.getX(), Engine.HEIGHT - Mouse.getY());
-			if (b.hovering && Mouse.isButtonDown(0)) {
-				clickedButton = b;
+		for (String b : buttons.keySet()) {
+			buttons.get(b).checkHover(Mouse.getX(), Engine.HEIGHT - Mouse.getY());
+			if (buttons.get(b).hovering && Mouse.isButtonDown(0)) {
+				clickedButton = buttons.get(b);
 			}
-			if (b.hovering && Input.isMouseButtonUp() && clickedButton != null && clickedButton.equals(b)) {
-				b.onClick();
+			if (buttons.get(b).hovering && Input.isMouseButtonUp() && clickedButton != null && clickedButton.equals(b)) {
+				buttons.get(b).onClick();
 				clickedButton = null; 
 			}
 		}
@@ -83,16 +83,16 @@ public class Window extends Canvas {
 	}
 	
 	public void pollMouse() {
-		for (Button b : buttons) {
-			b.checkHover(Mouse.getX(), Engine.HEIGHT - Mouse.getY());
+		for (String b : buttons.keySet()) {
+			buttons.get(b).checkHover(Mouse.getX(), Engine.HEIGHT - Mouse.getY());
 		}
 		while (Mouse.next()) {
 			if (Mouse.getEventButtonState()) {
 				switch (Mouse.getEventButton()) {
 					case 0:	//Left click
-						for (Button b : buttons)
-							if (b.hovering) {
-								b.onClick();
+						for (String b : buttons.keySet())
+							if (buttons.get(b).hovering) {
+								buttons.get(b).onClick();
 							}
 						break;
 					case 1: //Right click
@@ -109,16 +109,10 @@ public class Window extends Canvas {
 				switch (Keyboard.getEventKey()) {
 					//Quit the game
 					case Keyboard.KEY_ESCAPE:
-						if (id == Menu.PAUSE)
-							Menu.unPause();
+						System.exit(0);
 						break;
 				}
 			}
 		}
 	}
-	
-	public void createButton(int xOffset, int yOffset, int width, int height, boolean show) {
-		buttons.add(new Button(x + xOffset, y + yOffset, width, height, show));
-	}
-
 }

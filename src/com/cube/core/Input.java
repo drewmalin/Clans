@@ -52,7 +52,7 @@ public class Input {
 	 * poll for interaction with the main game.
 	 */
 	public static void poll() {
-		
+		/*
 		for (Window w : Menu.windows) {
 			
 			if (w.stealContext) {
@@ -63,7 +63,7 @@ public class Input {
 				w.checkGuiClick();
 			}
 		}
-	
+	*/
 		pollKeyboard();
 		pollMouse();
 	}
@@ -163,12 +163,12 @@ public class Input {
 				switch (Keyboard.getEventKey()) {
 					case Keyboard.KEY_ESCAPE:
 						Game.buildingToBeBuilt = null;
-						Menu.windows.get(Menu.CONSOLE).closeWindow();
-						Menu.windows.get(Menu.BUILDING).closeWindow();
-						Menu.pause();
+						//Menu.windows.get(Menu.CONSOLE).closeWindow();
+						//Menu.windows.get(Menu.BUILDING).closeWindow();
+						//Menu.pause();
 						break;
 					case Keyboard.KEY_0:
-						Menu.windows.get(Menu.CONSOLE).show = !Menu.windows.get(Menu.CONSOLE).show;
+						//Menu.windows.get(Menu.CONSOLE).show = !Menu.windows.get(Menu.CONSOLE).show;
 						break;
 					case Keyboard.KEY_P:
 						Resources.map.massSmooth();

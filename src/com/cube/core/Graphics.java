@@ -191,9 +191,7 @@ public class Graphics {
 	}
 	
 	private static void updatePhysics() {
-		if (!Menu.windows.get(Menu.PAUSE).stealContext) {
-			Physics.drawEffects();
-		}
+		Physics.drawEffects();
 	}
 	
 	private static void drawClans() {
@@ -280,8 +278,8 @@ public class Graphics {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		GL11.glPushMatrix();	
-		Menu.draw();	
-		Menu.update();
+		//Menu.draw();	
+		//Menu.update();
 		GL11.glPopMatrix();
 		
 		GL11.glEnable(GL11.GL_LIGHTING);											

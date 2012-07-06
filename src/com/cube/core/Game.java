@@ -19,10 +19,9 @@ public class Game {
 
 	public static void update() {
 		Input.poll();
-		Graphics.update();
 		
-		if (!Menu.windows.get(Menu.PAUSE).stealContext)
-			updateScene();
+		Graphics.update();
+		updateScene();
 		
 		Utilities.updateFrameRate();
 		
