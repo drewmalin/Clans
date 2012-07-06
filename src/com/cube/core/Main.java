@@ -3,6 +3,8 @@ package com.cube.core;
 import java.util.logging.Level;
 
 import com.cube.util.FileLogger;
+import com.cube.util.Node;
+import com.cube.util.XMLParser;
 
 public class Main {
 	
@@ -20,6 +22,5 @@ public class Main {
 		
 		// Static call to start the game engine
 		Engine.start();
-
 	}
 }

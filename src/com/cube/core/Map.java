@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.cube.util.BMPparser;
+import com.cube.util.BMPParser;
 import com.cube.util.ShaderManager;
 import com.cube.util.Utilities;
 import com.cube.util.Vertex;
@@ -78,7 +78,7 @@ public class Map extends Drawable {
 	public void load(String filename) {
 		try {
 
-			BMPparser parser = new BMPparser(filename);
+			BMPParser parser = new BMPParser(filename);
 			width = parser.width;
 			height = parser.height;
 			pixels = parser.pixels;
@@ -249,7 +249,7 @@ public class Map extends Drawable {
 	public void drawMap() {
 		
 		if (Engine.VBO) {
-			Resources.textures.get(1).bind();
+			Resources.textureLibrary.get("default").bind();
 
 			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboVertexHandle);
 			GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, 0);

@@ -2,8 +2,7 @@ package com.cube.core;
 
 import java.util.ArrayList;
 
-import javax.vecmath.Vector3d;
-
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 import com.cube.states.NeutralState;
@@ -20,13 +19,8 @@ public class Clan {
 	public int hunterCount;
 
 	public float[] color;
-	public Vector3d position;
+	public Vector3f position;
 	public Inventory clanStockpile;
-	
-	public static int FARMER 	= 100;
-	public static int BUILDER 	= 101;
-	public static int WARRIOR 	= 102;
-	public static int HUNTER 	= 103;
 	
 	public static int influenceRadius = 100;
 	
@@ -34,7 +28,7 @@ public class Clan {
 		units = new ArrayList<Unit>();
 		buildings = new ArrayList<Building>();
 		
-		position = new Vector3d(0, 0, 0);
+		position = new Vector3f(0, 0, 0);
 		farmerCount 	= 0;
 		builderCount	= 0;
 		warriorCount 	= 0;
@@ -69,34 +63,37 @@ public class Clan {
 	public void process() {
 		
 		for (int i = 0; i < farmerCount; i++) {
-			createUnit(FARMER, 4);
+			createUnit(Role.farmer, 4);
 		}
 		for (int i = 0; i < builderCount; i++) {
-			createUnit(BUILDER, 4);
+			createUnit(Role.builder, 4);
 		}
 		for (int i = 0; i < warriorCount; i++) {
-			createUnit(WARRIOR, 4);
+			createUnit(Role.warrior, 4);
 		}
 		for (int i = 0; i < hunterCount; i++) {
-			createUnit(HUNTER, 16);
+			createUnit(Role.hunter, 16);
 		}
 	}
 	
-	public void createUnit(int type, int inv) {
+	public void createUnit(String role, int inv) {
 		Unit u;
-		u = new Unit(type, 12, this, Resources.textures.get(2));
+		u = new Unit(role, this);
+		u.model = "barman";
+		u.texture = "manStoneAge1";
+		
 		u.inventory.setCap(inv);
 		u.currentState = NeutralState.getState();
 		u.inventory.maxWeight = 10;
 		u.startState();
 		
-		if (type == HUNTER) {
-			u.targets.add(Entity.AGGRESSIVE);
-			u.targets.add(Entity.PASSIVE);
-			u.targets.add(Entity.EDIBLE);
+		if (role == Role.hunter) {
+			u.targets.add(Type.aggressive);
+			u.targets.add(Type.passive);
+			u.targets.add(Type.edible);
 		}
-		else if (type == BUILDER) {
-			u.targets.add(Entity.GATHERABLE);
+		else if (role == Role.builder) {
+			u.targets.add(Type.gatherable);
 		}
 		
 		units.add(u);

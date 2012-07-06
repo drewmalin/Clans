@@ -1,19 +1,25 @@
 package com.cube.core;
 
+import java.util.ArrayList;
+
 import org.lwjgl.opengl.GL11;
 import com.cube.util.Texture;
 import com.cube.util.ShaderManager;
 
 public class Unit extends Entity {
+	
+	public ArrayList<String> roles;
 			
-	public Unit(int _type, int _id, Clan c, Texture tex) {
-		types.add(_type);
-		objectID = _id;
+	public Unit(String role, Clan c) {
+		
+		roles = new ArrayList<String>();
+		
+		roles.add(role);
+		
 		clanRef = c;
 		
 		show = true;
 
-		this.tex = tex;
 		selectionRingRotation = 0;
 		
 		position.x = c.position.x + 5;
@@ -29,6 +35,11 @@ public class Unit extends Entity {
 	}
 	
 	@Override
+	public ArrayList<String> getRoles() {
+		return roles;
+	}
+	
+	@Override
 	public void draw() {
 		GL11.glPushMatrix();
 			GL11.glLoadIdentity();
@@ -37,21 +48,21 @@ public class Unit extends Entity {
 			GL11.glRotatef(rotation[0], 1, 0, 0);
 			GL11.glRotatef(rotation[1], 0, 1, 0);
 			GL11.glRotatef(rotation[2], 0, 0, 1);
-			GL11.glScalef(scale, scale, scale);
+			GL11.glScalef(scale[0], scale[1], scale[2]);
 
 			if (Graphics.colorPicking) {
 				GL11.glColor3ub((byte)colorID[0], (byte)colorID[1], (byte)colorID[2]);
-				Resources.objectLibrary.get(objectID).drawOBJ();
+				Resources.modelLibrary.get(model).drawOBJ();
 			}
 			else {
 				GL11.glColor3f(color[0], color[1], color[2]);
 				
 				//Bind shaders
 				Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
-				if(tex == null) {
-					Resources.objectLibrary.get(objectID).draw();
+				if(texture == null) {
+					Resources.modelLibrary.get(model).draw();
 				}else{
-					Resources.objectLibrary.get(objectID).draw(tex);
+					Resources.modelLibrary.get(model).draw(Resources.textureLibrary.get(texture));
 				}
 				
 				//Unbind shaders

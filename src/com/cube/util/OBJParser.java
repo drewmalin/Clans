@@ -52,14 +52,18 @@ public class OBJParser {
 		
 		
 		try {
-			fstream = new FileInputStream(str);
-			in = new DataInputStream(fstream);
-			br = new BufferedReader(new InputStreamReader(in));
+			//fstream = new FileInputStream(str);
+			//in = new DataInputStream(fstream);
+			//br = new BufferedReader(new InputStreamReader(in));
+			
+			br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(str)));
+
 			parse(br);
-			in.close();
+			//in.close();
 			
 		} catch (Exception e) {
 			System.err.println("Error loading model: " + e.getMessage());
+			e.printStackTrace();
 		}
 		
 		/*

@@ -75,12 +75,14 @@ public class Graphics {
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);										// enables opengl to use glColor3f to define material color
 		GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT_AND_DIFFUSE);			// tell opengl glColor3f effects the ambient and diffuse properties of material		
 			
+		/*
 		Light sun = new Light("SUN");
 		sun.setPosition(0, 200, 0);
 		sun.setColor(1f, 1f, 1f, 1f);
 		sun.create(GL11.GL_LIGHT0);
 		sun.loadOBJ("res/obj/berryBushSans.obj");
 		Resources.lights.add(sun);
+		*/
 	}
 
 	private static void setupShaderManager() {

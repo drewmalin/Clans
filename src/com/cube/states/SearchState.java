@@ -1,16 +1,17 @@
 package com.cube.states;
 
-import javax.vecmath.Vector2d;
+import org.lwjgl.util.vector.Vector2f;
 
 import com.cube.core.Clan;
 import com.cube.core.Entity;
 import com.cube.core.Physics;
 import com.cube.core.Resources;
+import com.cube.core.Role;
 import com.cube.util.Utilities;
 
 public class SearchState extends State {
 
-	Vector2d tempVect;
+	Vector2f tempVect;
 	
 	/*
 	 * Entering the Hunt state means entering the 'search' or probably more accurately, 'wander,' movement
@@ -35,7 +36,7 @@ public class SearchState extends State {
 	@Override
 	public void execute(Entity e) {
 		boolean print = false;
-		if (e.types.contains(Clan.HUNTER)) print = true;
+		if (e.getRoles().contains(Role.hunter)) print = true;
 		// Look for resources
 		for (Entity x : Resources.entities) {
 			if (Physics.distSquared(x.position, e.position) < 400) {		//Entity spotted a resource

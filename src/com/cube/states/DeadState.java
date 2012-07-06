@@ -2,6 +2,8 @@ package com.cube.states;
 
 import com.cube.core.Entity;
 import com.cube.core.Physics;
+import com.cube.core.Status;
+import com.cube.core.Type;
 
 public class DeadState extends State {
 	
@@ -11,8 +13,8 @@ public class DeadState extends State {
 		Physics.haltEntity(e);
 		e.underAttack = false;
 		e.types.clear();
-		e.types.add(Entity.NEUTRAL);
-		e.types.add(Entity.DEAD);
+		e.types.add(Type.neutral);
+		e.status.equals(Status.dead);
 		e.rotation[0] += 180;
 		e.position.y += 2;
 	}

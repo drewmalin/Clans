@@ -1,6 +1,6 @@
 package com.cube.states;
 
-import javax.vecmath.Vector2d;
+import org.lwjgl.util.vector.Vector2f;
 
 import com.cube.core.Clan;
 import com.cube.core.Entity;
@@ -10,7 +10,7 @@ import com.cube.core.Resources;
 
 public class GatherState extends State {
 
-	Vector2d tempVect;
+	Vector2f tempVect;
 
 	/*
 	 * At the beginning of the gather, the unit stops his current movement and starts walking

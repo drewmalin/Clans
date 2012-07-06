@@ -1,6 +1,6 @@
 package com.cube.states;
 
-import javax.vecmath.Vector2d;
+import org.lwjgl.util.vector.Vector2f;
 
 import com.cube.core.Building;
 import com.cube.core.Entity;
@@ -10,7 +10,7 @@ import com.cube.core.Resources;
 
 public class BuildState extends State {
 	
-	Vector2d tempVect;
+	Vector2f tempVect;
 	Building building;
 	int x, z;
 	

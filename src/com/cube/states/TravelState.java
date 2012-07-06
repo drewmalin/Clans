@@ -1,16 +1,19 @@
 package com.cube.states;
 
-import javax.vecmath.Vector2d;
+import org.lwjgl.util.vector.Vector2f;
 
 import com.cube.core.Building;
 import com.cube.core.Clan;
 import com.cube.core.Entity;
 import com.cube.core.Physics;
+import com.cube.core.Role;
+import com.cube.core.Status;
+import com.cube.core.Type;
 import com.cube.core.Unit;
 
 public class TravelState extends State {
 
-	Vector2d tempVect;
+	Vector2f tempVect;
 
 	@Override
 	public void enter(Entity e) {
@@ -34,19 +37,19 @@ public class TravelState extends State {
 																			
 				e.changeState( DepositState.getState() );
 			}
-			else if (e.focusEntity.types.contains(Entity.DEAD) ||			// Focus is edible/gatherable/dead: immediately gather
-					 e.focusEntity.types.contains(Entity.EDIBLE) ||
-					 e.focusEntity.types.contains(Entity.GATHERABLE)){ 
+			else if (e.focusEntity.status.equals(Status.dead) ||			// Focus is edible/gatherable/dead: immediately gather
+					 e.focusEntity.types.contains(Type.edible) ||
+					 e.focusEntity.types.contains(Type.gatherable)){ 
 				e.changeState( GatherState.getState() );
 
 			}
-			else if (e.focusEntity.types.contains(Entity.AGGRESSIVE) ||
-					 e.focusEntity.types.contains(Entity.PASSIVE)) {		// Focus is aggressive/passive: attack
+			else if (e.focusEntity.types.contains(Type.aggressive) ||
+					 e.focusEntity.types.contains(Type.passive)) {		// Focus is aggressive/passive: attack
 				e.changeState( AttackState.getState() );
 			}
 			else if (e.focusEntity.getClass().equals(Building.class)) {		// Focus is building: interact
 				// Building is incomplete and entity is a builder. Build.
-				if (e.types.contains(Clan.BUILDER) && !((Building) (e.focusEntity)).complete) {
+				if (e.getRoles().contains(Role.builder) && !((Building) (e.focusEntity)).complete) {
 					e.changeState( BuildState.getState() );
 				}
 				//Entity is merely interacting with a building. Interact.

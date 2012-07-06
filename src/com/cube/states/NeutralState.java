@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.cube.core.Clan;
 import com.cube.core.Entity;
+import com.cube.core.Role;
+import com.cube.core.Type;
 import com.cube.util.Utilities;
 
 public class NeutralState extends State {
@@ -16,17 +18,17 @@ public class NeutralState extends State {
 	@Override
 	public void execute(Entity e) {
 		
-		ArrayList<Integer> test = new ArrayList<Integer>();
+		ArrayList<String> test = new ArrayList<String>();
 		
-		test.add(Clan.HUNTER);
-		test.add(Clan.BUILDER);
-		test.add(Entity.AGGRESSIVE);
-		test.add(Entity.PASSIVE);
-		
+		test.add(Role.hunter);
+		test.add(Role.builder);
+		test.add(Type.aggressive);
+		test.add(Type.passive);
+	
 		if (e.focusEntity != null) {
 			e.interactWithFocusEntity();
 		}
-		else if (Utilities.containsAny(e.types, test)) {
+		else if (Utilities.containsAny(e.types, test) || Utilities.containsAny(e.getRoles(), test)) {
 			e.changeState( SearchState.getState() );
 		}
 		

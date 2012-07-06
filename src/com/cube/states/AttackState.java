@@ -1,6 +1,6 @@
 package com.cube.states;
 
-import javax.vecmath.Vector2d;
+import org.lwjgl.util.vector.Vector2f;
 
 import com.cube.core.Entity;
 import com.cube.core.Physics;
@@ -8,7 +8,7 @@ import com.cube.gui.Menu;
 
 public class AttackState extends State {
 
-	Vector2d tempVect;
+	Vector2f tempVect;
 
 	@Override
 	public void enter(Entity e) {

@@ -11,14 +11,14 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 
-public class BMPparser {
+public class BMPParser {
 	
 	private RandomAccessFile raf;
 	public int pixels[][][];
 	public int width;
 	public int height;
 	
-	public BMPparser(String filename) throws IOException {
+	public BMPParser(String filename) throws IOException {
 		try {
 			raf = new RandomAccessFile(filename, "r");
 			pixels = parse(raf);

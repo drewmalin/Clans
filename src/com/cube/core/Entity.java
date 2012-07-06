@@ -13,51 +13,30 @@ import com.cube.states.TravelState;
 import com.cube.util.Texture;
 import com.cube.util.Utilities;
 
-public class Entity {
+public class Entity extends Movable {
+		
+	public String name;
+	public String model;
+	public String texture;
 	
-	/* Entities each are given a unique type that dictates how they can
-    be interacted with (if at all):
-    
-    0 - NEUTRAL    (no interaction, e.g. static scenery)
-    1 - HUNTABLE   (entities that yield meat) <- may be deprecated
-    2 - PASSIVE    (entities that yield meat/will flee if attacked)
-    3 - AGGRESSIVE (entities that yield meat/will attack if attacked)
-    4 - GATHERABLE (indedible entities like trees, dead animals)
-    5 - MINEABLE   (mines, ore, gems, etc.)
-    6 - EDIBLE     (entities that could be immediately eaten, e.g. berries)
-	 */
+	public float[] scale;
+
+	public Entity focusEntity;
+	public Inventory inventory;
+	public ArrayList<String> types;
+	public ArrayList<String> targets;
+	public ArrayList<String> regions;
+	public Status status;
+
+	public int maxHealth;
+	public int curHealth;
 	
-	public final static int NEUTRAL 		= 0;
-	public final static int HUNTABLE 		= 1;
-	public final static int PASSIVE			= 2;
-	public final static int AGGRESSIVE		= 3;
-	public final static int GATHERABLE 		= 4;
-	public final static int MINEABLE 		= 5;
-	public final static int EDIBLE			= 6;
-	public final static int DEAD			= 7;
+	public float popDensity;
 	
 	//--- TEMPORARY LOCATION ---//
 	protected int selectionRingRotation;
 	public long waitMillis;
 	public long waitDelta;
-	
-	//---------- Movement/Rendering attributes ---------//
-	public int objectID;
-	public Vector3d position;
-	public Vector3d destination;
-	public Vector3d direction;
-	public Vector2d force;
-	public Vector2d acceleration;
-	public Vector2d velocity;
-	public double mass;
-	public double max_v;
-	public float[] color;
-	public float[] colorID;
-	public float[] rotation;
-	public float scale;
-	public boolean show;	
-	public Texture tex;
-	//--------------------------------------------------//
 	
 	//----------- Unique Entity attributes -------------//
 	public State currentState;
@@ -65,55 +44,27 @@ public class Entity {
 	
 	public boolean userControlled;	
 	
-	public Entity focusEntity;	
-	public Inventory inventory;
-	private int pause;
-	public Clan clanRef;
-	public int timedump;
 	public float proximityRadius;
-	
-	public ArrayList<Integer> targets;
-	public ArrayList<Integer> types;
 	
 	public boolean underAttack;
 	
-	public int maxHealth;
-	public int curHealth;
+
 	//----------------------------------------------------//
-	
+	public Clan clanRef;
+
 	
 	public Entity() {
+		super();
+		
+		model = "default";
 		
 		proximityRadius = 1.5f;
-		
 		maxHealth = curHealth = 5;
-		
-		color 		= new float[3];
-		rotation 	= new float[3];
-		colorID		= new float[3];
-		destination = new Vector3d(0, 0, 0);
-		direction	= new Vector3d(0, 0, 0);
-		position 	= new Vector3d(0, 0, 0);
-
-		force 			= new Vector2d(0, 0);
-		acceleration 	= new Vector2d(0, 0);
-		velocity 		= new Vector2d(0, 0);
-		mass			= 100;
-		max_v			= .1;
-		
-		color[0] 	= color[1] 		= color[2] 		= 1f;
-		rotation[0] = rotation[1]	 = rotation[2] 	= 0f;
-		
-		scale 		= .05f;
-		show 		= true;
-		objectID 	= -1;
+		scale = new float[]{0.5f, 0.5f, 0.5f};
 		
 		inventory = new Inventory();
-		clanRef = null;
 		
-		tex = null;
-		timedump = 0;
-		pause = 0;
+		texture = null;
 		selectionRingRotation = 0;
 
 		/* Grab a unique color ID from Resources (float[3]) save it to this entity,
@@ -124,13 +75,36 @@ public class Entity {
 		setColorID(Resources.getNextColorID());
 		Resources.pickingHashMap.put(Resources.colorIDToStringKey(colorID), this);
 
-		targets = new ArrayList<Integer>();
-		types = new ArrayList<Integer>();
+		targets = new ArrayList<String>();
+		types = new ArrayList<String>();
+		regions = new ArrayList<String>();
 		
 		underAttack = false;
 	}
 	
-	public void setType(int _type) {
+	public void update(int timeElapsed) {
+		
+		Physics.updatePosition(this);
+
+		if (velocity.length() != 0) {
+			rotation[1] = (float) ((180/Math.PI) * Math.acos((-1 * velocity.y)/velocity.length()));
+			
+			if (velocity.x > 0)
+				rotation[1] *= -1;
+			
+			direction.x = velocity.x / velocity.length();
+			direction.z = velocity.y / velocity.length();
+			
+		}
+
+		if (currentState != null) {
+			currentState.execute(this);
+		}
+		
+		timedump += timeElapsed;
+	}
+	
+	public void setType(String _type) {
 		types.add(_type);
 	}
 	
@@ -146,19 +120,20 @@ public class Entity {
 			GL11.glRotatef(rotation[0], 1, 0, 0);
 			GL11.glRotatef(rotation[1], 0, 1, 0);
 			GL11.glRotatef(rotation[2], 0, 0, 1);
-			GL11.glScalef(scale, scale, scale);
+			GL11.glScalef(scale[0], scale[1], scale[2]);
 			
 			if (Graphics.colorPicking) {
 				GL11.glColor3ub((byte)colorID[0], (byte)colorID[1], (byte)colorID[2]);
-				Resources.objectLibrary.get(objectID).drawOBJ();
+			//	Resources.objectLibrary.get(objectID).drawOBJ();
+				Resources.modelLibrary.get(model).drawOBJ();
 			}
 			else {
 				GL11.glColor3f(color[0], color[1], color[2]);
-				if(tex == null)
+				if(texture == null)
 				{
-					Resources.objectLibrary.get(objectID).draw();
+					Resources.modelLibrary.get(model).draw();
 				}else{
-					Resources.objectLibrary.get(objectID).draw(tex);
+					Resources.modelLibrary.get(model).draw(Resources.textureLibrary.get(texture));
 				}
 			}
 			
@@ -227,7 +202,7 @@ public class Entity {
 	 */
 	public void interactWithFocusEntity() {
 		//Focus entity is immediately edible/gatherable, travel to it
-		if (focusEntity.types.contains(Entity.EDIBLE) || focusEntity.types.contains(Entity.GATHERABLE))
+		if (focusEntity.types.contains(Type.edible) || focusEntity.types.contains(Type.gatherable))
 			changeState( TravelState.getState() );
 		//Focus entity is a building
 		else if (focusEntity.getClass().equals(Building.class)) {
@@ -239,7 +214,7 @@ public class Entity {
 			focusEntity.focusEntity = this;
 
 			// If the focus is passive, it should flee
-			if (focusEntity.types.contains(Entity.PASSIVE))	
+			if (focusEntity.types.contains(Type.passive))	
 				focusEntity.changeState( FleeState.getState() );
 			// If the focus is not passive, it counter attacks
 			else
@@ -278,61 +253,72 @@ public class Entity {
 			currentState.enter(this);
 		}
 	}
-	
-	public void update(int timeElapsed) {
-		
-		Physics.updatePosition(this);
-
-		if (velocity.length() != 0) {
-			rotation[1] = (float) ((180/Math.PI) * Math.acos((-1 * velocity.y)/velocity.length()));
-			
-			if (velocity.x > 0)
-				rotation[1] *= -1;
-			
-			direction.x = velocity.x / velocity.length();
-			direction.z = velocity.y / velocity.length();
-			
-		}
-
-		if (currentState != null) {
-			currentState.execute(this);
-		}
-		
-		timedump += timeElapsed;
-	}
 
 	public void retire() {
 		focusEntity.types.clear();
-		focusEntity.types.add(Entity.NEUTRAL);
+		focusEntity.types.add(Type.neutral);
 		focusEntity = null;		
 	}
-
-	public void setDestination(float[] target) {
-		destination.x = target[0];
-		destination.y = target[1];
-		destination.z = target[2];
-	}
-
-	public void setDestination(Vector3d pos) {
-		destination.x = pos.x;
-		destination.y = pos.y;
-		destination.z = pos.z;
-	}
 	
-	public boolean pause(int time) {
-		if (pause < time) {
-			pause++;
-			return false;
-		}
-		else {
-			pause = 0;
-			return true;
-		}
-	}
-
 	public void setColorID(float[] nextColorID) {
 		colorID[0] = nextColorID[0];
 		colorID[1] = nextColorID[1];
 		colorID[2] = nextColorID[2];
+	}
+
+	public void setScale(float[] scaleArr) {
+		scale[0] = scaleArr[0];
+		scale[1] = scaleArr[1];
+		scale[2] = scaleArr[2];
+	}
+
+	public void setTypes(String[] typeArr) {
+		for (String type : typeArr) {
+			types.add(type);
+		}
+	}
+
+	public void setTargets(String[] targetArr) {
+		for (String target : targetArr) {
+			targets.add(target);
+		}
+	}
+
+	public void setRegions(String[] regionArr) {
+		for (String region : regionArr) {
+			regions.add(region);
+		}
+	}
+
+	public void setPopDensity(float density) {
+		popDensity = density;
+	}
+
+	public void setTexture(String textureFile) {
+		texture = textureFile.substring(textureFile.lastIndexOf("/")+1, textureFile.indexOf("."));
+		if (Resources.textureLibrary.get(texture) == null) {
+			try {
+				Texture newTexture = Resources.texLoader.getTexture(textureFile);
+				Resources.textureLibrary.put(texture, newTexture);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void setModel(String modelFile) {
+		model = modelFile.substring(modelFile.lastIndexOf("/")+1, modelFile.indexOf("."));
+		if (Resources.modelLibrary.get(model) == null) {
+			Model newModel = new Model(modelFile);
+			Resources.modelLibrary.put(model, newModel);
+		}
+	}
+
+	public ArrayList<String> getRoles() {
+		return null;
+	}
+	
+	public Clan getClanRef() {
+		return clanRef;
 	}
 }

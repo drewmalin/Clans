@@ -10,9 +10,11 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -245,13 +247,16 @@ public class TextureLoader {
      */
     private BufferedImage loadImage(String ref) throws IOException 
     { 
+    	/*
         URL url = TextureLoader.class.getClassLoader().getResource(ref);
         
         if (url == null) {
             throw new IOException("Cannot find: "+ref);
         }
-        
-        BufferedImage bufferedImage = ImageIO.read(new BufferedInputStream(getClass().getClassLoader().getResourceAsStream(ref))); 
+        */
+		BufferedImage bufferedImage = ImageIO.read(new BufferedInputStream(this.getClass().getResourceAsStream(ref)));
+
+        //BufferedImage bufferedImage = ImageIO.read(new BufferedInputStream(getClass().getClassLoader().getResourceAsStream(ref))); 
  
         return bufferedImage;
     }

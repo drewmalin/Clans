@@ -1,14 +1,9 @@
 package com.cube.core;
 
-import java.util.logging.Level;
-
 import org.lwjgl.opengl.Display;
-
 import com.cube.gui.Menu;
 import com.cube.util.FileLogger;
 import com.cube.util.Timer;
-
-
 
 public class Engine {
 	
@@ -30,18 +25,22 @@ public class Engine {
 	public static void start() {
 		
 		FileLogger.initialize();
-		Resources.initialize();
 		Graphics.initialize();
+		Resources.initialize();
 		Input.initialize();
 		Game.initialize();
 		Physics.initialize();
 		Timer.initialize();
 		Menu.initialize();
 		
-		Resources.loadItems("res/items.xml");
-		Resources.loadBuildings("res/buildings.xml");
-		Resources.loadLevel("res/level1.xml");
-
+		Resources.loadItemLib("/res/lib/ItemLib.xml");
+		Resources.loadBuildingLib("/res/lib/BuildingLib.xml");
+		Resources.loadEntityLib("/res/lib/EntityLib.xml");
+		Resources.loadShaderLib("/res/lib/ShaderLib.xml");
+		Resources.loadSavedGame("/res/lvl/level1.xml");
+		
+		//Menu.loadMenu("/res/Menu_START.xml");
+		/*
 		Menu.create();
 		
 		try {
@@ -50,6 +49,7 @@ public class Engine {
 			FileLogger.logger.log(Level.SEVERE, e.getMessage());
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	public static void enterGameLoop() throws Exception {

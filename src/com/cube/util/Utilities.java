@@ -39,9 +39,9 @@ public class Utilities {
 	/*
 	 * Method to neatly print the contents of an ArrayList.
 	 */
-	public static String printArrayList(ArrayList<Integer> types) {
+	public static String printArrayList(ArrayList<String> types) {
 		String ret = "(";
-		for (Integer i : types) {
+		for (String i : types) {
 			ret += (i + ", " );
 		}
 		ret = ret.substring(0, ret.lastIndexOf(","));
@@ -56,8 +56,8 @@ public class Utilities {
 	 * (possible types of entity it can interact with) while the second list, 'test', will
 	 * contain all of the types that define the second entity.
 	 */
-	public static boolean containsAny(ArrayList<Integer>  primary, ArrayList<Integer> test) {
-		for (Integer i : test) {
+	public static boolean containsAny(ArrayList<String>  primary, ArrayList<String> test) {
+		for (String i : test) {
 			if (primary.contains(i))
 				return true;
 		}

@@ -3,10 +3,8 @@ package com.cube.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.vecmath.Vector3d;
-
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.opengl.GL11;
-
 import com.cube.util.Utilities;
 
 public class Building extends Entity {
@@ -154,7 +152,7 @@ public class Building extends Entity {
 		
 		for (Entity e : Resources.entities) {
 			
-			if (Physics.distSquared(new Vector3d(pos[0], pos[1], pos[2]), e.position) < 1) {
+			if (Physics.distSquared(new Vector3f(pos[0], pos[1], pos[2]), e.position) < 1) {
 				
 			}
 		}
