@@ -26,7 +26,7 @@ public class Entity extends Movable {
 	public ArrayList<String> types;
 	public ArrayList<String> targets;
 	public ArrayList<String> regions;
-	public Status status;
+	public String status;
 
 	public int maxHealth;
 	public int curHealth;

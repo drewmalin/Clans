@@ -14,7 +14,7 @@ public class DeadState extends State {
 		e.underAttack = false;
 		e.types.clear();
 		e.types.add(Type.neutral);
-		e.status.equals(Status.dead);
+		e.status = Status.dead;
 		e.rotation[0] += 180;
 		e.position.y += 2;
 	}

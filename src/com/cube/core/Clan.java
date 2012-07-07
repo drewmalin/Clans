@@ -136,4 +136,10 @@ public class Clan {
 			clanStockpile.removeItems(i, buildingToBeBuilt.itemPrereqs.get(i));
 		}
 	}
+
+	public void setPosition(float[] posArr) {
+		position.x = posArr[0];
+		position.y = posArr[1];
+		position.z = posArr[2];
+	}
 }

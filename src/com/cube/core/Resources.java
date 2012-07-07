@@ -117,6 +117,7 @@ public class Resources {
 				}
 			}
 			
+			//TODO: this needs to be dynamic
 			entities.add(entity);
 		}
 	}
@@ -204,6 +205,49 @@ public class Resources {
 	
 	public static void loadSavedGame(String file) {
 		XMLParser savedGame = new XMLParser(file);
+		
+		for (Node gameEl : savedGame.root.children) {
+			if (gameEl.name.equals("map")) {
+				for (Node mapEl : gameEl.children) {
+					if (mapEl.name.equals("file"))
+						map.file = mapEl.readString();
+					else if (mapEl.name.equals("scale"))
+						map.scale = mapEl.readFloat();
+					else if (mapEl.name.equals("colorID"))
+						map.colorID = mapEl.readIntArray();
+				}
+				map.initialize();
+			}
+			else if (gameEl.name.equals("camera"))
+				for (Node camEl : gameEl.children) {
+					if (camEl.name.equals("thetaX"))
+						Graphics.camera.setThetaX(camEl.readFloat());
+					else if (camEl.name.equals("thetaY"))
+						Graphics.camera.setThetaY(camEl.readFloat());
+				}
+			else if (gameEl.name.equals("clan")) {
+				Game.playerClan = new Clan();
+				for (Node clanEl : gameEl.children) {
+					if (clanEl.name.equals("meat"))
+						Game.playerClan.clanStockpile.addItems(itemLibrary.get("MEAT"), clanEl.readInt());
+					else if (clanEl.name.equals("berry"))
+						Game.playerClan.clanStockpile.addItems(itemLibrary.get("BERRY"), clanEl.readInt());
+					else if (clanEl.name.equals("wood"))
+						Game.playerClan.clanStockpile.addItems(itemLibrary.get("WOOD"), clanEl.readInt());
+					else if (clanEl.name.equals("farmer"))
+						Game.playerClan.farmerCount = clanEl.readInt();
+					else if (clanEl.name.equals("hunter"))
+						Game.playerClan.hunterCount = clanEl.readInt();
+					else if (clanEl.name.equals("warrior"))
+						Game.playerClan.warriorCount = clanEl.readInt();
+					else if (clanEl.name.equals("builder"))
+						Game.playerClan.builderCount = clanEl.readInt();
+					else if (clanEl.name.equals("position"))
+						Game.playerClan.setPosition(clanEl.readFloatArray());
+				}
+				clans.add(Game.playerClan);
+			}
+		}
 	}
 	public static void loadLevel(String file) {
 		

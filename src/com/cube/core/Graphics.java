@@ -37,7 +37,7 @@ public class Graphics {
 		createDisplay();
 		setupLighting();
 		setupBlend();
-		setupShaderManager();
+		//setupShaderManager();
 
 		FileLogger.logger.log(Level.INFO, "Graphics initialized");
 	}

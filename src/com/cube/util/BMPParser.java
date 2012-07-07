@@ -7,28 +7,36 @@
  *
  */
 package com.cube.util;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-
+import java.io.InputStream;
 
 public class BMPParser {
 	
-	private RandomAccessFile raf;
+	private InputStream is;
+	private ByteArrayOutputStream output;
+	
 	public int pixels[][][];
 	public int width;
 	public int height;
 	
 	public BMPParser(String filename) throws IOException {
 		try {
-			raf = new RandomAccessFile(filename, "r");
-			pixels = parse(raf);
+			is = this.getClass().getResourceAsStream(filename);
+			output = new ByteArrayOutputStream();
+			 
+	        for (int read = is.read(); read >= 0; read = is.read())
+		        output.write(read);
+			
+			pixels = parse(output);
 			
 		} catch (Exception e) {
 			System.err.println("Error loading map: " + e.getMessage());
 			e.printStackTrace();
 		}
 		finally {
-			raf.close();
+			is.close();
+			output.close();
 		}
 	}
 	
@@ -43,36 +51,38 @@ public class BMPParser {
 		}
 	}
 	
-	public int[][][] parse(RandomAccessFile raf) throws IOException {
-
-		byte cbuf[] = new byte[4];
+	public int[][][] parse(ByteArrayOutputStream raf) throws IOException {
+		
+		byte buffer[] = raf.toByteArray();
+		
 		int filesize, pixelAddr, header, junk, depth, compression;
 		
-		cbuf[0] = raf.readByte(); //Read the first two characters. If they are 'B' and 'M', then this is a valid BMP
-		cbuf[1] = raf.readByte();
-		if (cbuf[0] == 'B' && cbuf[1] == 'M') {
+		int counter = 0;
+
+		if (buffer[0] == 'B' && buffer[1] == 'M') {
 			
-			filesize = 	readInt(raf, 4); 	//Next 4 bytes: filesize
-			junk = 		readInt(raf, 4);	//Next 4 bytes: junk
-			pixelAddr = readInt(raf, 4);	//Next 4 bytes: pixel data start address
-			header = 	readInt(raf, 4); 	//Next 4 bytes: header (width/height/compression data)
+			filesize 	= readInt(buffer, 2, 4);
+			junk 		= readInt(buffer, 6, 4);
+			pixelAddr 	= readInt(buffer, 10, 4);
+			header 		= readInt(buffer, 14, 4);	
 			
 			if (header != 40) {
 				System.out.println("Error: Incompatible bitmap image given.");
 				return null;
 			}
-			
-			width = 	readInt(raf, 4); 	//Next 4 bytes: image width
-			height = 	readInt(raf, 4);	//Next 4 bytes: image height
-			junk = 		readInt(raf, 2);	//Next 2 bytes: junk
-			depth = 	readInt(raf, 4);	//Next 4 bytes: color depth;
 
+			width 	= readInt(buffer, 18, 4);
+			height 	= readInt(buffer, 22, 4);
+			junk	= readInt(buffer, 26, 2);
+			depth 	= readInt(buffer, 28, 4);
+			
+			
 			if (depth != 24) {
 				System.out.println("Error: Image depth is not 24.");
 				return null;
 			}
-			
-			compression = readInt(raf, 4);	//Next 4 bytes: compression
+
+			compression = readInt(buffer, 32, 4);
 			
 			if (compression != 0) {
 				System.out.println("Error: Image is compressed.");
@@ -82,13 +92,16 @@ public class BMPParser {
 			//--------------- Image parsing -----------------------//
 			
 			// pixels read from left to right, bottom to top
+			
 			int pixels[][][] = new int[width][height][3];
-			raf.seek((long)pixelAddr);
+
+			counter = pixelAddr;
 
 			for (int j = 0; j < height; j++) {
 				for (int i = width - 1; i >= 0; i--) {
 					for (int color = 0; color < 3; color++) {
-						pixels[i][j][color] = readInt(raf, 1);
+						pixels[i][j][color] = readInt(buffer, counter++, 1);
+
 					}
 				}
 			}
@@ -102,14 +115,17 @@ public class BMPParser {
 		}
 	}
 
-	public int readInt(RandomAccessFile raf, int num) throws IOException {
+	public int readInt(byte[] buf, int startIdx, int count) {
 		byte cbuf[] = new byte[4];
-		for (int i = 0; i < num; i++) {
-			cbuf[i] = raf.readByte();
+		
+		for (int i = 0; i < count; i++) {
+			
+			cbuf[i] = buf[startIdx + i];
 		}
 		
-		return binToInt(cbuf, num);
+		return binToInt(cbuf, count);
 	}
+
 	private int binToInt(byte[] cbuf, int size) {
 		int intVal = 0;
 		
@@ -134,7 +150,7 @@ public class BMPParser {
 			intVal = (int) (cbuf[0]) & 0xff;
 			break;
 		}
-
+		
 		return intVal;
 
 	}

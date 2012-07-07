@@ -40,12 +40,17 @@ public class Engine {
 		Resources.loadBuildingLib("/res/lib/BuildingLib.xml");
 		Resources.loadEntityLib("/res/lib/EntityLib.xml");
 		Resources.loadShaderLib("/res/lib/ShaderLib.xml");
-		Resources.loadSavedGame("/res/lvl/level1.xml");
 		
 		Menu.loadMenu("/res/menu/start.xml");
 		Menu.loadMenu("/res/menu/options.xml");
-		Menu.windows.get("start").buttons.get("go").setClickListener(new ClickListener() {
+		Menu.windows.get("start").buttons.get("newgame").setClickListener(new ClickListener() {
 			public void onClick() {
+				System.out.println("NEW GAME!");
+			}
+		});
+		Menu.windows.get("start").buttons.get("continue").setClickListener(new ClickListener() {
+			public void onClick() {
+				Resources.loadSavedGame("/res/lvl/level1.xml");
 				Menu.popMenuStack();
 			}
 		});
@@ -59,6 +64,7 @@ public class Engine {
 				System.exit(0);
 			}
 		});
+		
 		Menu.windows.get("options").buttons.get("back").setClickListener(new ClickListener() {
 			public void onClick() {
 				Menu.popMenuStack();

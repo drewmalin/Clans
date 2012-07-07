@@ -162,10 +162,11 @@ public class Input {
 			if (Keyboard.getEventKeyState()) {
 				switch (Keyboard.getEventKey()) {
 					case Keyboard.KEY_ESCAPE:
-						Game.buildingToBeBuilt = null;
+						//Game.buildingToBeBuilt = null;
 						//Menu.windows.get(Menu.CONSOLE).closeWindow();
 						//Menu.windows.get(Menu.BUILDING).closeWindow();
 						//Menu.pause();
+						System.exit(0);
 						break;
 					case Keyboard.KEY_0:
 						//Menu.windows.get(Menu.CONSOLE).show = !Menu.windows.get(Menu.CONSOLE).show;
