@@ -28,20 +28,20 @@ public class Model extends Drawable {
 	@Override
 	public void draw() {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
+		//Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
 		Resources.textureLibrary.get("default").bind();
 		drawOBJ();
-		Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
+		//Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
 	
 	public void draw(Texture tex)
 	{
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
+		//Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
 		tex.bind();
 		drawOBJ();
-		Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
+		//Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
 }

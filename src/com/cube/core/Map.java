@@ -62,9 +62,9 @@ public class Map extends Drawable {
 	public void draw() {
 		//drawGrid();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
+		//Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
 		drawMap();
-		Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
+		//Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
 	
