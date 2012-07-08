@@ -50,10 +50,12 @@ public class Graphics {
 	private static void setupCamera() {
 		camera = new Camera();
 		camera.setUp(0f, 1f, 0f);
+		/*
 		camera.setTarget(0f, 0f, 0f); 
 		camera.setRadius(30f);
 		camera.setThetaX(46.9f);
 		camera.setThetaY(-22.3f);
+		*/
 	}
 	
 	private static void setupLighting() {

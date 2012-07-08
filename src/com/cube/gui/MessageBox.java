@@ -6,14 +6,9 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 
-public class MessageBox {
+public class MessageBox extends Canvas {
 
 	//Coordinates, usually relative to top-left of the enclosing menu box
-	public int x;
-	public int y;
-	public int width;
-	public int height;
-	public boolean show = true;
 	
 	//Font attributes
 	public String fontName;
@@ -28,6 +23,7 @@ public class MessageBox {
 	public boolean skipProcessing = false;
 	
 	public MessageBox() {
+		message = "";
 		color = Color.WHITE;
 	}
 
@@ -137,32 +133,22 @@ public class MessageBox {
 		}
 	}
 	
-	public void prettyPrint(boolean background) {
+	public void draw() {
+		super.draw();
+		prettyPrint();
+	}
+	
+	public void prettyPrint() {
+	
+		GL11.glPushMatrix();
+		GL11.glLoadIdentity();
+	
+		if (!skipProcessing) processMessage();
 		
-		if (show) {
-			GL11.glPushMatrix();
-			GL11.glLoadIdentity();
+		GL11.glEnable(GL11.GL_TEXTURE_2D);	
+		print();
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
-			if (!skipProcessing) processMessage();
-			
-			if (background) {
-			
-				int charPixelWidth = 6; //temp arbitrary number
-				
-				GL11.glBegin(GL11.GL_QUADS);
-					GL11.glColor4f(.8f, .8f, .8f, 1f);
-					GL11.glVertex2f(x, y);
-					GL11.glVertex2f(x, y + (lineCount * lineHeight));
-					GL11.glVertex2f(x + (lineWidth * charPixelWidth), y + (lineCount * lineHeight));		
-					GL11.glVertex2f(x + (lineWidth * charPixelWidth), y);
-				GL11.glEnd();
-			}
-			
-			GL11.glEnable(GL11.GL_TEXTURE_2D);	
-			print();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			
-			GL11.glPopMatrix();
-		}
+		GL11.glPopMatrix();
 	}
 }

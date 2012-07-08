@@ -52,18 +52,6 @@ public class Input {
 	 * poll for interaction with the main game.
 	 */
 	public static void poll() {
-		/*
-		for (Window w : Menu.windows) {
-			
-			if (w.stealContext) {
-				w.poll();
-				return;
-			}
-			else if (w.show) {
-				w.checkGuiClick();
-			}
-		}
-	*/
 		pollKeyboard();
 		pollMouse();
 	}
@@ -162,11 +150,7 @@ public class Input {
 			if (Keyboard.getEventKeyState()) {
 				switch (Keyboard.getEventKey()) {
 					case Keyboard.KEY_ESCAPE:
-						//Game.buildingToBeBuilt = null;
-						//Menu.windows.get(Menu.CONSOLE).closeWindow();
-						//Menu.windows.get(Menu.BUILDING).closeWindow();
-						//Menu.pause();
-						System.exit(0);
+						Menu.pushMenuStack("pause");
 						break;
 					case Keyboard.KEY_0:
 						//Menu.windows.get(Menu.CONSOLE).show = !Menu.windows.get(Menu.CONSOLE).show;

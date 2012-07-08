@@ -1,13 +1,10 @@
 package com.cube.gui;
 
-import java.awt.Color;
 import java.util.ArrayList;
-
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import com.cube.core.Graphics;
+import com.cube.core.Engine;
 import com.cube.core.Resources;
-import com.cube.util.ShaderManager;
 
 
 public class Canvas {
@@ -15,36 +12,33 @@ public class Canvas {
 	public 	int 					y;
 	public 	int						width;
 	public 	int						height;
+	public 	int						rotation;
 	public 	boolean 				show;
 	public 	float[]					color;
+	public 	float[] 				hoverColor;
+	public 	float[]					baseColor;
+	
 	public 	ArrayList<MessageBox> 	messageBoxes;
 	public	boolean					active;
-	public	int						id;
 	public 	String 					backgroundImageFile;
-	
-	public Canvas(int _x, int _y, int w, int h, boolean _show) {
-		x = _x;
-		y = _y;
-		width = w;
-		height = h;
-		show = _show;
-		color = new float[]{0, 0, 0, 0};
-		messageBoxes = new ArrayList<MessageBox>();
-		active = false;
-	}
+	MessageBox hoverMessageBox;
+	public boolean hovering = false;
+	public boolean hoverColorRequested = false;
+	public boolean animated = false;
+	public float rotateSpeed = 0;
 	
 	public Canvas() {
-		color = new float[]{0, 0, 0, 0};
+		color 		= new float[]{0, 0, 0, 0};
+		hoverColor 	= new float[]{0, 0, 0, 0};
+		baseColor 	= new float[]{0, 0, 0, 0};
+		hovering = false;
+		rotation = 0;
 		messageBoxes = new ArrayList<MessageBox>();
 	}
 	
-	public void setMessage(int idx, String str) {
-		messageBoxes.get(idx).setMessage(str);
-	}
-
 	public void drawMessages() {
 		for (MessageBox mb : messageBoxes) {
-			mb.prettyPrint(false);
+			mb.draw();
 		}
 	}
 	
@@ -61,21 +55,27 @@ public class Canvas {
 	
 	public void drawBackground() {
 		
+		if (animated) rotation += rotateSpeed;
+		
 		if (backgroundImageFile != null) {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			Resources.textureLibrary.get(backgroundImageFile).bind();
 			GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 			GL11.glColor4f(1f, 1f, 1f, 1f);
+			GL11.glTranslatef(x, y, 0);
+			GL11.glTranslatef(width/2, height/2, 0);
+			GL11.glRotatef(rotation, 0, 0, 1);
+			GL11.glTranslatef(-width/2, -height/2, 0);
 			GL11.glBegin(GL11.GL_QUADS);
 				GL11.glTexCoord2f(0, 0);
-				GL11.glVertex2f(x, y);
+				GL11.glVertex2f(0, 0);
 				GL11.glTexCoord2f(0, 1);
-				GL11.glVertex2f(x, y + height);
+				GL11.glVertex2f(0, height);
 				GL11.glTexCoord2f(1, 1);
-				GL11.glVertex2f(x + width, y + height);
+				GL11.glVertex2f(width, height);
 				GL11.glTexCoord2f(1, 0);
-				GL11.glVertex2f(x + width, y);
+				GL11.glVertex2f(width, 0);
 			GL11.glEnd();
 			GL11.glPopMatrix();
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -84,32 +84,64 @@ public class Canvas {
 			GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 			GL11.glColor4f(color[0], color[1], color[2], color[3]);
+			GL11.glTranslatef(x, y, 0);
 			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glVertex2f(x, y);
-				GL11.glVertex2f(x, y + height);
-				GL11.glVertex2f(x + width, y + height);		
-				GL11.glVertex2f(x + width, y);
+				GL11.glVertex2f(0, 0);
+				GL11.glVertex2f(0, height);
+				GL11.glVertex2f(width, height);		
+				GL11.glVertex2f(width, 0);
 			GL11.glEnd();
 			GL11.glPopMatrix();
 		}
 	}
-	public void draw() {
-		if (show) {
-			drawBackground();
-			drawMessages();
+	
+	public void checkHover(int mouseX, int mouseY) {
+
+		if ((mouseX >= x && mouseX <= (x + width)) &&
+			(mouseY >= y && mouseY <= (y + height))) {
+			
+			if (hoverColorRequested) {
+				color[0] = hoverColor[0];
+				color[1] = hoverColor[1];
+				color[2] = hoverColor[2];
+			}
+			
+			hovering = true;
+		}
+
+		else {
+			color[0] = baseColor[0];
+			color[1] = baseColor[1];
+			color[2] = baseColor[2];
+			
+			hovering = false;
 		}
 	}
-	public void setColor(float r, float g, float b, float a) {
-		color[0] = r;
-		color[1] = g;
-		color[2] = b;
-		color[3] = a;
+	
+	public void draw() {
+		drawBackground();
+		if (hovering && hoverMessageBox!= null && !hoverMessageBox.message.isEmpty()) {
+			hoverMessageBox.x = Mouse.getX() + 20;
+			hoverMessageBox.y = Engine.HEIGHT - Mouse.getY() + 20;
+			hoverMessageBox.draw();
+		}
 	}
 	
 	public void setColor(float[] colorArr) {	
-		color[0] = colorArr[0];
-		color[1] = colorArr[1];
-		color[2] = colorArr[2];
-		color[3] = colorArr[3];
+		color[0] = baseColor[0] = colorArr[0];
+		color[1] = baseColor[1] = colorArr[1];
+		color[2] = baseColor[2] = colorArr[2];
+		color[3] = baseColor[3] = colorArr[3];
+		
+	}
+	
+	public void setHovorColor(float[] colorArr) {
+		
+		hoverColorRequested = true;
+		
+		hoverColor[0] = colorArr[0];
+		hoverColor[1] = colorArr[1];
+		hoverColor[2] = colorArr[2];
+		hoverColor[3] = colorArr[3];
 	}
 }

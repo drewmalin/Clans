@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.cube.core.Engine;
 import com.cube.core.Graphics;
+import com.cube.core.Resources;
 import com.cube.gui.MessageBox;
 import com.cube.util.FileLogger;
 import com.cube.util.Node;
@@ -83,8 +84,12 @@ public class Menu {
 							button.height = buttonEl.readInt();
 						else if (buttonEl.name.equals("messageBox"))
 							loadMessageBox(buttonEl, button);
-						else if (buttonEl.name.equals("hoverMessageBox"))
-							loadHoverMessageBox(buttonEl, button);
+						else if (buttonEl.name.equals("onHover"))
+							loadHoverBehavior(buttonEl, button);
+						else if (buttonEl.name.equals("backgroundImage"))
+							button.setBackgroundImage(buttonEl.readString());
+						else if (buttonEl.name.equals("backgroundColor"))
+							button.setColor(buttonEl.readFloatArray());
 					}
 					window.buttons.put(button.name, button);
 				}
@@ -112,30 +117,44 @@ public class Menu {
 				mb.setFontColor(mbEl.readString());
 			else if (mbEl.name.equals("message"))
 				mb.message = mbEl.readString();
+			else if (mbEl.name.equals("backgroundImage"))
+				mb.setBackgroundImage(mbEl.readString());
+			else if (mbEl.name.equals("backgroundColor"))
+				mb.setColor(mbEl.readFloatArray());
 		}
 		mb.load();
 		canvas.messageBoxes.add(mb);
 	}
 	
-	private static void loadHoverMessageBox(Node xmlContext, Button button) {
-		MessageBox mb = new MessageBox();
+	private static void loadHoverBehavior(Node xmlContext, Button button) {
 		
-		for (Node mbEl : xmlContext.children) {
-			if (mbEl.name.equals("width"))
-				mb.width = mbEl.readInt();
-			else if (mbEl.name.equals("height"))
-				mb.height = mbEl.readInt();
-			else if (mbEl.name.equals("fontName"))
-				mb.fontName = mbEl.readString();
-			else if (mbEl.name.equals("fontSize"))
-				mb.fontSize = mbEl.readInt();
-			else if (mbEl.name.equals("fontColor"))
-				mb.setFontColor(mbEl.readString());
-			else if (mbEl.name.equals("message"))
-				mb.message = mbEl.readString();
+		for (Node hoverEl : xmlContext.children) {
+			if (hoverEl.name.equals("backgroundColor"))
+				button.setHovorColor(hoverEl.readFloatArray());
+			else if (hoverEl.name.equals("messageBox")) {
+				MessageBox mb = new MessageBox();
+				for (Node mbEl : hoverEl.children) {
+					if (mbEl.name.equals("width"))
+						mb.width = mbEl.readInt();
+					else if (mbEl.name.equals("height"))
+						mb.height = mbEl.readInt();
+					else if (mbEl.name.equals("fontName"))
+						mb.fontName = mbEl.readString();
+					else if (mbEl.name.equals("fontSize"))
+						mb.fontSize = mbEl.readInt();
+					else if (mbEl.name.equals("fontColor"))
+						mb.setFontColor(mbEl.readString());
+					else if (mbEl.name.equals("message"))
+						mb.message = mbEl.readString();
+					else if (mbEl.name.equals("backgroundImage"))
+						mb.setBackgroundImage(mbEl.readString());
+					else if (mbEl.name.equals("backgroundColor"))
+						mb.setColor(mbEl.readFloatArray());
+				}
+				mb.load();
+				button.hoverMessageBox = mb;
+			}
 		}
-	
-		button.hoverMessageBox = mb;
 	}
 	
 	/** Update the window system-- draw the windows in the stack, poll for input
@@ -243,5 +262,76 @@ public class Menu {
 		}
 		w.show = false;
 		w.active = false;
+	}
+
+	private static void animate(Canvas c, float speed) {
+		c.animated = true;
+		c.rotateSpeed = speed;
+	}
+	
+	/** Giant spot designated as a code dump. All click listeners for menus need to be (or at least, probably
+	 * should be) created in code rather than using another document parser, thus, put those snazzy listeners
+	 * here!
+	 * 
+	 */
+	public static void createClickListeners() {
+		//---------------------------   Start menu   ---------------------------//
+		Menu.windows.get("start").buttons.get("newgame").setClickListener(new ClickListener() {
+			public void onClick() {
+				Menu.pushMenuStack("load");
+				Menu.animate(Menu.windows.get("load").buttons.get("icon"), 2.5f);
+
+				new Thread(new Runnable() {
+				    public void run() {
+						//Create new game... replace the try/catch block with the sleep
+				    	//command with the routine needed to create and start a new game.
+				    	//This will be done in its own thread so that the loading screen
+				    	//continues to animate the loading icon.
+				        try {
+							Thread.sleep(5000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						Menu.popMenuStack(); //<--Pop loading screen
+						//Menu.popMenuStack(); //<--Pop start menu
+				    }
+				}).start();
+			}
+		});
+		Menu.windows.get("start").buttons.get("continue").setClickListener(new ClickListener() {
+			public void onClick() {
+				Resources.loadSavedGame("/res/lvl/level1.xml");
+				Menu.popMenuStack();
+			}
+		});
+		Menu.windows.get("start").buttons.get("options").setClickListener(new ClickListener() {
+			public void onClick() {
+				Menu.pushMenuStack("options");
+			}
+		});
+		Menu.windows.get("start").buttons.get("exit").setClickListener(new ClickListener() {
+			public void onClick() {
+				System.exit(0);
+			}
+		});
+		
+		//---------------------------   Options menu   ---------------------------//
+		Menu.windows.get("options").buttons.get("back").setClickListener(new ClickListener() {
+			public void onClick() {
+				Menu.popMenuStack();
+			}
+		});
+		
+		//---------------------------   Pause menu   ---------------------------//
+		Menu.windows.get("pause").buttons.get("resume").setClickListener(new ClickListener() {
+			public void onClick() {
+				Menu.popMenuStack();
+			}
+		});
+		Menu.windows.get("pause").buttons.get("quit").setClickListener(new ClickListener() {
+			public void onClick() {
+				System.exit(0);
+			}
+		});
 	}
 }

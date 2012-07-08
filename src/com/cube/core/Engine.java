@@ -43,33 +43,10 @@ public class Engine {
 		
 		Menu.loadMenu("/res/menu/start.xml");
 		Menu.loadMenu("/res/menu/options.xml");
-		Menu.windows.get("start").buttons.get("newgame").setClickListener(new ClickListener() {
-			public void onClick() {
-				System.out.println("NEW GAME!");
-			}
-		});
-		Menu.windows.get("start").buttons.get("continue").setClickListener(new ClickListener() {
-			public void onClick() {
-				Resources.loadSavedGame("/res/lvl/level1.xml");
-				Menu.popMenuStack();
-			}
-		});
-		Menu.windows.get("start").buttons.get("options").setClickListener(new ClickListener() {
-			public void onClick() {
-				Menu.pushMenuStack("options");
-			}
-		});
-		Menu.windows.get("start").buttons.get("exit").setClickListener(new ClickListener() {
-			public void onClick() {
-				System.exit(0);
-			}
-		});
-		
-		Menu.windows.get("options").buttons.get("back").setClickListener(new ClickListener() {
-			public void onClick() {
-				Menu.popMenuStack();
-			}
-		});
+		Menu.loadMenu("/res/menu/pause.xml");
+		Menu.loadMenu("/res/menu/load.xml");
+		Menu.createClickListeners();
+
 		Menu.pushMenuStack("start");
 					
 		try {

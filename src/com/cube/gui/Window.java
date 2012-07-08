@@ -20,7 +20,8 @@ public class Window extends Canvas {
 	}
 
 	public void draw() {
-		super.draw(); 	//Draw this window's canvas, includes all message boxes
+		super.draw();
+		drawMessages();
 		drawButtons();
 	}
 
@@ -28,21 +29,14 @@ public class Window extends Canvas {
 		for (String b : buttons.keySet()) {
 			buttons.get(b).draw();
 		}
-		for (String b : buttons.keySet()) {
-			if (buttons.get(b).hoverMessageBox != null) {
-				if (buttons.get(b).hovering)
-					buttons.get(b).openHoverMessageBox();
-				else
-					buttons.get(b).closeHoverMessageBox();
-			}
-		}
-	}
-	
-	public void closeWindow() {
-		for (MessageBox mb : messageBoxes) {
-			mb.show = false;
-		}
-		show = false;
+//		for (String b : buttons.keySet()) {
+//			if (buttons.get(b).hoverMessageBox != null) {
+//				if (buttons.get(b).hovering)
+//					buttons.get(b).openHoverMessageBox();
+//				else
+//					buttons.get(b).closeHoverMessageBox();
+//			}
+//		}
 	}
 	
 	public void updateLoadingScreen(String message, float percentage) {
@@ -86,6 +80,10 @@ public class Window extends Canvas {
 		for (String b : buttons.keySet()) {
 			buttons.get(b).checkHover(Mouse.getX(), Engine.HEIGHT - Mouse.getY());
 		}
+		for (MessageBox mb : messageBoxes) {
+			mb.checkHover(Mouse.getX(), Engine.HEIGHT - Mouse.getY());
+		}
+		
 		while (Mouse.next()) {
 			if (Mouse.getEventButtonState()) {
 				switch (Mouse.getEventButton()) {

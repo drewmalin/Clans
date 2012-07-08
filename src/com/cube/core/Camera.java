@@ -157,6 +157,11 @@ public class Camera {
 		position.z = (float)z;
 	}
 	
+	public void setPosition(float[] posArr) {
+		position.x = posArr[0];
+		position.y = posArr[1];
+		position.z = posArr[2];
+	}
 	/*
 	 * Sets the initial target of the camera (the point in world coordinates towards which the camera will be directed).
 	 * For use in camera initialization.
@@ -166,7 +171,11 @@ public class Camera {
 		target.y = y;
 		target.z = z;
 	}
-
+	public void setTarget(float[] targetArr) {
+		target.x = targetArr[0];
+		target.y = targetArr[1];
+		target.z = targetArr[2];
+	}
 	/*
 	 * Sets the vector that will be used to signify 'up' for the camera. This has the effect of setting the orientation
 	 * of the camera. For use primarily in camera initialization.

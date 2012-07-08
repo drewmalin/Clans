@@ -294,6 +294,11 @@ public class Entity extends Movable {
 		popDensity = density;
 	}
 
+	/** Assigns a texture to this entity. Additionally, if the texture file has not yet been seen by
+	 * the engine, it will be loaded and persisted.
+	 * 
+	 * @param textureFile
+	 */
 	public void setTexture(String textureFile) {
 		texture = textureFile.substring(textureFile.lastIndexOf("/")+1, textureFile.indexOf("."));
 		if (Resources.textureLibrary.get(texture) == null) {
@@ -306,6 +311,11 @@ public class Entity extends Movable {
 		}
 	}
 
+	/**  Assigns a model to this entity. Additionally, if the model file has not yet been seen by
+	 * the engine, it will be loaded and persisted.
+	 * 
+	 * @param modelFile
+	 */
 	public void setModel(String modelFile) {
 		model = modelFile.substring(modelFile.lastIndexOf("/")+1, modelFile.indexOf("."));
 		if (Resources.modelLibrary.get(model) == null) {
