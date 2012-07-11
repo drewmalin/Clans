@@ -58,7 +58,7 @@ public class Unit extends Entity {
 				GL11.glColor3f(color[0], color[1], color[2]);
 				
 				//Bind shaders
-				Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
+//				Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
 				if(texture == null) {
 					Resources.modelLibrary.get(model).draw();
 				}else{
@@ -66,7 +66,7 @@ public class Unit extends Entity {
 				}
 				
 				//Unbind shaders
-				Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
+//				Graphics.shaderManager.unbindShader(ShaderManager.HEMISPHERE);
 				
 				inventory.draw(this);
 				

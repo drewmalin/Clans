@@ -88,7 +88,8 @@ public class Graphics {
 	}
 
 	private static void setupShaderManager() {
-		shaderManager = new ShaderManager();
+		//TODO: put correct filename here!!!! vvvvvvvvvvvvv
+		shaderManager = new ShaderManager("/res/shaderconfig.xml");
 		shaderManager.initialize();
 	}
 

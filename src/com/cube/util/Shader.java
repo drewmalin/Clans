@@ -19,24 +19,26 @@ public class Shader {
 	private String vertexShaderSourceFile;
 	private String fragmentShaderSourceFile;
 	//Strings to hold the shader code that will be compiled
-	private StringBuilder vertexShaderSource;
-	private StringBuilder fragmentShaderSource;
+	private String vertexShaderSource;
+	private String fragmentShaderSource;
 		
 	private Shader() {		
 		//Initialize the shader program and vertex and fragment shaders
 		shaderProgram = glCreateProgram();
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		/* REMOVED FOR REFACTOR TO RESOURCE BUILDERS
 		//Initialize the string builders that will hold the shader code
 		vertexShaderSource = new StringBuilder();
 		fragmentShaderSource = new StringBuilder();
+		*/
 	}
 	
-	public Shader(String vertexShaderFile, String fragmentShaderFile) {
+	public Shader(String vertexShaderSource, String fragmentShaderSource) {
 		this();
 		//Set the source files to the provided files
-		setVertexShaderSourceFile(vertexShaderFile);
-		setFragmentShaderSourceFile(fragmentShaderFile);
+		setVertexShaderSource(vertexShaderSource);
+		setFragmentShaderSource(fragmentShaderSource);
 		//Load the shader source code
 		loadShaders();
 		//Link the shaders
@@ -69,6 +71,7 @@ public class Shader {
 	}
 	
 	public void loadVertexShader() {
+		/*
 		try {
 			//Prepare the file for reading
 			BufferedReader reader = new BufferedReader(new FileReader(ShaderManager.BASE_DIR + vertexShaderSourceFile));
@@ -80,6 +83,7 @@ public class Shader {
 		} catch (IOException e) {
 	    	FileLogger.logger.log(Level.SEVERE, "Vertex shader failed to load properly!");
 		}
+		*/
 		//Attach the shader source to the shader
         glShaderSource(vertexShader, vertexShaderSource);
         //Compile the shader
@@ -91,6 +95,7 @@ public class Shader {
 	}
 	
 	public void loadFragmentShader() {
+		/*
 		try {
 			//Prepare the file for reading
 			BufferedReader reader = new BufferedReader(new FileReader(ShaderManager.BASE_DIR + fragmentShaderSourceFile));
@@ -102,6 +107,7 @@ public class Shader {
 		} catch (IOException e) {
 	    	FileLogger.logger.log(Level.SEVERE, "Fragment shader failed to load properly!");
 		}
+		*/
 		//Attach the shader source to the shader
         glShaderSource(fragmentShader, fragmentShaderSource);
         //Compile the shader
@@ -248,23 +254,23 @@ public class Shader {
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 	//Getters and Setters, pretty self explanatory
-	public String getVertexShaderSourceFile() {
-		return vertexShaderSourceFile;
-	}
-	
 	public int getShaderProgram() {
 		return shaderProgram;
 	}
 	
-	public void setVertexShaderSourceFile(String source) {
-		vertexShaderSourceFile = source;
+	public String getVertexShaderSource() {
+		return vertexShaderSource;
 	}
 	
-	public String getFragmentShaderSourceFile() {
-		return fragmentShaderSourceFile;
+	public void setVertexShaderSource(String source) {
+		vertexShaderSource = source;
 	}
 	
-	public void setFragmentShaderSourceFile(String source) {
-		fragmentShaderSourceFile = source;
+	public String getFragmentShaderSource() {
+		return fragmentShaderSource;
+	}
+	
+	public void setFragmentShaderSource(String source) {
+		fragmentShaderSource = source;
 	}
 }
