@@ -24,8 +24,8 @@ public class ShaderManager {
 	public ShaderManager(String filename) {
 		//Initialize the hashmap
 		shaderMap = new HashMap<String, Shader>();
-		//Set up the buffered reader to read the XML file
-		br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)));
+		//Load the shaders
+		loadShaders(filename);
 	}
 	
 //PUBLIC METHODS:::
@@ -59,11 +59,45 @@ public class ShaderManager {
     	FileLogger.logger.log(Level.INFO, "Shaders initialized");
 	}
 	
-	public String readShaderSource(String res) {
+	public void loadShaders(String filename) {
+		XMLParser xp = new XMLParser(filename);
+		String shaderID = new String();
+		String vertexShaderFile = new String();
+		String fragmentShaderFile = new String();
+		
+		//Loop through each <shader> tag
+		for(Node shaderEl : xp.root.children) {
+			//Reset the variables
+			shaderID = new String();
+			vertexShaderFile = new String();
+			fragmentShaderFile = new String();
+			
+			//Loop through each data tag within
+			for(Node dataEl : shaderEl.children) {
+				if(dataEl.name.toLowerCase().equals("id")) {
+					shaderID = dataEl.data;
+				} else if(dataEl.name.toLowerCase().equals("vertexshader")) {
+					vertexShaderFile = dataEl.data;
+				} else if(dataEl.name.toLowerCase().equals("fragmentshader")) {
+					fragmentShaderFile = dataEl.data;
+				}
+			}//end data loop
+			//Make sure all of the data has a value
+			if( (!shaderID.equals("")) && (!vertexShaderFile.equals("")) && (!fragmentShaderFile.equals("")) ) {
+				//Create a new shader from the data
+				Shader s = new Shader(vertexShaderFile, fragmentShaderFile);
+				//Add the shader to the map
+				addShader(shaderID, s);
+			}
+		}//end <shader> loop
+		
+	}
+	
+	public String readShaderSource(String filename) {
 		StringBuilder source = new StringBuilder();
 		try {
 			//Prepare the file for reading
-			br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(res)));
+			br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)));
             String line;
             //Read the file, line by line
             while ((line = br.readLine()) != null) {

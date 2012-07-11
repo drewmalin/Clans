@@ -57,6 +57,8 @@ public class Unit extends Entity {
 			else {
 				GL11.glColor3f(color[0], color[1], color[2]);
 				
+				
+//TODO: CONFIGURE THE UNIT'S SHADER BINDINGS
 				//Bind shaders
 //				Graphics.shaderManager.bindShader(ShaderManager.HEMISPHERE);
 				if(texture == null) {
