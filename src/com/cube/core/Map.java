@@ -156,6 +156,11 @@ public class Map extends Drawable {
 		calculateVertexNormals();
 	}
 	
+	public String getColorIDAsString() {
+		String ret = colorID[0] + " " + colorID[1] + " " + colorID[2];
+		return ret;
+	}
+	
 	public void calculateVertexNormals() {
 
 		Vector3f north;

@@ -1,6 +1,9 @@
 package com.cube.util;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
@@ -19,7 +22,16 @@ public class XMLParser {
 	 * file path is bin/com/res/file.xml, the string should be "/com/res/file.xml")
 	 */
 	public XMLParser(String filename) {
-		br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)));
+		try {
+			FileInputStream fstream = new FileInputStream(filename);
+			DataInputStream in = new DataInputStream(fstream);
+			br = new BufferedReader(new InputStreamReader(in));
+			
+			//br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)));
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		root = new Node();
 		root.name = filename;
 		root.data = null;

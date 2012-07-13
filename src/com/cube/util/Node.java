@@ -18,6 +18,17 @@ public class Node  {
 		children = new ArrayList<Node>();
 	}
 	
+	public Node(String _name) {
+		name = _name;
+		children = new ArrayList<Node>();
+	}
+	
+	public Node(String _name, String _data) {
+		data = _data;
+		name = _name;
+		children = new ArrayList<Node>();
+	}
+	
 	/** readString()
 	 * 
 	 * @return The data corresponding to this element. If the XML element tag does not

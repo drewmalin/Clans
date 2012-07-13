@@ -34,7 +34,7 @@ public class Graphics {
 		frameCount = 0;
 		
 		setupCamera();
-		createDisplay();
+		setupDisplay();
 		setupLighting();
 		setupBlend();
 		//setupShaderManager();
@@ -92,9 +92,7 @@ public class Graphics {
 		shaderManager.initialize();
 	}
 
-	private static void createDisplay() {
-		
-		//---------- Will be moved for loading purposes later -----------------//
+	public static void createDisplay() {
 		try {
 			Display.setDisplayMode(new DisplayMode( Engine.WIDTH, Engine.HEIGHT));
 			Display.setTitle(Engine.title);
@@ -112,7 +110,11 @@ public class Graphics {
 			e.printStackTrace();
 			FileLogger.logger.log(Level.SEVERE, e.getMessage());
 		}
-		//---------------------------------------------------------------------//
+	}
+	
+	public static void setupDisplay() {
+
+		createDisplay();
 		
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();

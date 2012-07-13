@@ -36,15 +36,16 @@ public class Engine {
 		Timer.initialize();
 		Menu.initialize();
 		
-		Resources.loadItemLib("/res/lib/ItemLib.xml");
-		Resources.loadBuildingLib("/res/lib/BuildingLib.xml");
-		Resources.loadEntityLib("/res/lib/EntityLib.xml");
-		Resources.loadShaderLib("/res/lib/ShaderLib.xml");
+		Resources.loadItemLib("res/lib/ItemLib.xml");
+		Resources.loadBuildingLib("res/lib/BuildingLib.xml");
+		Resources.loadEntityLib("res/lib/EntityLib.xml");
+		Resources.loadShaderLib("res/lib/ShaderLib.xml");
+		//Resources.loadDisplaySettings("res/settings/DisplaySettings.xml");
 		
-		Menu.loadMenu("/res/menu/start.xml");
-		Menu.loadMenu("/res/menu/options.xml");
-		Menu.loadMenu("/res/menu/pause.xml");
-		Menu.loadMenu("/res/menu/load.xml");
+		Menu.loadMenu("res/menu/start.xml");
+		Menu.loadMenu("res/menu/options.xml");
+		Menu.loadMenu("res/menu/pause.xml");
+		Menu.loadMenu("res/menu/load.xml");
 		Menu.createClickListeners();
 
 		Menu.pushMenuStack("start");
