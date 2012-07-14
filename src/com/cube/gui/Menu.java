@@ -300,7 +300,7 @@ public class Menu {
 		});
 		Menu.windows.get("start").buttons.get("continue").setClickListener(new ClickListener() {
 			public void onClick() {
-				Resources.loadSavedGame("/res/lvl/level1.xml");
+				Resources.loadLatestSavedGame();
 				Menu.popMenuStack();
 			}
 		});
@@ -326,6 +326,11 @@ public class Menu {
 		Menu.windows.get("pause").buttons.get("resume").setClickListener(new ClickListener() {
 			public void onClick() {
 				Menu.popMenuStack();
+			}
+		});
+		Menu.windows.get("pause").buttons.get("save").setClickListener(new ClickListener() {
+			public void onClick() {
+				Resources.saveGame();
 			}
 		});
 		Menu.windows.get("pause").buttons.get("quit").setClickListener(new ClickListener() {

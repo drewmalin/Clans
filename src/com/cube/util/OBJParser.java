@@ -15,8 +15,6 @@ public class OBJParser {
 	public ArrayList<Vertex> vn;
 	public ArrayList<TextureVert> t;
 
-	private FileInputStream fstream;
-	private DataInputStream in;
 	private BufferedReader br;
 	
 	public ArrayList<GeometryGroup> ggs;
@@ -52,11 +50,11 @@ public class OBJParser {
 		
 		
 		try {
-			//fstream = new FileInputStream(str);
-			//in = new DataInputStream(fstream);
-			//br = new BufferedReader(new InputStreamReader(in));
+			FileInputStream fstream = new FileInputStream(str);
+			DataInputStream in = new DataInputStream(fstream);
+			br = new BufferedReader(new InputStreamReader(in));
 			
-			br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(str)));
+			//br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(str)));
 
 			parse(br);
 			//in.close();

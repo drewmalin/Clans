@@ -101,6 +101,10 @@ public class Camera {
 		thetaX = t;
 	}
 	
+	public float getThetaX() {
+		return thetaX;
+	}
+	
 	/*
 	 * ThetaY represents the camera's rotation about its local y-axis.
 	 */
@@ -108,6 +112,9 @@ public class Camera {
 		thetaY = t;
 	}
 	
+	public float getThetaY() {
+		return thetaY;
+	}
 	/*
 	 * The value of thetaX is changed slowly by the user's input. The saved value is capped at 90 (or 89.99...)
 	 * so that the camera does not flip about its y-axis at thetaX values greater than 90.
@@ -147,6 +154,9 @@ public class Camera {
 		radius = r;
 	}
 	
+	public float getRadius() {
+		return radius;
+	}
 	/*
 	 * Sets the final position of the camera in world coordinates. For use internally to the Camera class within the
 	 * updatePosition method.
@@ -175,6 +185,10 @@ public class Camera {
 		target.x = targetArr[0];
 		target.y = targetArr[1];
 		target.z = targetArr[2];
+	}
+	public String getTargetAsString() {
+		String ret = target.x + " " + target.y + " " + target.z;
+		return ret;
 	}
 	/*
 	 * Sets the vector that will be used to signify 'up' for the camera. This has the effect of setting the orientation

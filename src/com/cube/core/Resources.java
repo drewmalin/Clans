@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 
@@ -20,6 +21,7 @@ import com.cube.util.Texture;
 import com.cube.util.TextureLoader;
 import com.cube.util.GeometryGroup;
 import com.cube.util.XMLParser;
+import com.cube.util.XMLWriter;
 
 
 public class Resources {
@@ -72,8 +74,8 @@ public class Resources {
 	
 	public static void loadDefaults() {
 		try {
-			modelLibrary.put("default", new Model("/res/obj/barman.obj"));
-			textureLibrary.put("default", texLoader.getTexture("/res/img/brookstoneFTW.png"));
+			modelLibrary.put("default", new Model("res/obj/barman.obj"));
+			textureLibrary.put("default", texLoader.getTexture("res/img/brookstoneFTW.png"));
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
@@ -255,7 +257,59 @@ public class Resources {
 			}
 		}
 	}
+	
+	public static void loadDisplaySettings(String file) {
+		XMLParser displaySettings = new XMLParser(file);
+		for (Node displayEl : displaySettings.root.children) {
+			if (displayEl.name.equals("width"))
+				Engine.WIDTH = displayEl.readInt();
+			else if (displayEl.name.equals("height"))
+				Engine.HEIGHT = displayEl.readInt();
+			else if (displayEl.name.equals("vsync"))
+				Engine.vSync = displayEl.readBoolean();
+			else if (displayEl.name.equals("fullscreen"))
+				Engine.fullscreen = displayEl.readBoolean();
+			else if (displayEl.name.equals("samples"))
+				Engine.MSAA = displayEl.readInt();
+			else if (displayEl.name.equals("antialiasing"))
+				Engine.AA = displayEl.readBoolean();
+		}
+		
+		Display.destroy();
+		Graphics.setupDisplay();
+	}
+	
+	public static void loadLatestSavedGame() {
+		loadSavedGame("res/lvl/saved_game.xml");
+	}
 
+	public static void saveGame() {
+		// Setup root node and xml writer 
+		XMLWriter xmlWriter = new XMLWriter("res/lvl/saved_game.xml");
+		Node root = new Node();
+		
+		// Save camera
+		Node camNode = new Node();
+		camNode.name = "camera";
+		camNode.children.add(new Node("radius", Float.toString(Graphics.camera.getRadius())));
+		camNode.children.add(new Node("thetaX", Float.toString(Graphics.camera.getThetaX())));
+		camNode.children.add(new Node("thetaY", Float.toString(Graphics.camera.getThetaY())));
+		camNode.children.add(new Node("target", Graphics.camera.getTargetAsString()));
+		
+		// Save map
+		Node mapNode = new Node();
+		mapNode.name = "map";
+		mapNode.children.add(new Node("file", map.file));
+		mapNode.children.add(new Node("scale", Float.toString(map.scale)));
+		mapNode.children.add(new Node("colorID", map.getColorIDAsString()));
+		
+		// Write top-level nodes to root
+		root.children.add(camNode);
+		root.children.add(mapNode);
+		
+		xmlWriter.write(root);
+		xmlWriter.close();
+	}
 	/*
 	 * Generate unique color IDs for use with object selection. The color ID of {0, 0, 0} is reserved for a 
 	 * null selection (selection does not correspond to any entity)

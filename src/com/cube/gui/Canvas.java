@@ -104,6 +104,7 @@ public class Canvas {
 				color[0] = hoverColor[0];
 				color[1] = hoverColor[1];
 				color[2] = hoverColor[2];
+				color[3] = hoverColor[3];
 			}
 			
 			hovering = true;
@@ -113,6 +114,7 @@ public class Canvas {
 			color[0] = baseColor[0];
 			color[1] = baseColor[1];
 			color[2] = baseColor[2];
+			color[3] = baseColor[3];
 			
 			hovering = false;
 		}
